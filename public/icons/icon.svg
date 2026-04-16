@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#1a2744"/>
+  <!-- Plate -->
+  <circle cx="256" cy="270" r="140" fill="#f0fdfa" opacity="0.95"/>
+  <circle cx="256" cy="270" r="115" fill="none" stroke="#5eead4" stroke-width="2" opacity="0.35"/>
+  <!-- Fork (left) -->
+  <g fill="#ccfbf1">
+    <rect x="118" y="100" width="6" height="70" rx="3"/>
+    <rect x="130" y="100" width="6" height="70" rx="3"/>
+    <rect x="142" y="100" width="6" height="70" rx="3"/>
+    <rect x="115" y="165" width="36" height="12" rx="5"/>
+    <rect x="128" y="165" width="10" height="120" rx="5"/>
+  </g>
+  <!-- Knife (right) -->
+  <g fill="#ccfbf1">
+    <path d="M370 100 c0 0 14 0 14 40 c0 30-14 35-14 35 l0 110 c0 3-4 5-7 5 c-3 0-7-2-7-5 l0-110 c0 0-6-5-6-35 c0-40 6-40 6-40 z"/>
+  </g>
+  <!-- Steam lines -->
+  <g stroke="#99f6e4" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.7">
+    <path d="M220 150 Q215 130 225 115 Q235 100 228 82"/>
+    <path d="M256 140 Q251 120 261 105 Q271 90 264 72"/>
+    <path d="M292 150 Q287 130 297 115 Q307 100 300 82"/>
+  </g>
+  <!-- Food on plate -->
+  <circle cx="235" cy="255" r="22" fill="#2dd4bf" opacity="0.8"/>
+  <circle cx="275" cy="260" r="18" fill="#5eead4" opacity="0.8"/>
+  <circle cx="250" cy="285" r="16" fill="#67e8f9" opacity="0.7"/>
+</svg>

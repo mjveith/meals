@@ -1,0 +1,886 @@
+{
+  "preferences": {
+    "selectedProteins": [
+      "chicken",
+      "pork",
+      "fish",
+      "red-meat"
+    ],
+    "favoriteProteins": [],
+    "favoriteRecipeIds": [],
+    "adults": 2,
+    "children": 1,
+    "customStaples": [],
+    "sectionOrder": [
+      "produce",
+      "dairy",
+      "protein",
+      "pantry",
+      "spice",
+      "bakery",
+      "frozen",
+      "beverage",
+      "household",
+      "other"
+    ]
+  },
+  "mealPlan": {
+    "weekOf": "2026-03-30",
+    "days": [
+      {
+        "date": "2026-03-30",
+        "meals": {
+          "breakfast": {
+            "enabled": false
+          },
+          "lunch": {
+            "enabled": false
+          },
+          "dinner": {
+            "enabled": true,
+            "recipeId": "thai-chicken-peanut-noodles"
+          }
+        }
+      },
+      {
+        "date": "2026-03-31",
+        "meals": {
+          "breakfast": {
+            "enabled": true,
+            "recipeId": "blueberry-almond-oatmeal"
+          },
+          "lunch": {
+            "enabled": true,
+            "recipeId": "greek-meatball-pitas"
+          },
+          "dinner": {
+            "enabled": true,
+            "recipeId": "beef-stuffed-sweet-potatoes"
+          }
+        }
+      },
+      {
+        "date": "2026-04-01",
+        "meals": {
+          "breakfast": {
+            "enabled": false
+          },
+          "lunch": {
+            "enabled": false
+          },
+          "dinner": {
+            "enabled": true,
+            "recipeId": "beef-and-broccoli"
+          }
+        }
+      },
+      {
+        "date": "2026-04-02",
+        "meals": {
+          "breakfast": {
+            "enabled": true,
+            "recipeId": "spinach-feta-omelet"
+          },
+          "lunch": {
+            "enabled": true,
+            "recipeId": "beef-kofta-rice-plates"
+          },
+          "dinner": {
+            "enabled": true,
+            "recipeId": "chicken-parmesan-bowls"
+          }
+        }
+      },
+      {
+        "date": "2026-04-03",
+        "meals": {
+          "breakfast": {
+            "enabled": false
+          },
+          "lunch": {
+            "enabled": false
+          },
+          "dinner": {
+            "enabled": false
+          }
+        }
+      },
+      {
+        "date": "2026-04-04",
+        "meals": {
+          "breakfast": {
+            "enabled": false
+          },
+          "lunch": {
+            "enabled": false
+          },
+          "dinner": {
+            "enabled": false
+          }
+        }
+      },
+      {
+        "date": "2026-04-05",
+        "meals": {
+          "breakfast": {
+            "enabled": false
+          },
+          "lunch": {
+            "enabled": false
+          },
+          "dinner": {
+            "enabled": false
+          }
+        }
+      }
+    ]
+  },
+  "groceryOverrides": {
+    "protein::chicken breast::lb": {
+      "collected": false,
+      "adjustment": -1
+    },
+    "bakery::pita bread::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "dairy::cheddar cheese::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "dairy::eggs::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "dairy::feta::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "dairy::greek yogurt::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "dairy::milk::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "dairy::mozzarella::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::almonds::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::black beans::can": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::breadcrumbs::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::brown sugar::tbsp": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::marinara::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::olive oil::tbsp": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::peanut butter::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::rice::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::rice noodles::oz": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::rolled oats::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::soy sauce::tbsp": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "pantry::soy sauce::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::basil::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::blueberries::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::broccoli::head": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::carrot::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::cucumber::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::garlic::clove": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::green onion::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::lime::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::parsley::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::spinach::cup": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::sweet potato::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::tomato::count": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "protein::flank steak::lb": {
+      "collected": false,
+      "adjustment": 0
+    },
+    "protein::chicken thigh::lb": {
+      "collected": true,
+      "adjustment": 0
+    }
+  },
+  "customGroceryItems": [],
+  "customRecipes": [],
+  "savedWeeks": [
+    {
+      "id": "week-2026-03-30-mnduskuz",
+      "savedAt": "2026-03-31T00:03:06.010Z",
+      "weekOf": "2026-03-30",
+      "label": "Week of Mar 30",
+      "mealPlan": {
+        "weekOf": "2026-03-30",
+        "days": [
+          {
+            "date": "2026-03-30",
+            "meals": {
+              "breakfast": {
+                "enabled": false
+              },
+              "lunch": {
+                "enabled": false
+              },
+              "dinner": {
+                "enabled": true,
+                "recipeId": "thai-chicken-peanut-noodles"
+              }
+            }
+          },
+          {
+            "date": "2026-03-31",
+            "meals": {
+              "breakfast": {
+                "enabled": true,
+                "recipeId": "blueberry-almond-oatmeal"
+              },
+              "lunch": {
+                "enabled": true,
+                "recipeId": "greek-meatball-pitas"
+              },
+              "dinner": {
+                "enabled": true,
+                "recipeId": "beef-stuffed-sweet-potatoes"
+              }
+            }
+          },
+          {
+            "date": "2026-04-01",
+            "meals": {
+              "breakfast": {
+                "enabled": false
+              },
+              "lunch": {
+                "enabled": false
+              },
+              "dinner": {
+                "enabled": true,
+                "recipeId": "beef-and-broccoli"
+              }
+            }
+          },
+          {
+            "date": "2026-04-02",
+            "meals": {
+              "breakfast": {
+                "enabled": true,
+                "recipeId": "spinach-feta-omelet"
+              },
+              "lunch": {
+                "enabled": true,
+                "recipeId": "beef-kofta-rice-plates"
+              },
+              "dinner": {
+                "enabled": true,
+                "recipeId": "chicken-parmesan-bowls"
+              }
+            }
+          },
+          {
+            "date": "2026-04-03",
+            "meals": {
+              "breakfast": {
+                "enabled": false
+              },
+              "lunch": {
+                "enabled": false
+              },
+              "dinner": {
+                "enabled": false
+              }
+            }
+          },
+          {
+            "date": "2026-04-04",
+            "meals": {
+              "breakfast": {
+                "enabled": false
+              },
+              "lunch": {
+                "enabled": false
+              },
+              "dinner": {
+                "enabled": false
+              }
+            }
+          },
+          {
+            "date": "2026-04-05",
+            "meals": {
+              "breakfast": {
+                "enabled": false
+              },
+              "lunch": {
+                "enabled": false
+              },
+              "dinner": {
+                "enabled": false
+              }
+            }
+          }
+        ]
+      },
+      "groceryList": [
+        {
+          "key": "bakery::pita bread::count",
+          "name": "pita bread",
+          "quantity": 3.75,
+          "unit": "count",
+          "category": "bakery",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "dairy::cheddar cheese::cup",
+          "name": "cheddar cheese",
+          "quantity": 0.63,
+          "unit": "cup",
+          "category": "dairy",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "dairy::eggs::count",
+          "name": "eggs",
+          "quantity": 2.5,
+          "unit": "count",
+          "category": "dairy",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "dairy::feta::cup",
+          "name": "feta",
+          "quantity": 0.31,
+          "unit": "cup",
+          "category": "dairy",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "dairy::greek yogurt::cup",
+          "name": "Greek yogurt",
+          "quantity": 1.26,
+          "unit": "cup",
+          "category": "dairy",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "dairy::milk::cup",
+          "name": "milk",
+          "quantity": 1.25,
+          "unit": "cup",
+          "category": "dairy",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "dairy::mozzarella::cup",
+          "name": "mozzarella",
+          "quantity": 0.63,
+          "unit": "cup",
+          "category": "dairy",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::almonds::cup",
+          "name": "almonds",
+          "quantity": 0.31,
+          "unit": "cup",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "pantry::black beans::can",
+          "name": "black beans",
+          "quantity": 0.63,
+          "unit": "can",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "pantry::breadcrumbs::cup",
+          "name": "breadcrumbs",
+          "quantity": 0.63,
+          "unit": "cup",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::brown sugar::tbsp",
+          "name": "brown sugar",
+          "quantity": 1.88,
+          "unit": "tbsp",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "pantry::marinara::cup",
+          "name": "marinara",
+          "quantity": 1.25,
+          "unit": "cup",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::olive oil::tbsp",
+          "name": "olive oil",
+          "quantity": 0.63,
+          "unit": "tbsp",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::peanut butter::cup",
+          "name": "peanut butter",
+          "quantity": 0.16,
+          "unit": "cup",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::rice::cup",
+          "name": "rice",
+          "quantity": 3.75,
+          "unit": "cup",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::rice noodles::oz",
+          "name": "rice noodles",
+          "quantity": 7.5,
+          "unit": "oz",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "pantry::rolled oats::cup",
+          "name": "rolled oats",
+          "quantity": 0.94,
+          "unit": "cup",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::soy sauce::tbsp",
+          "name": "soy sauce",
+          "quantity": 1.25,
+          "unit": "tbsp",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "pantry::soy sauce::cup",
+          "name": "soy sauce",
+          "quantity": 0.16,
+          "unit": "cup",
+          "category": "pantry",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "produce::basil::cup",
+          "name": "basil",
+          "quantity": 0.16,
+          "unit": "cup",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::blueberries::cup",
+          "name": "blueberries",
+          "quantity": 0.63,
+          "unit": "cup",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::broccoli::head",
+          "name": "broccoli",
+          "quantity": 1.25,
+          "unit": "head",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::carrot::count",
+          "name": "carrot",
+          "quantity": 1.25,
+          "unit": "count",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::cucumber::count",
+          "name": "cucumber",
+          "quantity": 0.8900000000000001,
+          "unit": "count",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::garlic::clove",
+          "name": "garlic",
+          "quantity": 1.88,
+          "unit": "clove",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::green onion::count",
+          "name": "green onion",
+          "quantity": 3.13,
+          "unit": "count",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::lime::count",
+          "name": "lime",
+          "quantity": 0.63,
+          "unit": "count",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::parsley::cup",
+          "name": "parsley",
+          "quantity": 0.32,
+          "unit": "cup",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::spinach::cup",
+          "name": "spinach",
+          "quantity": 1.25,
+          "unit": "cup",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::sweet potato::count",
+          "name": "sweet potato",
+          "quantity": 1.5,
+          "unit": "count",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "produce::tomato::count",
+          "name": "tomato",
+          "quantity": 1.25,
+          "unit": "count",
+          "category": "produce",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "protein::chicken thigh::lb",
+          "name": "chicken thigh",
+          "quantity": 1.78,
+          "unit": "lb",
+          "category": "protein",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "protein::flank steak::lb",
+          "name": "flank steak",
+          "quantity": 0.78,
+          "unit": "lb",
+          "category": "protein",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "protein::ground beef::lb",
+          "name": "ground beef",
+          "quantity": 2.34,
+          "unit": "lb",
+          "category": "protein",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "spice::black pepper::tsp",
+          "name": "black pepper",
+          "quantity": 0.31,
+          "unit": "tsp",
+          "category": "spice",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "spice::chili powder::tsp",
+          "name": "chili powder",
+          "quantity": 0.63,
+          "unit": "tsp",
+          "category": "spice",
+          "isStaple": false,
+          "collected": false
+        },
+        {
+          "key": "spice::cinnamon::tsp",
+          "name": "cinnamon",
+          "quantity": 0.63,
+          "unit": "tsp",
+          "category": "spice",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "spice::oregano::tsp",
+          "name": "oregano",
+          "quantity": 0.63,
+          "unit": "tsp",
+          "category": "spice",
+          "isStaple": false,
+          "collected": true
+        },
+        {
+          "key": "staples::bread::loaf",
+          "name": "Bread",
+          "quantity": 1,
+          "unit": "loaf",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::butter::box",
+          "name": "Butter",
+          "quantity": 1,
+          "unit": "box",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::cheese::block",
+          "name": "Cheese",
+          "quantity": 1,
+          "unit": "block",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::coffee::bag",
+          "name": "Coffee",
+          "quantity": 1,
+          "unit": "bag",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::eggs::half carton",
+          "name": "Eggs",
+          "quantity": 1,
+          "unit": "half carton",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::fruit / berries / veggies for snacks::assortment",
+          "name": "Fruit / berries / veggies for snacks",
+          "quantity": 1,
+          "unit": "assortment",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::half & half::carton",
+          "name": "Half & half",
+          "quantity": 1,
+          "unit": "carton",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::juice::jug",
+          "name": "Juice",
+          "quantity": 1,
+          "unit": "jug",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::ketchup::bottle",
+          "name": "Ketchup",
+          "quantity": 1,
+          "unit": "bottle",
+          "category": "other",
+          "isStaple": true,
+          "collected": true
+        },
+        {
+          "key": "staples::mayo::jar",
+          "name": "Mayo",
+          "quantity": 1,
+          "unit": "jar",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::milk::half gallon",
+          "name": "Milk",
+          "quantity": 1,
+          "unit": "half gallon",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::oil (olive/avocado/coconut/tallow)::bottle",
+          "name": "Oil (olive/avocado/coconut/tallow)",
+          "quantity": 1,
+          "unit": "bottle",
+          "category": "other",
+          "isStaple": true,
+          "collected": true
+        },
+        {
+          "key": "staples::rice::bag",
+          "name": "Rice",
+          "quantity": 1,
+          "unit": "bag",
+          "category": "other",
+          "isStaple": true,
+          "collected": true
+        },
+        {
+          "key": "staples::snacks::box",
+          "name": "Snacks",
+          "quantity": 1,
+          "unit": "box",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::tea::box",
+          "name": "Tea",
+          "quantity": 1,
+          "unit": "box",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        },
+        {
+          "key": "staples::yogurt::tub",
+          "name": "Yogurt",
+          "quantity": 1,
+          "unit": "tub",
+          "category": "other",
+          "isStaple": true,
+          "collected": false
+        }
+      ],
+      "customGroceryItems": []
+    }
+  ]
+}

@@ -1,0 +1,3721 @@
+[
+  {
+    "id": "blueberry-almond-oatmeal",
+    "name": "Blueberry Almond Oatmeal",
+    "description": "Creamy oats finished with blueberries, cinnamon, and toasted almonds.",
+    "cuisine": "American",
+    "prepTime": 5,
+    "cookTime": 10,
+    "ingredients": [
+      {
+        "name": "rolled oats",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "milk",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "blueberries",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "brown sugar",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "almonds",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cinnamon",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Set a medium saucepan over medium heat. Pour in the milk and heat for 2 to 3 minutes, stirring once or twice, until it is steaming and just starting to bubble around the edges; do not let it boil hard.",
+      "Stir in the rolled oats and reduce the heat to medium-low. Simmer for 8 to 10 minutes, stirring every 1 to 2 minutes and scraping the bottom of the pan, until the oats are tender and the mixture is thick and creamy.",
+      "While the oatmeal finishes, rinse the blueberries and roughly chop the almonds if they are whole. During the last 1 to 2 minutes of cooking, stir in the brown sugar and cinnamon, then gently fold in half of the blueberries so they soften slightly without fully bursting.",
+      "Divide the oatmeal between bowls and top with the remaining blueberries and almonds. Let it stand for 1 minute to thicken before serving, until the surface looks glossy and spoonable rather than loose."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "banana-walnut-oatmeal",
+    "name": "Banana Walnut Oatmeal",
+    "description": "Warm oatmeal with mashed banana, maple syrup, and crunchy walnuts.",
+    "cuisine": "American",
+    "prepTime": 5,
+    "cookTime": 10,
+    "ingredients": [
+      {
+        "name": "rolled oats",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "water",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "banana",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "walnuts",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "maple syrup",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "salt",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Slice one banana into thin rounds for topping and mash the second banana with a fork until smooth. In a medium saucepan over medium heat, bring the water and salt to a gentle simmer, about 3 minutes.",
+      "Stir in the rolled oats and mashed banana, then reduce the heat to medium-low. Cook for 7 to 9 minutes, stirring frequently, until the oats are tender and the banana melts into a thick, naturally sweet base.",
+      "When the oatmeal is creamy and no pockets of water remain, stir in the maple syrup and cook 30 seconds more. If it becomes too thick, loosen it with 1 to 2 tablespoons of hot water.",
+      "Spoon into bowls and top with the sliced banana and walnuts. Let the oatmeal rest for 1 minute before serving so it sets slightly and the walnuts stay crunchy."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "apple-cinnamon-oatmeal",
+    "name": "Apple Cinnamon Oatmeal",
+    "description": "Oatmeal with sauteed apples and a generous shake of cinnamon.",
+    "cuisine": "American",
+    "prepTime": 7,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "rolled oats",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "milk",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "apple",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "butter",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "cinnamon",
+        "quantity": 1.5,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "honey",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Dice the apple into 1/2-inch cubes. Melt the butter in a medium saucepan over medium heat, add the apple, and cook for 4 to 5 minutes, stirring occasionally, until the pieces are softened and lightly golden at the edges.",
+      "Pour in the milk and bring it to a gentle simmer over medium heat. Stir in the rolled oats, reduce the heat to medium-low, and cook for 8 to 10 minutes, stirring often, until the oats are creamy and the apples are fully tender.",
+      "Add the cinnamon and honey during the last 1 minute of cooking, stirring until evenly distributed. The oatmeal is ready when it slowly falls from the spoon and the apples are soft enough to cut with the side of the spoon.",
+      "Spoon into bowls and let rest for 1 to 2 minutes before serving so the oatmeal thickens slightly. Finish with any buttery apples left in the pan."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "spinach-feta-omelet",
+    "name": "Spinach Feta Omelet",
+    "description": "Quick omelet packed with spinach, feta, and herbs.",
+    "cuisine": "Mediterranean",
+    "prepTime": 5,
+    "cookTime": 8,
+    "ingredients": [
+      {
+        "name": "eggs",
+        "quantity": 4,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "green onion",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "black pepper",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Crack the eggs into a bowl and whisk with the black pepper for 30 seconds until the yolks and whites are fully blended and slightly frothy. Thinly slice the green onion and roughly chop the spinach if the leaves are large.",
+      "Heat the olive oil in an 8-inch nonstick skillet over medium heat. Add the green onion and spinach and cook for 1 to 2 minutes, stirring, until the onion smells fragrant and the spinach is wilted but still bright green.",
+      "Reduce the heat to medium-low and pour in the eggs, tilting the pan so they spread evenly. Cook undisturbed for 1 minute, then gently pull the set edges toward the center with a spatula and continue cooking 1 to 2 minutes more until the top is mostly set but still slightly glossy.",
+      "Scatter the feta over one half of the omelet, fold it over, and cook 30 to 60 seconds longer until the cheese softens and the center is just set. Slide onto a plate and let rest 1 minute before cutting so the filling stays inside."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "veggie-egg-scramble",
+    "name": "Veggie Egg Scramble",
+    "description": "Soft scrambled eggs with peppers, mushrooms, and cheddar.",
+    "cuisine": "American",
+    "prepTime": 8,
+    "cookTime": 10,
+    "ingredients": [
+      {
+        "name": "eggs",
+        "quantity": 6,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "mushrooms",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "cheddar cheese",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "butter",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "salt",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Dice the bell pepper into 1/4-inch pieces and slice the mushrooms evenly so they cook at the same rate. Crack the eggs into a bowl, add the salt, and whisk until smooth and uniform in color.",
+      "Melt the butter in a large nonstick skillet over medium heat. Add the bell pepper and mushrooms and saute for 4 to 5 minutes, stirring occasionally, until the mushrooms release their moisture and the peppers are tender with light browning.",
+      "Reduce the heat to medium-low and pour in the eggs. Stir slowly with a silicone spatula for 2 to 3 minutes, pushing from the edges to the center, until soft curds form and the eggs are mostly set but still slightly glossy.",
+      "Sprinkle in the cheddar cheese, fold once or twice, and remove the skillet from the heat. Let the scramble stand for 30 seconds so the residual heat melts the cheese without overcooking the eggs."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "crispy-breakfast-potato-hash",
+    "name": "Crispy Breakfast Potato Hash",
+    "description": "Golden potatoes with onions, peppers, and sunny eggs on top.",
+    "cuisine": "American",
+    "prepTime": 10,
+    "cookTime": 20,
+    "ingredients": [
+      {
+        "name": "russet potato",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "eggs",
+        "quantity": 4,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "paprika",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Dice the russet potato, onion, and bell pepper into 1/2-inch pieces so they cook evenly. Pat the potatoes dry with a towel to remove surface starch, which helps them brown instead of steam.",
+      "Heat the olive oil in a large cast-iron skillet over medium heat. Add the potatoes in a single layer and cook for 10 to 12 minutes, turning only every 2 to 3 minutes, until they are deeply golden and nearly tender when pierced with a knife.",
+      "Add the onion, bell pepper, and paprika, then season with salt and pepper. Continue cooking over medium heat for 5 to 6 minutes, stirring occasionally, until the vegetables are tender and the potato edges are crisp.",
+      "In a separate nonstick skillet, fry the eggs over medium-low heat for 2 to 3 minutes for runny yolks or 4 minutes for firmer yolks. Spoon the hash onto plates, top with the eggs, and let the hash sit 1 minute before serving so the crust stays crisp."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "berry-yogurt-parfait",
+    "name": "Berry Yogurt Parfait",
+    "description": "Layered Greek yogurt with berries, granola, and honey.",
+    "cuisine": "American",
+    "prepTime": 5,
+    "cookTime": 0,
+    "ingredients": [
+      {
+        "name": "Greek yogurt",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "strawberries",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "blueberries",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "granola",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "honey",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Hull and slice the strawberries into thin pieces and rinse the blueberries. If you prefer extra crunch, spread the granola on a small baking sheet and warm it in a 300°F (150°C) oven for 4 to 5 minutes, then cool for 2 minutes.",
+      "Spoon one-third of the Greek yogurt into each glass or bowl, spreading it to the edges for even layers. Add a light drizzle of honey over the yogurt so it distributes through the parfait instead of pooling on top.",
+      "Layer in some strawberries, blueberries, and granola, then repeat the layers until the glasses are filled. Keep the granola toward the center of each layer to help it stay crisp longer.",
+      "Finish with the remaining berries and a final drizzle of honey. Serve immediately for the best texture, or chill for up to 10 minutes if you want a colder, firmer parfait."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "lemon-ricotta-pancakes",
+    "name": "Lemon Ricotta Pancakes",
+    "description": "Tender pancakes with ricotta, lemon zest, and a light maple finish.",
+    "cuisine": "American",
+    "prepTime": 10,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "flour",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "ricotta",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "milk",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "eggs",
+        "quantity": 2,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "maple syrup",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "In a mixing bowl, whisk the ricotta, milk, eggs, and the finely grated zest from the lemon until mostly smooth. Add the flour and stir just until no dry streaks remain; a few small lumps are fine and keep the pancakes tender.",
+      "Heat a lightly greased nonstick skillet or griddle over medium heat until a drop of water sizzles on contact. If the pan starts smoking, lower the heat to medium-low before cooking.",
+      "Portion the batter into 1/4-cup rounds and cook for 2 to 3 minutes on the first side, until bubbles rise to the surface and the edges look set. Flip and cook 1 1/2 to 2 minutes more, until both sides are golden and the centers spring back lightly when touched.",
+      "Transfer to a plate and hold loosely covered for 1 minute before serving. Finish with maple syrup and a little extra lemon zest if desired."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "overnight-oats-with-berries",
+    "name": "Overnight Oats with Berries",
+    "description": "Cold-soaked oats with chia seeds, milk, and fresh berries.",
+    "cuisine": "American",
+    "prepTime": 8,
+    "cookTime": 0,
+    "ingredients": [
+      {
+        "name": "rolled oats",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "milk",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "chia seeds",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "berries",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "vanilla",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "pantry"
+      },
+      {
+        "name": "honey",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "In a jar or lidded container, combine the rolled oats, milk, chia seeds, vanilla, and honey. Stir for 30 seconds, making sure to scrape the bottom so no chia seeds clump together.",
+      "Cover and refrigerate for at least 8 hours or overnight, until the oats are fully hydrated and the mixture is thick enough to mound slightly on a spoon. Stir once after the first 10 minutes if possible for the smoothest texture.",
+      "In the morning, loosen the oats with 1 to 2 tablespoons of milk if they are thicker than you like. Taste and adjust with a little more honey if needed.",
+      "Top with the berries just before serving so they stay fresh and do not bleed into the oats. Serve cold, or microwave for 45 to 60 seconds if you prefer them lightly warmed."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "avocado-tomato-toast",
+    "name": "Avocado Tomato Toast",
+    "description": "Sourdough toast with mashed avocado, tomato slices, and chili flakes.",
+    "cuisine": "Mediterranean",
+    "prepTime": 8,
+    "cookTime": 4,
+    "ingredients": [
+      {
+        "name": "sourdough bread",
+        "quantity": 4,
+        "unit": "slice",
+        "category": "bakery"
+      },
+      {
+        "name": "avocado",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "tomato",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "chili flakes",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Toast the sourdough in a toaster or on a sheet pan in a 400°F (200°C) oven for 4 to 6 minutes, flipping once if needed, until the slices are crisp at the edges and still slightly chewy in the center.",
+      "Halve and pit the avocado, then mash the flesh in a bowl with the lemon juice, olive oil, and a pinch of salt until mostly smooth with a little texture. Slice the tomato into thin rounds and pat dry so the toast does not get soggy.",
+      "Spread the avocado mixture thickly over the warm toast, taking it all the way to the corners. Layer the tomato slices on top in a single overlapping row.",
+      "Finish with chili flakes and an extra pinch of salt. Serve immediately while the toast is still crisp and the avocado is cool and creamy."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "veggie-breakfast-quesadilla",
+    "name": "Veggie Breakfast Quesadilla",
+    "description": "Flour tortillas stuffed with eggs, spinach, peppers, and Monterey Jack.",
+    "cuisine": "Mexican",
+    "prepTime": 8,
+    "cookTime": 10,
+    "ingredients": [
+      {
+        "name": "flour tortilla",
+        "quantity": 4,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "eggs",
+        "quantity": 5,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "Monterey Jack",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "salsa",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Dice the bell pepper into small 1/4-inch pieces and roughly chop the spinach. Whisk the eggs in a bowl until smooth and prepare the cheese so it is ready to melt quickly.",
+      "Heat a nonstick skillet over medium heat and scramble the eggs with the bell pepper and spinach for 2 to 3 minutes, stirring gently, until the eggs are just set and the vegetables are tender. Transfer the filling to a plate so the eggs do not overcook.",
+      "Place one tortilla in the skillet over medium-low heat, scatter on half the Monterey Jack, spread half the egg mixture over one side, then fold the tortilla in half. Cook for 2 to 3 minutes per side, pressing lightly with a spatula, until the tortilla is golden brown and the cheese is fully melted.",
+      "Repeat with the remaining tortilla and filling. Let each quesadilla rest for 1 minute before slicing into wedges, then serve with salsa."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "cottage-cheese-fruit-bowl",
+    "name": "Cottage Cheese Fruit Bowl",
+    "description": "Protein-friendly breakfast bowl with cottage cheese, pineapple, and toasted coconut.",
+    "cuisine": "American",
+    "prepTime": 5,
+    "cookTime": 2,
+    "ingredients": [
+      {
+        "name": "cottage cheese",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "pineapple",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "banana",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "toasted coconut",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "honey",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Spoon the cottage cheese into serving bowls and smooth it into an even layer. For a colder bowl, chill the bowls in the refrigerator for 10 minutes before assembling.",
+      "Cut the pineapple into bite-size pieces if needed and slice the banana into 1/4-inch rounds just before serving to prevent browning. Arrange the fruit over the cottage cheese so it covers most of the surface.",
+      "Sprinkle the toasted coconut evenly over the top for crunch. If the coconut has softened, warm it on a small baking sheet at 300°F (150°C) for 3 minutes and let it cool before using.",
+      "Drizzle lightly with honey and serve immediately. The bowl should taste cool and creamy with distinct layers of soft fruit and crisp coconut."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "skillet-french-toast",
+    "name": "Skillet French Toast",
+    "description": "Classic cinnamon French toast with berries and maple syrup.",
+    "cuisine": "American",
+    "prepTime": 10,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "bread",
+        "quantity": 8,
+        "unit": "slice",
+        "category": "bakery"
+      },
+      {
+        "name": "eggs",
+        "quantity": 4,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "milk",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "cinnamon",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "berries",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "maple syrup",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "In a shallow dish, whisk the eggs, milk, and cinnamon until the mixture is completely smooth and no streaks of egg white remain. Heat a buttered nonstick skillet or griddle over medium heat.",
+      "Dip each slice of bread into the custard for 10 to 15 seconds per side, letting the excess drip off so the center stays tender without becoming soggy. Work in batches rather than crowding the pan.",
+      "Cook the bread for 2 to 3 minutes per side over medium heat, adjusting to medium-low if it browns too quickly, until both sides are deep golden and the center feels set when gently pressed.",
+      "Transfer to plates and rest for 30 seconds so the crust stays intact. Top with berries and maple syrup and serve hot."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "chia-vanilla-pudding",
+    "name": "Chia Vanilla Pudding",
+    "description": "Creamy chia pudding with vanilla, banana, and toasted pecans.",
+    "cuisine": "American",
+    "prepTime": 8,
+    "cookTime": 0,
+    "ingredients": [
+      {
+        "name": "chia seeds",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "milk",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "vanilla",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "pantry"
+      },
+      {
+        "name": "banana",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "pecans",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Whisk the chia seeds, milk, and vanilla together in a bowl or jar for 30 seconds until the seeds are evenly suspended. Let the mixture stand for 5 minutes, then whisk again to break up any clumps.",
+      "Cover and refrigerate for at least 4 hours, preferably overnight, until the pudding is thick and spoonable. It is ready when the chia seeds are fully hydrated and the texture resembles loose tapioca.",
+      "Stir the pudding well before serving, adding a splash of milk if you want a softer consistency. Slice the banana and roughly chop the pecans while the pudding chills.",
+      "Spoon into bowls and top with the banana and pecans. Serve cold for the cleanest texture."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "baked-eggs-with-tomatoes",
+    "name": "Baked Eggs with Tomatoes",
+    "description": "Jammy baked eggs over garlicky tomatoes and herbs.",
+    "cuisine": "Mediterranean",
+    "prepTime": 8,
+    "cookTime": 14,
+    "ingredients": [
+      {
+        "name": "eggs",
+        "quantity": 4,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "parsley",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 375°F (190°C). Halve the cherry tomatoes and mince the garlic finely so it disperses evenly through the sauce.",
+      "Heat the olive oil in a small oven-safe skillet over medium heat. Add the tomatoes and garlic and cook for 4 to 5 minutes, stirring occasionally, until the tomatoes soften and begin to collapse into a chunky sauce.",
+      "Make small wells in the tomatoes and crack the eggs into them. Transfer the skillet to the oven and bake for 8 to 12 minutes, until the whites are fully set and the yolks are still slightly jiggly, or longer if you prefer firmer yolks.",
+      "Sprinkle with parsley and feta, then let the dish rest for 2 minutes before serving. The residual heat will finish setting the eggs without overbaking them."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "savory-mushroom-polenta",
+    "name": "Savory Mushroom Polenta",
+    "description": "Creamy breakfast polenta with sauteed mushrooms and parmesan.",
+    "cuisine": "Italian",
+    "prepTime": 8,
+    "cookTime": 18,
+    "ingredients": [
+      {
+        "name": "polenta",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "water",
+        "quantity": 4,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "mushrooms",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "parmesan",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "butter",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "thyme",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Bring the water to a gentle boil in a medium saucepan over medium-high heat. Slowly whisk in the polenta in a steady stream, then reduce the heat to low so it bubbles lazily rather than splattering.",
+      "Cook the polenta for 20 to 25 minutes, whisking every 2 to 3 minutes, until it is thick, creamy, and no longer tastes grainy. Stir in the parmesan at the end so it melts smoothly into the base.",
+      "While the polenta cooks, melt the butter in a skillet over medium-high heat. Add the mushrooms and thyme and saute for 6 to 8 minutes, stirring occasionally, until the mushrooms release their liquid and then brown at the edges.",
+      "Spoon the polenta into bowls and top with the mushrooms and any butter from the pan. Let stand 2 minutes before serving so the polenta firms slightly."
+    ],
+    "mealType": [
+      "breakfast"
+    ],
+    "proteins": [],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "lemon-herb-chicken-bowls",
+    "name": "Lemon Herb Chicken Bowls",
+    "description": "Rice bowls with grilled chicken, cucumbers, tomatoes, and herbed yogurt.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 15,
+    "cookTime": 18,
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "tomato",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "oregano",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Cook the rice according to package directions and keep it warm, covered, for 5 minutes after cooking so it finishes steaming. Meanwhile, dice the cucumber and tomato into bite-size pieces and stir the Greek yogurt with the juice from half the lemon until smooth.",
+      "Pat the chicken dry and season it with oregano, the finely grated zest of the lemon, salt, pepper, and a light drizzle of oil. Heat a skillet or grill pan over medium-high heat and cook the chicken for 5 to 6 minutes per side, until browned and the thickest part reaches 165°F (74°C).",
+      "Transfer the chicken to a cutting board and let it rest for 5 minutes before slicing so the juices stay in the meat. Taste the yogurt sauce and add more lemon juice if you want a brighter finish.",
+      "Build bowls with the rice, sliced chicken, cucumber, and tomato. Spoon the lemon yogurt over the top and serve while the chicken is still warm."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "chicken-fajita-wraps",
+    "name": "Chicken Fajita Wraps",
+    "description": "Seared chicken, peppers, and onions folded into warm tortillas.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 12,
+    "cookTime": 15,
+    "ingredients": [
+      {
+        "name": "chicken thigh",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "flour tortilla",
+        "quantity": 6,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "fajita seasoning",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "spice"
+      },
+      {
+        "name": "sour cream",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "instructions": [
+      "Slice the chicken thighs, bell pepper, and onion into thin strips about 1/2 inch wide. Toss the chicken with the fajita seasoning until evenly coated.",
+      "Heat a large skillet over medium-high heat. Add a light film of oil, sear the chicken for 5 to 7 minutes, stirring occasionally, until browned at the edges and cooked through to 165°F (74°C), then transfer to a plate.",
+      "In the same skillet, cook the peppers and onion over medium-high heat for 4 to 5 minutes until tender-crisp with some charred spots. Return the chicken to the pan for 30 seconds so everything is hot and coated in the pan juices.",
+      "Warm the tortillas in a dry skillet over medium heat for 20 to 30 seconds per side or wrap them in foil and heat at 300°F (150°C) for 5 minutes. Fill with the chicken mixture, add sour cream, and serve immediately."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "sesame-chicken-stir-fry",
+    "name": "Sesame Chicken Stir-Fry",
+    "description": "Quick chicken stir-fry with broccoli, carrots, and sesame sauce.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 15,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "broccoli",
+        "quantity": 1,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "sesame oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Cook the rice first and keep it covered off the heat for 5 minutes so it stays fluffy. Slice the chicken into thin strips, cut the broccoli into small florets, and cut the carrot into thin matchsticks so the vegetables cook quickly.",
+      "Heat a wok or large skillet over medium-high heat until very hot, then add the sesame oil. Add the chicken in a single layer and stir-fry for 3 to 4 minutes until it is lightly browned and about 80 percent cooked through.",
+      "Add the broccoli, carrot, and minced garlic, then stir-fry for 3 to 4 minutes more over medium-high heat. The vegetables should be bright and crisp-tender, and the garlic should smell fragrant but not browned.",
+      "Pour in the soy sauce and toss for 30 to 60 seconds until the chicken is glazed and cooked through to 165°F (74°C). Serve immediately over the warm rice."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "italian-chicken-pasta-salad",
+    "name": "Italian Chicken Pasta Salad",
+    "description": "Rotini with chicken, olives, tomatoes, mozzarella, and Italian dressing.",
+    "mealType": [
+      "lunch"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Italian",
+    "prepTime": 15,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rotini",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "mozzarella",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "olives",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "Italian dressing",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Bring a large pot of salted water to a boil and cook the rotini for 8 to 10 minutes, until al dente. Drain and rinse under cold water for 30 seconds to stop the cooking, then shake off the excess water.",
+      "Season the chicken lightly with salt and pepper. Cook it in a skillet over medium-high heat for 5 to 6 minutes per side, until golden and the center reaches 165°F (74°C), then rest for 5 minutes before dicing into bite-size pieces.",
+      "Halve the cherry tomatoes and drain the mozzarella and olives if needed. In a large bowl, combine the cooled pasta, chicken, tomatoes, mozzarella, and olives.",
+      "Pour in the Italian dressing and toss until everything is evenly coated. Chill for 15 to 20 minutes before serving so the pasta absorbs some of the dressing and the flavors settle."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "chicken-tortilla-soup",
+    "name": "Chicken Tortilla Soup",
+    "description": "Tomato-chile broth with shredded chicken, corn, beans, and tortilla strips.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 10,
+    "cookTime": 25,
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "black beans",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "corn",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "frozen"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 28,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "chicken broth",
+        "quantity": 4,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "tortilla strips",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Dice the onion into small pieces. In a Dutch oven or soup pot over medium heat, add a little oil and saute the onion for 4 to 5 minutes until softened and translucent.",
+      "Add the crushed tomatoes, chicken broth, black beans, corn, and chicken breasts. Bring to a gentle boil over medium-high heat, then reduce to medium-low and simmer for 18 to 22 minutes until the chicken reaches 165°F (74°C).",
+      "Transfer the chicken to a plate and shred it with two forks while the soup continues to simmer. Return the shredded chicken to the pot and cook 2 minutes more, until the broth is slightly thickened and the flavors are blended.",
+      "Ladle into bowls and top with tortilla strips just before serving so they stay crisp. Let the soup cool 2 minutes before eating."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "mediterranean-chicken-pitas",
+    "name": "Mediterranean Chicken Pitas",
+    "description": "Warm pita pockets stuffed with chicken, lettuce, cucumber, and tzatziki.",
+    "mealType": [
+      "lunch"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 12,
+    "cookTime": 14,
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "pita bread",
+        "quantity": 6,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "romaine",
+        "quantity": 1,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "tzatziki",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "paprika",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Pat the chicken dry and season both sides with paprika, salt, and pepper. Heat a skillet over medium-high heat and cook the chicken for 5 to 6 minutes per side, until browned and the center reaches 165°F (74°C).",
+      "Rest the chicken for 5 minutes on a cutting board, then slice it thinly across the grain. While it rests, shred the romaine and dice the cucumber into small pieces.",
+      "Warm the pita bread in a dry skillet over medium heat for 20 seconds per side or in a 300°F (150°C) oven for 4 minutes, just until pliable. Cut or open the pitas carefully so they do not tear.",
+      "Fill each pita with romaine, cucumber, sliced chicken, and a generous spoonful of tzatziki. Serve immediately while the pita is warm and the chicken is juicy."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "honey-mustard-pork-chops",
+    "name": "Honey Mustard Pork Chops",
+    "description": "Pan-seared pork chops with a glossy honey mustard pan sauce.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "American",
+    "prepTime": 8,
+    "cookTime": 16,
+    "ingredients": [
+      {
+        "name": "pork chop",
+        "quantity": 4,
+        "unit": "count",
+        "category": "protein"
+      },
+      {
+        "name": "Dijon mustard",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "honey",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "green beans",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Pat the pork chops dry and season them lightly with salt and pepper. Trim the green beans if needed and set them aside so they can cook while the chops rest.",
+      "Heat the olive oil in a large skillet over medium-high heat. Sear the pork chops for 4 to 5 minutes per side, lowering to medium if they darken too quickly, until deeply golden and the thickest part reaches 145°F (63°C).",
+      "Transfer the chops to a plate and rest for 5 minutes. In the same skillet over medium heat, add the minced garlic, Dijon mustard, and honey and stir for 30 to 60 seconds until the sauce is glossy and lightly bubbling.",
+      "Add the green beans and cook for 4 to 5 minutes, tossing to coat, until crisp-tender. Return the pork chops to the pan for 30 seconds to glaze, then serve immediately."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "pork-carnitas-bowls",
+    "name": "Pork Carnitas Bowls",
+    "description": "Tender pulled pork over rice with black beans, salsa, and lime.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 15,
+    "cookTime": 35,
+    "ingredients": [
+      {
+        "name": "pork shoulder",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "black beans",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "lime",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "salsa",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cumin",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 325°F (165°C). Cut the pork shoulder into large 2-inch chunks, season generously with cumin, salt, and pepper, and place in a covered Dutch oven or roasting pan.",
+      "Roast for 2 1/2 to 3 hours, turning once halfway through, until the pork is fork-tender and easily shreds. For crisp edges, spread the shredded pork on a baking sheet and broil for 3 to 4 minutes until browned in spots.",
+      "Cook the rice while the pork finishes and let it stand covered for 5 minutes after cooking. Warm the black beans over medium-low heat with the juice of the lime for 2 to 3 minutes, until heated through.",
+      "Build bowls with rice, beans, shredded pork, and salsa. Let the pork rest 2 minutes after broiling so the crisp bits stay attached when served."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "ginger-pork-lettuce-cups",
+    "name": "Ginger Pork Lettuce Cups",
+    "description": "Savory ground pork with ginger, carrots, and crisp lettuce leaves.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 15,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "ground pork",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "lettuce",
+        "quantity": 1,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "ginger",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "green onion",
+        "quantity": 3,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Separate the lettuce into whole cups, rinse well, and dry thoroughly so the filling does not slide off. Peel and grate the ginger finely, and shred the carrot if it is not already prepared.",
+      "Heat a large skillet over medium-high heat and add the ground pork. Cook for 5 to 6 minutes, breaking it into small crumbles, until browned with no pink remaining.",
+      "Reduce the heat to medium and stir in the ginger, carrot, and soy sauce. Cook for 2 to 3 minutes more until the carrot softens slightly and the sauce is absorbed enough that the filling is moist but not watery.",
+      "Spoon the hot pork mixture into the lettuce leaves and top with sliced green onion. Serve immediately so the lettuce stays crisp and cool."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "pork-fried-rice",
+    "name": "Pork Fried Rice",
+    "description": "Weeknight fried rice with pork, peas, carrots, and scrambled egg.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 10,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "ground pork",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "cooked rice",
+        "quantity": 4,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "peas and carrots",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "frozen"
+      },
+      {
+        "name": "eggs",
+        "quantity": 2,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "sesame oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Break up the cooked rice with your hands or a fork so there are no large clumps; cold rice works best because it fries instead of steaming. Beat the eggs in a small bowl until smooth.",
+      "Heat a large skillet or wok over medium-high heat and add a little oil. Cook the ground pork for 5 to 6 minutes, breaking it up as it browns, until fully cooked and lightly crisp at the edges.",
+      "Push the pork to one side, add the eggs to the open space, and scramble for 30 to 45 seconds until softly set. Add the rice, peas and carrots, soy sauce, and sesame oil, then stir-fry for 3 to 4 minutes until the rice is hot and lightly toasted.",
+      "Taste and adjust the seasoning, then serve right away. The finished rice should be steaming hot with separate grains rather than clumpy or wet."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "pork-tenderloin-with-apples",
+    "name": "Pork Tenderloin with Apples",
+    "description": "Roasted pork tenderloin with apples, onions, and thyme.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "American",
+    "prepTime": 12,
+    "cookTime": 25,
+    "ingredients": [
+      {
+        "name": "pork tenderloin",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "apple",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "thyme",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "chicken broth",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 400°F (200°C). Slice the apple and onion into 1/2-inch wedges, then pat the pork tenderloin dry and season it well with thyme, salt, and pepper.",
+      "Place the pork on a parchment-lined sheet pan and arrange the apples and onion around it. Drizzle everything with olive oil and roast for 22 to 28 minutes, turning the apples once halfway through, until the pork reaches 145°F (63°C).",
+      "Transfer the pork to a cutting board and let it rest for 5 to 10 minutes before slicing. While it rests, place the sheet pan over low heat on the stovetop if possible or transfer the pan juices to a skillet, add the chicken broth, and simmer 2 minutes to make a quick sauce.",
+      "Slice the pork into medallions and serve with the roasted apples, onion, and spoonfuls of the pan sauce. The apples should be tender and caramelized at the edges."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "bbq-pulled-pork-sandwiches",
+    "name": "BBQ Pulled Pork Sandwiches",
+    "description": "Pulled pork piled on buns with crunchy slaw.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "American",
+    "prepTime": 12,
+    "cookTime": 30,
+    "ingredients": [
+      {
+        "name": "pork shoulder",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "barbecue sauce",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "burger bun",
+        "quantity": 6,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "cabbage slaw mix",
+        "quantity": 4,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "mayonnaise",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "apple cider vinegar",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 325°F (165°C). Place the pork shoulder in a Dutch oven or covered roasting pan, season lightly with salt and pepper, and roast for 3 1/2 to 4 hours until it pulls apart easily with a fork.",
+      "Transfer the pork to a bowl and shred it while still warm, discarding any large pieces of fat. Toss with the barbecue sauce until the meat is glossy and moist but not soupy.",
+      "In a separate bowl, combine the cabbage slaw mix, mayonnaise, and apple cider vinegar. Stir until evenly coated, then let the slaw chill for 10 minutes so it softens slightly while keeping some crunch.",
+      "Warm the buns in a 300°F (150°C) oven for 3 to 4 minutes. Pile the pulled pork onto the buns, top with slaw, and serve immediately."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "garlic-butter-salmon",
+    "name": "Garlic Butter Salmon",
+    "description": "Skillet salmon with garlic butter, lemon, and roasted broccoli.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "American",
+    "prepTime": 10,
+    "cookTime": 15,
+    "ingredients": [
+      {
+        "name": "salmon fillet",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "broccoli",
+        "quantity": 2,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "butter",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 425°F (220°C). Cut the broccoli into bite-size florets, toss with olive oil, spread on a parchment-lined sheet pan, and roast for 15 to 18 minutes, until tender with browned, crisp edges.",
+      "Pat the salmon dry and season lightly with salt and pepper. Heat a skillet over medium-high heat with a small drizzle of oil and sear the salmon for 3 to 4 minutes on the first side, then 2 to 3 minutes on the second, until it is nearly cooked through and flakes at the edges.",
+      "Reduce the heat to medium-low, add the butter and minced garlic, and cook for 30 seconds until fragrant. Squeeze in the lemon juice and spoon the foaming butter over the salmon for 1 minute, until the center reaches 125 to 130°F (52 to 54°C) for medium or flakes easily.",
+      "Rest the salmon for 2 minutes before serving with the roasted broccoli. Spoon the garlic butter from the pan over the top."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "teriyaki-salmon-rice-bowls",
+    "name": "Teriyaki Salmon Rice Bowls",
+    "description": "Rice bowls with glazed salmon, cucumbers, and quick-pickled carrots.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 15,
+    "cookTime": 15,
+    "ingredients": [
+      {
+        "name": "salmon fillet",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "teriyaki sauce",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "rice vinegar",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Cook the rice according to package directions and let it sit covered for 5 minutes after cooking. Meanwhile, cut the cucumber into thin half-moons and toss the shredded carrot with the rice vinegar and a pinch of salt for a quick pickle; let stand 10 minutes.",
+      "Preheat the oven to 425°F (220°C) or heat a skillet over medium-high heat. Cook the salmon for 8 to 10 minutes in the oven or 3 to 4 minutes per side in the skillet, brushing with teriyaki sauce during the last 2 minutes, until the fish flakes easily.",
+      "Let the salmon rest for 2 minutes so the glaze sets slightly. Fluff the rice with a fork and taste the pickled carrots; they should be lightly softened but still crisp.",
+      "Build bowls with rice, glazed salmon, cucumber, and the pickled carrots. Spoon over any extra teriyaki sauce from the pan and serve warm."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "mediterranean-tuna-pasta",
+    "name": "Mediterranean Tuna Pasta",
+    "description": "Pasta tossed with tuna, capers, tomatoes, parsley, and olive oil.",
+    "mealType": [
+      "lunch"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 10,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "penne",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "canned tuna",
+        "quantity": 2,
+        "unit": "can",
+        "category": "protein"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "capers",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Bring a large pot of salted water to a boil and cook the penne for 9 to 11 minutes until al dente. Reserve 1/4 cup of the pasta water, then drain the pasta.",
+      "Halve the cherry tomatoes and drain the tuna well. Heat the olive oil in a large skillet over medium heat, add the tomatoes and capers, and cook for 2 to 3 minutes until the tomatoes soften slightly and release a little juice.",
+      "Add the tuna and cooked pasta to the skillet along with a splash of reserved pasta water. Toss over medium-low heat for 1 to 2 minutes until the mixture looks lightly glossy and the pasta is evenly coated.",
+      "Stir in the chopped parsley and serve warm or at room temperature. Let it stand 2 minutes before serving so the sauce clings to the pasta."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "fish-tacos-with-cabbage-slaw",
+    "name": "Fish Tacos with Cabbage Slaw",
+    "description": "Seasoned white fish tucked into tortillas with lime slaw and crema.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 15,
+    "cookTime": 12,
+    "ingredients": [
+      {
+        "name": "white fish fillet",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "corn tortilla",
+        "quantity": 8,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "cabbage",
+        "quantity": 0.5,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "lime",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "sour cream",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "chili powder",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Pat the fish dry and cut it into taco-size pieces. Season both sides with chili powder, salt, and pepper, then let it sit for 5 minutes while you prepare the toppings.",
+      "Toss the shredded cabbage with the juice of half the lime and a pinch of salt. In a small bowl, stir the sour cream with the remaining lime juice until smooth and loose enough to drizzle.",
+      "Heat a skillet over medium-high heat with a thin layer of oil and cook the fish for 2 to 3 minutes per side, until lightly browned and flaky in the center. Warm the tortillas in a dry skillet over medium heat for 20 seconds per side.",
+      "Fill each tortilla with fish, cabbage slaw, and lime crema. Serve immediately while the tortillas are warm and the slaw is crisp."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "sheet-pan-salmon-and-vegetables",
+    "name": "Sheet Pan Salmon and Vegetables",
+    "description": "Roasted salmon with zucchini, peppers, and red onion on one tray.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 12,
+    "cookTime": 18,
+    "ingredients": [
+      {
+        "name": "salmon fillet",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "zucchini",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "red onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "Italian seasoning",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 425°F (220°C). Cut the zucchini, bell pepper, and red onion into 1-inch pieces, toss with olive oil and Italian seasoning, and spread on a parchment-lined sheet pan.",
+      "Roast the vegetables for 12 minutes, stirring once halfway through, until they begin to soften and pick up light browning. Push them to the sides of the pan to make room for the salmon.",
+      "Place the salmon on the pan, season lightly with salt and pepper, and return to the oven for 10 to 12 minutes. Cook until the salmon flakes easily with a fork and the vegetables are tender with caramelized edges.",
+      "Rest the pan for 2 minutes before serving. This brief rest lets the salmon finish gently and makes the vegetables easier to transfer without breaking."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "shrimp-fried-rice",
+    "name": "Shrimp Fried Rice",
+    "description": "Shrimp, peas, carrots, and rice stir-fried with egg and scallions.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 10,
+    "cookTime": 10,
+    "ingredients": [
+      {
+        "name": "shrimp",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "cooked rice",
+        "quantity": 4,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "peas and carrots",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "frozen"
+      },
+      {
+        "name": "eggs",
+        "quantity": 2,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "green onion",
+        "quantity": 3,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Beat the eggs in a small bowl and break up the cooked rice so the grains are separate. Pat the shrimp dry so they sear instead of steaming.",
+      "Heat a wok or large skillet over medium-high heat with a little oil. Cook the shrimp for 1 to 2 minutes per side, until pink, curled, and just opaque, then transfer to a plate.",
+      "Add the eggs to the pan and scramble for 30 seconds until softly set. Add the rice, peas and carrots, and soy sauce, then stir-fry for 3 to 4 minutes, pressing out any rice clumps and cooking until the rice is hot and lightly toasted.",
+      "Return the shrimp to the pan with the green onion and toss for 30 seconds to warm through. Serve immediately while the rice is steaming and the shrimp are still tender."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "beef-and-broccoli",
+    "name": "Beef and Broccoli",
+    "description": "Thin-sliced beef stir-fried with broccoli in a glossy garlic soy sauce.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 15,
+    "cookTime": 10,
+    "ingredients": [
+      {
+        "name": "flank steak",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "broccoli",
+        "quantity": 2,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "brown sugar",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Cook the rice first and keep it covered while you prepare the stir-fry. Slice the flank steak thinly across the grain and cut the broccoli into small florets for quick, even cooking.",
+      "Heat a wok or large skillet over high heat until very hot, then add a little oil. Sear the beef for 2 to 3 minutes, stirring only occasionally, until browned at the edges but still slightly pink in spots.",
+      "Add the broccoli and minced garlic and stir-fry over medium-high heat for 3 to 4 minutes, until the broccoli turns bright green and is crisp-tender. Stir together the soy sauce and brown sugar, then pour it into the pan.",
+      "Cook for 1 to 2 minutes more, tossing constantly, until the sauce reduces to a glossy glaze and the beef is just cooked through. Serve over the rice right away."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "steak-fajita-bowls",
+    "name": "Steak Fajita Bowls",
+    "description": "Rice bowls with seared steak, peppers, onions, salsa, and lime.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 15,
+    "cookTime": 14,
+    "ingredients": [
+      {
+        "name": "sirloin steak",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "salsa",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "lime",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Cook the rice according to package directions and let it rest covered for 5 minutes. Slice the bell pepper and onion into thin strips and pat the steak dry before seasoning with salt and pepper.",
+      "Heat a heavy skillet over medium-high heat until very hot. Sear the steak for 3 to 4 minutes per side for medium-rare or 4 to 5 minutes per side for medium, until the center reaches 130 to 140°F (54 to 60°C).",
+      "Transfer the steak to a cutting board and rest for 5 minutes. In the same skillet, cook the peppers and onion for 4 to 5 minutes over medium-high heat until softened with charred edges.",
+      "Slice the steak thinly across the grain and build bowls with rice, steak, vegetables, salsa, and lime wedges. Squeeze the lime over just before serving."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "classic-spaghetti-bolognese",
+    "name": "Classic Spaghetti Bolognese",
+    "description": "Rich tomato meat sauce tossed with spaghetti and parmesan.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Italian",
+    "prepTime": 15,
+    "cookTime": 30,
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "spaghetti",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 28,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "parmesan",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "instructions": [
+      "Bring a large pot of salted water to a boil and cook the spaghetti for 9 to 11 minutes until al dente. Reserve 1/2 cup of pasta water, then drain the pasta.",
+      "While the pasta cooks, heat a large skillet or saucepan over medium-high heat. Add the ground beef, chopped onion, and minced garlic and cook for 7 to 8 minutes, breaking up the meat, until the beef is browned and the onion is soft.",
+      "Stir in the crushed tomatoes and reduce the heat to medium-low. Simmer for 15 to 20 minutes, stirring occasionally, until the sauce thickens and leaves a trail when you drag a spoon through it.",
+      "Toss the spaghetti with the sauce, adding a splash of pasta water if needed to loosen it. Top with parmesan and let the pasta stand 1 minute before serving so the sauce clings evenly."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "greek-meatball-pitas",
+    "name": "Greek Meatball Pitas",
+    "description": "Beef meatballs tucked into pita bread with cucumber salad and yogurt sauce.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 15,
+    "cookTime": 18,
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "pita bread",
+        "quantity": 6,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "oregano",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Combine the ground beef with chopped parsley, oregano, salt, and pepper, then mix just until combined. Form into small meatballs about 1 1/2 inches wide so they cook evenly.",
+      "Heat a skillet over medium-high heat with a thin layer of oil and cook the meatballs for 8 to 10 minutes, turning every 2 minutes, until browned all over and the centers reach 160°F (71°C).",
+      "Dice the cucumber into small pieces and stir the Greek yogurt with a squeeze of lemon if available, plus a pinch of salt, until smooth. Warm the pita bread in a 300°F (150°C) oven for 4 minutes or in a dry skillet for 20 seconds per side.",
+      "Let the meatballs rest for 2 minutes, then tuck them into the warm pitas with the cucumber and yogurt sauce. Serve while the pitas are soft and the meatballs are juicy."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "beef-enchilada-skillet",
+    "name": "Beef Enchilada Skillet",
+    "description": "Ground beef, tortillas, beans, and enchilada sauce cooked in one pan.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 12,
+    "cookTime": 20,
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "corn tortilla",
+        "quantity": 8,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "black beans",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "enchilada sauce",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cheddar cheese",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Chop the onion and cut the corn tortillas into 1-inch strips. Heat a large oven-safe skillet over medium-high heat and cook the ground beef and onion for 6 to 8 minutes, breaking up the meat, until the onion is soft and the beef is browned.",
+      "Stir in the black beans and enchilada sauce and bring the mixture to a simmer over medium heat. Once it is bubbling steadily, fold in the tortilla strips so they soften but still hold some shape.",
+      "Reduce the heat to medium-low and cook for 3 to 4 minutes, stirring once, until the tortilla edges are tender and the sauce thickens slightly. Scatter the cheddar cheese evenly over the top.",
+      "Cover the skillet and cook for 1 to 2 minutes, or place it under a broiler for 1 minute, until the cheese is fully melted. Let rest 2 minutes before serving so the sauce settles."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "lamb-kofta-with-couscous",
+    "name": "Lamb Kofta with Couscous",
+    "description": "Spiced lamb patties with couscous, cucumbers, and yogurt.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 15,
+    "cookTime": 14,
+    "ingredients": [
+      {
+        "name": "ground lamb",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "couscous",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "cumin",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Combine the ground lamb with cumin, chopped parsley, salt, and pepper, then mix gently and shape into oval kofta about 3 inches long. Avoid overmixing so the kofta stay tender.",
+      "Bring water for the couscous to a boil according to the package directions, stir in the couscous, cover, and let stand off the heat for 5 minutes. Fluff with a fork so the grains separate.",
+      "Heat a skillet or grill pan over medium-high heat and cook the kofta for 4 to 5 minutes per side, until browned and the centers reach 160°F (71°C). Dice the cucumber while the kofta cooks.",
+      "Rest the kofta for 2 minutes, then serve over couscous with cucumber and a spoonful of Greek yogurt. The exterior should be well browned while the inside stays juicy."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "beef-burrito-bowls",
+    "name": "Beef Burrito Bowls",
+    "description": "Seasoned beef with rice, corn, beans, salsa, and avocado.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 12,
+    "cookTime": 15,
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "corn",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "frozen"
+      },
+      {
+        "name": "black beans",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "avocado",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "salsa",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Cook the rice first and let it rest covered for 5 minutes. While it cooks, drain the black beans and measure the corn so both are ready to warm quickly.",
+      "Heat a skillet over medium-high heat and cook the ground beef for 6 to 8 minutes, breaking it up as it browns. Season with salt, pepper, and a pinch of cumin or chili powder if desired, and cook until no pink remains.",
+      "Warm the corn and black beans in a small saucepan over medium-low heat for 2 to 3 minutes or microwave them until hot. Slice the avocado just before serving so it stays bright green.",
+      "Layer the rice, beef, corn, beans, avocado, and salsa into bowls. Serve immediately while the beef is hot and the avocado is cool and creamy."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "steakhouse-salad",
+    "name": "Steakhouse Salad",
+    "description": "Sliced steak over romaine with tomatoes, blue cheese, and crispy onions.",
+    "mealType": [
+      "lunch"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "American",
+    "prepTime": 15,
+    "cookTime": 10,
+    "ingredients": [
+      {
+        "name": "sirloin steak",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "romaine",
+        "quantity": 1,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "tomato",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "blue cheese",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "crispy onions",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "ranch dressing",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "instructions": [
+      "Pat the steak dry and season generously with salt and pepper. Heat a heavy skillet over medium-high heat and sear the steak for 3 to 4 minutes per side for medium-rare or 4 to 5 minutes per side for medium, until the center reaches 130 to 140°F (54 to 60°C).",
+      "Transfer the steak to a cutting board and let it rest for 5 to 7 minutes before slicing thinly across the grain. Meanwhile, chop the romaine and cut the tomato into wedges or bite-size pieces.",
+      "Arrange the romaine and tomato in a large serving bowl and lightly season with a pinch of salt. Add the sliced steak over the greens so the warm juices lightly coat the salad.",
+      "Top with blue cheese, crispy onions, and ranch dressing just before serving. The contrast should be crisp, cool greens with warm steak and crunchy onions."
+    ],
+    "servings": 4,
+    "difficulty": "easy"
+  },
+  {
+    "id": "chicken-parmesan-bowls",
+    "name": "Chicken Parmesan Bowls",
+    "description": "Breaded chicken over marinara rice bowls with mozzarella and basil.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Italian",
+    "prepTime": 15,
+    "cookTime": 20,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "breadcrumbs",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "marinara",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "mozzarella",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "basil",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Cook the rice according to package directions and keep it covered. Pound the chicken breasts to an even thickness if needed, then coat them lightly in breadcrumbs, pressing so the coating adheres.",
+      "Heat a skillet over medium heat with a thin layer of oil and cook the chicken for 4 to 5 minutes per side until golden brown and the center reaches 165°F (74°C). Warm the marinara separately over medium-low heat for 3 to 4 minutes.",
+      "Spoon marinara over the chicken, top with the mozzarella, and cover the skillet for 1 to 2 minutes until the cheese melts completely. If needed, finish under a broiler for 30 to 60 seconds for extra browning.",
+      "Let the chicken rest 2 minutes, then slice and serve over rice with more marinara and basil. The coating should stay crisp around the edges even after saucing."
+    ]
+  },
+  {
+    "id": "thai-chicken-peanut-noodles",
+    "name": "Thai Chicken Peanut Noodles",
+    "description": "Rice noodles tossed with chicken, crunchy vegetables, and peanut sauce.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 15,
+    "cookTime": 15,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "chicken thigh",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice noodles",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "peanut butter",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "lime",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Cook the rice noodles according to package directions, usually 4 to 6 minutes in simmering water, until just tender. Drain and rinse briefly under cool water to stop the cooking, then toss lightly so they do not clump.",
+      "Heat a skillet over medium-high heat and cook the chicken thighs for 5 to 6 minutes per side, until browned and the thickest part reaches 165°F (74°C). Rest for 5 minutes, then slice thinly.",
+      "Whisk the peanut butter, soy sauce, and lime juice with 2 to 4 tablespoons of warm water until smooth and pourable. Cut the carrot into thin matchsticks and slice the cucumber into half-moons.",
+      "Toss the noodles with the chicken, vegetables, and peanut sauce until evenly coated. Let stand 1 minute before serving so the sauce absorbs into the noodles."
+    ]
+  },
+  {
+    "id": "greek-chicken-meatballs",
+    "name": "Greek Chicken Meatballs",
+    "description": "Chicken meatballs with lemon rice, cucumbers, and dill yogurt.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 15,
+    "cookTime": 18,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "ground chicken",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "dill",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Combine the ground chicken with chopped dill, salt, and pepper, mixing just until blended. Form into meatballs about 1 1/2 inches wide and place them on a parchment-lined tray or plate.",
+      "Bake at 425°F (220°C) for 12 to 15 minutes or pan-sear in a skillet over medium heat for 8 to 10 minutes, turning often, until the meatballs are firm and the centers reach 165°F (74°C).",
+      "Cook the rice while the meatballs cook, then season it with lemon zest and juice so it tastes bright but not wet. Stir the Greek yogurt with a little more dill and a pinch of salt for a quick sauce.",
+      "Let the meatballs rest for 2 minutes before serving with the lemon rice, sliced cucumber, and dill yogurt. They should be lightly browned outside and juicy inside."
+    ]
+  },
+  {
+    "id": "crispy-pork-schnitzel",
+    "name": "Crispy Pork Schnitzel",
+    "description": "Thin pork cutlets breaded and pan-fried with a simple cucumber salad.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "European",
+    "prepTime": 15,
+    "cookTime": 15,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "pork cutlet",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "breadcrumbs",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "eggs",
+        "quantity": 2,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "flour",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Place the pork cutlets between sheets of plastic wrap and pound them to an even 1/4-inch thickness. Set up three shallow dishes with flour, beaten eggs, and breadcrumbs so you can bread efficiently.",
+      "Season the pork lightly with salt and pepper, then dredge each piece in flour, shaking off the excess. Dip into egg, let the extra drip off, then press into the breadcrumbs until fully coated.",
+      "Heat a large skillet with a shallow layer of oil over medium-high heat. Fry the cutlets for 2 to 3 minutes per side, adjusting to medium if needed, until deep golden brown and the centers reach 145°F (63°C).",
+      "Transfer to a paper towel-lined plate and rest for 1 minute. Serve with sliced cucumber and lemon wedges while the crust is still crisp."
+    ]
+  },
+  {
+    "id": "pork-ramen-stir-fry",
+    "name": "Pork Ramen Stir-Fry",
+    "description": "Ground pork and vegetables tossed with ramen noodles and savory sauce.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 12,
+    "cookTime": 12,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "ground pork",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "ramen noodles",
+        "quantity": 3,
+        "unit": "pack",
+        "category": "pantry"
+      },
+      {
+        "name": "cabbage",
+        "quantity": 0.5,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "sesame oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Cook the ramen noodles in boiling water for 2 to 3 minutes until just tender, then drain and rinse briefly under cool water so they do not overcook. Shred the cabbage and carrot into thin strips.",
+      "Heat a large skillet or wok over medium-high heat and cook the ground pork for 5 to 6 minutes, breaking it into small pieces, until browned. Add the cabbage and carrot and stir-fry for 2 to 3 minutes until they soften slightly but still have bite.",
+      "Stir in the soy sauce and sesame oil, then add the drained noodles. Toss over medium-high heat for 1 to 2 minutes until the noodles are hot, coated, and beginning to crisp lightly in spots.",
+      "Serve immediately. The finished stir-fry should be glossy, savory, and not watery in the bottom of the pan."
+    ]
+  },
+  {
+    "id": "mexican-pork-stuffed-peppers",
+    "name": "Mexican Pork Stuffed Peppers",
+    "description": "Bell peppers filled with pork, rice, tomatoes, and melted cheese.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 15,
+    "cookTime": 25,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "ground pork",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 4,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "rice",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "diced tomatoes",
+        "quantity": 14,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "cheddar cheese",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 375°F (190°C). Halve the bell peppers lengthwise, remove the seeds and membranes, and place them cut side up in a baking dish.",
+      "Heat a skillet over medium-high heat and cook the ground pork and chopped onion for 6 to 8 minutes, until browned and the onion is soft. Stir in the cooked rice and diced tomatoes and simmer 2 to 3 minutes until the filling is thick rather than runny.",
+      "Fill the pepper halves generously with the pork mixture and top with cheddar cheese. Cover the baking dish loosely with foil and bake for 25 minutes, then uncover and bake 5 to 10 minutes more until the peppers are tender and the cheese is melted and lightly browned.",
+      "Let the stuffed peppers rest for 5 minutes before serving so the filling sets and does not spill out when cut."
+    ]
+  },
+  {
+    "id": "salmon-caesar-wraps",
+    "name": "Salmon Caesar Wraps",
+    "description": "Flaked salmon, romaine, and parmesan wrapped with creamy Caesar dressing.",
+    "mealType": [
+      "lunch"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "American",
+    "prepTime": 10,
+    "cookTime": 12,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "salmon fillet",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "flour tortilla",
+        "quantity": 4,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "romaine",
+        "quantity": 1,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "parmesan",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "Caesar dressing",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "croutons",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Pat the salmon dry, season lightly with salt and pepper, and cook it in a skillet over medium-high heat for 3 to 4 minutes per side or bake at 425°F (220°C) for 8 to 10 minutes, until it flakes easily. Rest for 2 minutes, then break into large pieces.",
+      "Chop the romaine into bite-size pieces and toss with the Caesar dressing, parmesan, and crushed croutons just until coated. Keep the salad lightly dressed so the wraps do not become soggy.",
+      "Warm the tortillas in a dry skillet over medium heat for 20 seconds per side or in a 300°F (150°C) oven for 4 minutes until pliable. Lay the tortillas flat and divide the salad between them.",
+      "Top with the salmon, roll tightly, and serve immediately. If cutting in half, let the wraps stand seam-side down for 30 seconds first so they hold their shape."
+    ]
+  },
+  {
+    "id": "mediterranean-shrimp-orzo",
+    "name": "Mediterranean Shrimp Orzo",
+    "description": "Orzo with shrimp, tomatoes, spinach, lemon, and feta.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 12,
+    "cookTime": 14,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "shrimp",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "orzo",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Bring a pot of salted water to a boil and cook the orzo for 8 to 9 minutes until tender. Reserve 1/4 cup of cooking water, then drain.",
+      "Pat the shrimp dry. Heat a skillet over medium-high heat with a little oil and cook the shrimp for 1 to 2 minutes per side until pink and just opaque, then transfer to a plate.",
+      "In the same skillet over medium heat, cook the cherry tomatoes for 2 to 3 minutes until they begin to burst. Add the spinach and stir for 30 to 60 seconds until wilted.",
+      "Return the shrimp to the skillet with the orzo, lemon juice, feta, and a splash of reserved orzo water. Toss for 1 minute until glossy and evenly combined, then serve immediately."
+    ]
+  },
+  {
+    "id": "miso-glazed-cod",
+    "name": "Miso Glazed Cod",
+    "description": "Baked cod with miso glaze, rice, and sesame green beans.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 12,
+    "cookTime": 16,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "cod fillet",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "green beans",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "produce"
+      },
+      {
+        "name": "miso paste",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "sesame seeds",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Cook the rice first and keep it warm. Preheat the oven to 400°F (200°C), trim the green beans, and whisk the miso paste with the soy sauce until smooth.",
+      "Place the cod on a parchment-lined baking sheet and spread the miso glaze evenly over the top. Bake for 10 to 12 minutes, until the fish flakes easily and the glaze is lightly caramelized at the edges.",
+      "While the cod bakes, saute the green beans in a skillet over medium-high heat with a little oil for 4 to 5 minutes, stirring occasionally, until crisp-tender and lightly blistered. Season lightly with salt.",
+      "Serve the cod over the rice with the green beans and a sprinkle of sesame seeds. Let the fish rest 1 minute after baking so the flakes hold together when plated."
+    ]
+  },
+  {
+    "id": "beef-kofta-rice-plates",
+    "name": "Beef Kofta Rice Plates",
+    "description": "Herbed beef kofta with rice, tomatoes, cucumbers, and yogurt sauce.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Mediterranean",
+    "prepTime": 15,
+    "cookTime": 16,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "tomato",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Mix the ground beef with chopped parsley, salt, and pepper, then shape into oblong kofta about 3 inches long. Refrigerate for 10 minutes if the mixture feels very soft so it holds its shape better in the pan.",
+      "Cook the rice according to package directions. Heat a skillet or grill pan over medium-high heat and cook the kofta for 4 to 5 minutes per side, until browned and the centers reach 160°F (71°C).",
+      "Dice the cucumber and tomato into small pieces and season lightly with salt. Spoon the Greek yogurt into a serving bowl so it is ready for plating.",
+      "Rest the kofta for 2 minutes, then serve with the rice, cucumber-tomato salad, and yogurt. The outside should be browned and slightly crisp while the inside stays moist."
+    ]
+  },
+  {
+    "id": "beef-taco-skillet",
+    "name": "Beef Taco Skillet",
+    "description": "Ground beef, tortillas, peppers, and cheese cooked into a taco bake.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 12,
+    "cookTime": 18,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "flour tortilla",
+        "quantity": 6,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "salsa",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cheddar cheese",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "black beans",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Cut the bell pepper into small strips and tear the flour tortillas into 2-inch pieces. Heat a large oven-safe skillet over medium-high heat and cook the ground beef and bell pepper for 6 to 8 minutes until the beef is browned and the pepper is tender.",
+      "Stir in the salsa and black beans and bring the mixture to a simmer over medium heat. Fold in the tortilla pieces so they soften in the sauce but still keep some texture.",
+      "Scatter the cheddar evenly over the top. Cover and cook over low heat for 2 minutes, or bake at 375°F (190°C) for 5 minutes, until the cheese is melted and bubbling.",
+      "Let the skillet rest for 2 minutes before serving. This keeps the filling from being too loose and helps the tortillas absorb the sauce."
+    ]
+  },
+  {
+    "id": "steak-gnocchi-skillet",
+    "name": "Steak Gnocchi Skillet",
+    "description": "Seared steak tips with pillowy gnocchi, mushrooms, and spinach.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Italian",
+    "prepTime": 15,
+    "cookTime": 18,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "sirloin steak",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "gnocchi",
+        "quantity": 16,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "mushrooms",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "parmesan",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "butter",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "dairy"
+      }
+    ],
+    "instructions": [
+      "Cut the sirloin into bite-size strips or cubes and season with salt and pepper. Heat a large skillet over medium-high heat with a little oil and sear the steak for 2 to 3 minutes, until browned on the outside but still slightly pink inside, then transfer to a plate.",
+      "Add the gnocchi to the same skillet over medium heat and cook for 4 to 5 minutes, stirring occasionally, until lightly crisp and golden in spots. Add the mushrooms and butter and cook 3 minutes more until the mushrooms are browned.",
+      "Stir in the spinach and cook for 30 to 60 seconds until just wilted. Return the steak to the skillet and toss for 1 minute, until the steak is warmed through and reaches your preferred doneness.",
+      "Finish with parmesan and let the skillet stand for 1 minute before serving. The gnocchi should have crisp edges with a tender center."
+    ]
+  },
+  {
+    "id": "southwest-chicken-chopped-salad",
+    "name": "Southwest Chicken Chopped Salad",
+    "description": "Chopped salad with chicken, corn, black beans, avocado, and tortilla strips.",
+    "mealType": [
+      "lunch"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 15,
+    "cookTime": 12,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "romaine",
+        "quantity": 1,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "corn",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "frozen"
+      },
+      {
+        "name": "black beans",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "avocado",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "tortilla strips",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Season the chicken breasts lightly with salt and pepper. Cook them in a skillet over medium-high heat for 5 to 6 minutes per side, until browned and the thickest part reaches 165°F (74°C), then rest for 5 minutes before slicing.",
+      "While the chicken rests, chop the romaine into bite-size pieces and place it in a large bowl. Drain the black beans and corn, and dice the avocado just before serving.",
+      "Add the corn, black beans, avocado, and tortilla strips to the romaine. Slice the chicken and arrange it over the salad so the warm meat slightly softens the greens.",
+      "Serve immediately with your preferred vinaigrette or salsa-ranch dressing. The salad should stay crisp, so dress it only at the table if making ahead."
+    ]
+  },
+  {
+    "id": "creamy-tuscan-chicken",
+    "name": "Creamy Tuscan Chicken",
+    "description": "Chicken simmered with garlic, spinach, tomatoes, and a light cream sauce.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "chicken"
+    ],
+    "cuisine": "Italian",
+    "prepTime": 12,
+    "cookTime": 18,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "sun-dried tomatoes",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "heavy cream",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "parmesan",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "instructions": [
+      "Pat the chicken dry and season lightly with salt and pepper. Heat a large skillet over medium-high heat with a little oil and sear the chicken for 4 to 5 minutes per side, until golden and nearly cooked through.",
+      "Reduce the heat to medium and add the garlic and sun-dried tomatoes. Cook for 30 to 60 seconds, stirring constantly, until fragrant but not browned.",
+      "Pour in the heavy cream and add the parmesan, then simmer over medium-low heat for 3 to 5 minutes until the sauce thickens enough to coat the back of a spoon. Return the chicken fully to the sauce and cook until it reaches 165°F (74°C).",
+      "Stir in the spinach and cook 1 minute until wilted. Let the skillet rest off the heat for 2 minutes before serving so the sauce settles and thickens slightly."
+    ]
+  },
+  {
+    "id": "maple-pork-meatballs",
+    "name": "Maple Pork Meatballs",
+    "description": "Baked pork meatballs glazed with maple soy sauce and served with roasted carrots.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "American",
+    "prepTime": 15,
+    "cookTime": 20,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "ground pork",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "breadcrumbs",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "egg",
+        "quantity": 1,
+        "unit": "count",
+        "category": "dairy"
+      },
+      {
+        "name": "maple syrup",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "carrot",
+        "quantity": 6,
+        "unit": "count",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 425°F (220°C). Mix the ground pork with the breadcrumbs and egg just until combined, then form into meatballs about 1 1/2 inches wide. Cut the carrot into thin sticks or coins so it roasts at the same rate.",
+      "Arrange the meatballs and carrots on a parchment-lined sheet pan, leaving a little space between each piece. Roast for 14 to 18 minutes, turning the carrots once halfway through, until the meatballs are browned and reach 160°F (71°C).",
+      "During the last 3 minutes of roasting, warm the maple syrup and soy sauce in a small saucepan over medium-low heat until lightly bubbling and glossy. Brush or spoon the glaze over the meatballs as soon as they come out of the oven.",
+      "Rest for 2 minutes before serving so the glaze clings to the meatballs. The carrots should be tender with lightly caramelized edges."
+    ]
+  },
+  {
+    "id": "pork-banh-mi-bowls",
+    "name": "Pork Banh Mi Bowls",
+    "description": "Rice bowls with pork, pickled carrots, cucumbers, and fresh herbs.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "pork"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 15,
+    "cookTime": 15,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "ground pork",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "rice vinegar",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "cilantro",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Cook the rice according to package directions and keep it warm. While it cooks, shred the carrot, slice the cucumber into thin half-moons, and roughly chop the cilantro.",
+      "Toss the carrot with the rice vinegar and a pinch of sugar and salt, then let it stand for 10 to 15 minutes so it softens into a quick pickle while staying crisp.",
+      "Heat a skillet over medium-high heat and cook the ground pork for 5 to 6 minutes, breaking it up as it browns, until fully cooked and lightly crisp at the edges. Season with salt and pepper as it cooks.",
+      "Build bowls with the rice, pork, pickled carrot, cucumber, and cilantro. Serve immediately for the best contrast between the hot pork and cool, crunchy vegetables."
+    ]
+  },
+  {
+    "id": "salmon-chowder",
+    "name": "Salmon Chowder",
+    "description": "Comforting chowder with salmon, potatoes, corn, and dill.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "American",
+    "prepTime": 12,
+    "cookTime": 22,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "salmon fillet",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "potato",
+        "quantity": 3,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "corn",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "frozen"
+      },
+      {
+        "name": "celery",
+        "quantity": 2,
+        "unit": "stalk",
+        "category": "produce"
+      },
+      {
+        "name": "half and half",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "dill",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      }
+    ],
+    "instructions": [
+      "Peel and dice the potato into 1/2-inch cubes and slice the celery thinly. Place both in a soup pot with enough water or broth to cover by about 1 inch, bring to a boil over medium-high heat, then reduce to medium and simmer for 10 to 12 minutes until the potatoes are nearly tender.",
+      "Cut the salmon into large chunks and add it to the pot with the corn. Simmer gently over medium-low heat for 5 to 6 minutes, until the salmon is just cooked and flakes easily with a spoon.",
+      "Lower the heat to low and stir in the half and half. Warm for 2 to 3 minutes without letting the soup boil hard, or the dairy may separate.",
+      "Stir in the dill and season to taste. Let the chowder rest for 3 minutes before serving so it thickens slightly and the salmon stays in large pieces."
+    ]
+  },
+  {
+    "id": "shrimp-taco-bowls",
+    "name": "Shrimp Taco Bowls",
+    "description": "Shrimp bowls with cilantro rice, cabbage slaw, corn, and lime crema.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "fish"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 15,
+    "cookTime": 10,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "shrimp",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "cabbage",
+        "quantity": 0.5,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "corn",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "frozen"
+      },
+      {
+        "name": "lime",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "sour cream",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "instructions": [
+      "Cook the rice according to package directions, then fluff it with a fork and season with lime juice and chopped cilantro if using. Keep it covered so it stays warm.",
+      "Pat the shrimp dry and season with chili powder, salt, and pepper. Heat a skillet over medium-high heat and cook the shrimp for 1 to 2 minutes per side until pink and just opaque.",
+      "Shred the cabbage and toss it with lime juice and a pinch of salt, massaging for 30 seconds so it softens slightly while staying crisp. Stir the sour cream with a little more lime juice until smooth for a quick crema.",
+      "Build bowls with rice, shrimp, cabbage slaw, and corn, then drizzle with the lime crema. Serve right away while the shrimp are still tender."
+    ]
+  },
+  {
+    "id": "beef-stuffed-sweet-potatoes",
+    "name": "Beef Stuffed Sweet Potatoes",
+    "description": "Roasted sweet potatoes filled with taco beef, black beans, and cheddar.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "American",
+    "prepTime": 12,
+    "cookTime": 30,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "sweet potato",
+        "quantity": 4,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "ground beef",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "black beans",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "cheddar cheese",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "green onion",
+        "quantity": 3,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "chili powder",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 425°F (220°C). Prick the sweet potatoes several times with a fork, place them on a parchment-lined sheet pan, and roast for 45 to 60 minutes until a knife slides easily through the centers.",
+      "Near the end of the baking time, heat a skillet over medium-high heat and cook the ground beef with the chili powder, salt, and pepper for 6 to 8 minutes until browned. Stir in the black beans and cook 1 to 2 minutes more until heated through.",
+      "Split the roasted sweet potatoes lengthwise and fluff the insides with a fork. Spoon the beef mixture into each potato and top with cheddar cheese.",
+      "Return to the oven for 3 to 5 minutes until the cheese melts, then finish with sliced green onion. Let stand 2 minutes before serving so the filling sets."
+    ]
+  },
+  {
+    "id": "italian-beef-and-peppers",
+    "name": "Italian Beef and Peppers",
+    "description": "Sliced beef simmered with peppers, onions, and Italian herbs.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Italian",
+    "prepTime": 15,
+    "cookTime": 20,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "sirloin steak",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "bell pepper",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "Italian seasoning",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "hoagie roll",
+        "quantity": 4,
+        "unit": "count",
+        "category": "bakery"
+      }
+    ],
+    "instructions": [
+      "Slice the sirloin, bell peppers, and onion into thin strips and mince the garlic finely. Keeping the vegetables and beef similar in size helps everything cook at the same pace.",
+      "Heat a large skillet over medium-high heat with a little oil. Cook the peppers and onion for 5 to 6 minutes, stirring occasionally, until softened and lightly browned at the edges.",
+      "Add the steak, garlic, and Italian seasoning and cook for 3 to 4 minutes over medium-high heat, tossing frequently, until the beef is browned and just cooked through. Lower the heat to medium if the garlic starts to darken too fast.",
+      "Warm the hoagie rolls in a 300°F (150°C) oven for 3 to 4 minutes, then fill with the beef and pepper mixture. Serve immediately while the rolls are soft and the filling is hot."
+    ]
+  }
+]
