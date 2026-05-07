@@ -1,8 +1,72 @@
 import recipesJson from "@/data/recipes.json";
 import { addDays, getMonday, toIsoDate } from "@/lib/date";
-import { CustomRecipe, MealPlan, MealType, ProteinType, Recipe, UserPreferences } from "@/types";
+import { BRUNCH_MODE_MEAL_TYPES, MEAL_TYPES, STANDARD_MEAL_TYPES } from "@/lib/constants";
+import { getMealParticipationAvailability } from "@/lib/household";
+import { CustomRecipe, MealPlan, MealSlot, MealType, ProteinType, Recipe, UserPreferences } from "@/types";
 
 export const recipes = recipesJson as Recipe[];
+
+type LunchDinnerMealType = Extract<MealType, "lunch" | "dinner">;
+
+type RecipeFreshnessProfile = "fresh-fish" | "fresh-butcher" | "late-friendly" | "neutral";
+
+interface SlotContext {
+  dayIndex: number;
+  mealType: LunchDinnerMealType;
+  lunchDinnerIndex: number;
+  lunchDinnerCount: number;
+}
+
+const FRESH_FISH_KEYWORDS = [
+  "salmon",
+  "cod",
+  "halibut",
+  "trout",
+  "snapper",
+  "tilapia",
+  "mahi",
+  "mahi mahi",
+  "mahi-mahi",
+  "sea bass",
+  "branzino",
+  "white fish",
+  "fish fillet",
+  "fish filet"
+];
+
+const NON_FRESH_FISH_KEYWORDS = ["tuna", "shrimp", "chowder"];
+
+const BUTCHER_STYLE_KEYWORDS = [
+  "steak",
+  "sirloin",
+  "flank",
+  "strip steak",
+  "ribeye",
+  "pork chop",
+  "pork chops",
+  "pork loin",
+  "pork tenderloin",
+  "tenderloin",
+  "cutlet",
+  "medallion",
+  "schnitzel",
+  "lamb chop",
+  "lamb loin",
+  "leg of lamb"
+];
+
+const LATE_FRIENDLY_KEYWORDS = [
+  "ground beef",
+  "ground pork",
+  "ground chicken",
+  "ground turkey",
+  "ground lamb",
+  "bacon",
+  "sausage",
+  "meatball",
+  "meatballs",
+  "bolognese"
+];
 
 export function getAllRecipes(customRecipes: CustomRecipe[] = []): Recipe[] {
   return [...recipes, ...customRecipes];
@@ -11,6 +75,294 @@ export function getAllRecipes(customRecipes: CustomRecipe[] = []): Recipe[] {
 export function getRecipeMap(customRecipes: CustomRecipe[] = []) {
   return new Map(getAllRecipes(customRecipes).map((recipe) => [recipe.id, recipe]));
 }
+export function isRecipeEligibleForMealType(recipe: Recipe, mealType: MealType) {
+  if (mealType === "brunch") {
+    return recipe.mealType.some((type) => type === "brunch" || type === "breakfast" || type === "lunch");
+  }
+
+  return recipe.mealType.includes(mealType);
+}
+
+function makeEmptyMeals(): Record<MealType, MealSlot> {
+  return {
+    breakfast: { enabled: false },
+    brunch: { enabled: false },
+    lunch: { enabled: false },
+    dinner: { enabled: false }
+  };
+}
+
+function normalizeSlot(slot: MealSlot | undefined): MealSlot {
+  if (!slot?.enabled) {
+    return { enabled: false };
+  }
+
+  return {
+    enabled: true,
+    ...(slot.recipeId ? { recipeId: slot.recipeId } : {}),
+    ...(slot.consumed ? { consumed: true } : {})
+  };
+}
+
+function getActiveMealTypes(preferences: UserPreferences): MealType[] {
+  return preferences.brunchMode ? BRUNCH_MODE_MEAL_TYPES : STANDARD_MEAL_TYPES;
+}
+
+
+export function assignRecipeToSlot(
+  plan: MealPlan,
+  dayIndex: number,
+  mealType: MealType,
+  recipeId: string,
+  customRecipes: CustomRecipe[] = []
+): MealPlan {
+  const day = plan.days[dayIndex];
+
+  if (!day) {
+    return plan;
+  }
+
+  const slot = day.meals[mealType];
+  const recipe = getRecipeMap(customRecipes).get(recipeId);
+
+  if (!slot.enabled || slot.consumed || !recipe || !isRecipeEligibleForMealType(recipe, mealType)) {
+    return plan;
+  }
+
+  const days = [...plan.days];
+  days[dayIndex] = {
+    ...day,
+    meals: {
+      ...day.meals,
+      [mealType]: {
+        ...slot,
+        recipeId
+      }
+    }
+  };
+
+  return {
+    ...plan,
+    days
+  };
+}
+
+export function swapRecipesBetweenSlots(
+  plan: MealPlan,
+  source: { dayIndex: number; mealType: MealType },
+  target: { dayIndex: number; mealType: MealType },
+  customRecipes: CustomRecipe[] = []
+): MealPlan {
+  if (source.dayIndex === target.dayIndex && source.mealType === target.mealType) {
+    return plan;
+  }
+
+  const sourceDay = plan.days[source.dayIndex];
+  const targetDay = plan.days[target.dayIndex];
+
+  if (!sourceDay || !targetDay) {
+    return plan;
+  }
+
+  const sourceSlot = sourceDay.meals[source.mealType];
+  const targetSlot = targetDay.meals[target.mealType];
+
+  if (
+    !sourceSlot.enabled ||
+    !targetSlot.enabled ||
+    sourceSlot.consumed ||
+    targetSlot.consumed ||
+    !sourceSlot.recipeId
+  ) {
+    return plan;
+  }
+
+  const recipeMap = getRecipeMap(customRecipes);
+  const sourceRecipe = recipeMap.get(sourceSlot.recipeId);
+
+  if (!sourceRecipe) {
+    return plan;
+  }
+
+  const days = [...plan.days];
+
+  if (source.dayIndex === target.dayIndex) {
+    const day = sourceDay;
+
+    days[source.dayIndex] = {
+      ...day,
+      meals: {
+        ...day.meals,
+        [source.mealType]: targetSlot.recipeId
+          ? { ...sourceSlot, recipeId: targetSlot.recipeId }
+          : { enabled: sourceSlot.enabled },
+        [target.mealType]: {
+          ...targetSlot,
+          recipeId: sourceSlot.recipeId
+        }
+      }
+    };
+  } else {
+    days[source.dayIndex] = {
+      ...sourceDay,
+      meals: {
+        ...sourceDay.meals,
+        [source.mealType]: targetSlot.recipeId
+          ? { ...sourceSlot, recipeId: targetSlot.recipeId }
+          : { enabled: sourceSlot.enabled }
+      }
+    };
+
+    days[target.dayIndex] = {
+      ...targetDay,
+      meals: {
+        ...targetDay.meals,
+        [target.mealType]: {
+          ...targetSlot,
+          recipeId: sourceSlot.recipeId
+        }
+      }
+    };
+  }
+
+  return {
+    ...plan,
+    days
+  };
+}
+
+function recipeSearchText(recipe: Recipe) {
+  return [recipe.name, recipe.description, ...recipe.ingredients.map((ingredient) => ingredient.name)]
+    .join(" ")
+    .toLowerCase();
+}
+
+function includesKeyword(text: string, keywords: string[]) {
+  return keywords.some((keyword) => text.includes(keyword));
+}
+
+function isFreshFishRecipe(recipe: Recipe, text = recipeSearchText(recipe)) {
+  if (!recipe.proteins.includes("fish") || includesKeyword(text, NON_FRESH_FISH_KEYWORDS)) {
+    return false;
+  }
+
+  return includesKeyword(text, FRESH_FISH_KEYWORDS);
+}
+
+function isLateFriendlyRecipe(recipe: Recipe, text = recipeSearchText(recipe)) {
+  return recipe.proteins.includes("chicken") || includesKeyword(text, LATE_FRIENDLY_KEYWORDS);
+}
+
+function isButcherStyleRecipe(recipe: Recipe, text = recipeSearchText(recipe)) {
+  if (isFreshFishRecipe(recipe, text) || isLateFriendlyRecipe(recipe, text)) {
+    return false;
+  }
+
+  return includesKeyword(text, BUTCHER_STYLE_KEYWORDS);
+}
+
+function getRecipeFreshnessProfile(recipe: Recipe, text = recipeSearchText(recipe)): RecipeFreshnessProfile {
+  if (isFreshFishRecipe(recipe, text)) {
+    return "fresh-fish";
+  }
+
+  if (isButcherStyleRecipe(recipe, text)) {
+    return "fresh-butcher";
+  }
+
+  if (isLateFriendlyRecipe(recipe, text)) {
+    return "late-friendly";
+  }
+
+  return "neutral";
+}
+
+function getLunchDinnerSlotContexts(days: MealPlan["days"]) {
+  const lunchDinnerCount = days.reduce(
+    (count, day) => count + Number(day.meals.lunch.enabled) + Number(day.meals.dinner.enabled),
+    0
+  );
+
+  let lunchDinnerIndex = 0;
+
+  return days.map((day, dayIndex) => {
+    const contexts: Partial<Record<LunchDinnerMealType, SlotContext>> = {};
+
+    (["lunch", "dinner"] as LunchDinnerMealType[]).forEach((mealType) => {
+      if (!day.meals[mealType].enabled) {
+        return;
+      }
+
+      contexts[mealType] = {
+        dayIndex,
+        mealType,
+        lunchDinnerIndex,
+        lunchDinnerCount
+      };
+      lunchDinnerIndex += 1;
+    });
+
+    return contexts;
+  });
+}
+
+function getSlotContext(
+  slotContexts: Array<Partial<Record<LunchDinnerMealType, SlotContext>>>,
+  dayIndex: number,
+  mealType: MealType
+) {
+  if (mealType !== "lunch" && mealType !== "dinner") {
+    return undefined;
+  }
+
+  return slotContexts[dayIndex]?.[mealType];
+}
+
+function getWeekProgress(slotContext?: SlotContext) {
+  if (!slotContext || slotContext.lunchDinnerCount <= 1) {
+    return 0;
+  }
+
+  return slotContext.lunchDinnerIndex / Math.max(1, slotContext.lunchDinnerCount - 1);
+}
+
+function scoreRecipeForSlot(recipe: Recipe, slotContext?: SlotContext) {
+  if (!slotContext) {
+    return 0;
+  }
+
+  const text = recipeSearchText(recipe);
+  const weekProgress = getWeekProgress(slotContext);
+  const earlyWeekBias = 1 - weekProgress;
+  const lateWeekBias = weekProgress;
+  const isFirstLunchDinnerSlot = slotContext.lunchDinnerIndex === 0;
+
+  switch (getRecipeFreshnessProfile(recipe, text)) {
+    case "fresh-fish":
+      return (isFirstLunchDinnerSlot ? 42 : 0) + earlyWeekBias * 14 - lateWeekBias * 6;
+    case "fresh-butcher":
+      return (isFirstLunchDinnerSlot ? 6 : 0) + earlyWeekBias * 10 - lateWeekBias * 4;
+    case "late-friendly":
+      return lateWeekBias * 10 - earlyWeekBias * 6 - (isFirstLunchDinnerSlot ? 10 : 0);
+    default:
+      return earlyWeekBias * 1.5 - lateWeekBias * 0.5;
+  }
+}
+
+function rankRecipesForSlot(recipePool: Recipe[], slotContext?: SlotContext) {
+  return recipePool
+    .map((recipe) => ({
+      recipe,
+      score: scoreRecipeForSlot(recipe, slotContext),
+      tiebreaker: Math.random()
+    }))
+    .sort((left, right) => right.score - left.score || left.tiebreaker - right.tiebreaker)
+    .map(({ recipe }) => recipe);
+}
+
+function pickRankedRecipe(recipePool: Recipe[], slotContext?: SlotContext) {
+  return rankRecipesForSlot(recipePool, slotContext)[0];
+}
 
 function filterRecipes(
   recipePool: Recipe[],
@@ -18,7 +370,7 @@ function filterRecipes(
   selectedProteins: ProteinType[],
   favoriteRecipeIds: string[]
 ) {
-  const base = recipePool.filter((recipe) => recipe.mealType.includes(mealType));
+  const base = recipePool.filter((recipe) => isRecipeEligibleForMealType(recipe, mealType));
 
   const filtered =
     mealType === "breakfast"
@@ -37,16 +389,13 @@ function filterRecipes(
   };
 }
 
-function randomize<T>(items: T[]): T[] {
-  return [...items].sort(() => Math.random() - 0.5);
-}
-
 function pickRecipe(
   recipePool: Recipe[],
   mealType: MealType,
   preferences: UserPreferences,
   usedIds: Set<string>,
-  excludeIds: string[] = []
+  excludeIds: string[] = [],
+  slotContext?: SlotContext
 ): Recipe {
   const { favorites, all } = filterRecipes(
     recipePool,
@@ -56,11 +405,15 @@ function pickRecipe(
   );
 
   const blocked = new Set([...usedIds, ...excludeIds]);
-  const favoritePool = randomize(favorites).filter((recipe) => !blocked.has(recipe.id));
-  const mainPool = randomize(all).filter((recipe) => !blocked.has(recipe.id));
-  const fallbackPool = randomize(all);
+  const favoritePool = favorites.filter((recipe) => !blocked.has(recipe.id));
+  const mainPool = all.filter((recipe) => !blocked.has(recipe.id));
+  const fallbackPool = all;
 
-  return favoritePool[0] ?? mainPool[0] ?? fallbackPool[0];
+  return (
+    pickRankedRecipe(favoritePool, slotContext) ??
+    pickRankedRecipe(mainPool, slotContext) ??
+    pickRankedRecipe(fallbackPool, slotContext)
+  );
 }
 
 function spreadFavoriteIndices(slotCount: number, favoriteCount: number) {
@@ -87,7 +440,9 @@ function placeFavoriteRecipes(
   recipePool: Recipe[],
   dayConfigs?: DayConfig[]
 ) {
-  (["breakfast", "lunch", "dinner"] as MealType[]).forEach((mealType) => {
+  const slotContexts = getLunchDinnerSlotContexts(days);
+
+  getActiveMealTypes(preferences).forEach((mealType) => {
     const { favorites } = filterRecipes(
       recipePool,
       mealType,
@@ -100,17 +455,22 @@ function placeFavoriteRecipes(
         slot: day.meals[mealType],
         config: dayConfigs?.[dayIndex]
       }))
-      .filter(({ slot, config }) => slot.enabled && config?.enabled !== false);
+      .filter(({ slot, config }) => slot.enabled && !slot.recipeId && !slot.consumed && config?.enabled !== false);
 
-    const favoriteRecipes = favorites.filter((recipe) => !usedIds.has(recipe.id));
     const targetIndices = spreadFavoriteIndices(
       availableSlots.length,
-      Math.min(availableSlots.length, favoriteRecipes.length)
+      Math.min(
+        availableSlots.length,
+        favorites.filter((recipe) => !usedIds.has(recipe.id)).length
+      )
     );
 
-    targetIndices.forEach((slotIndex, favoriteIndex) => {
+    targetIndices.forEach((slotIndex) => {
       const target = availableSlots[slotIndex];
-      const recipe = favoriteRecipes[favoriteIndex];
+      const recipe = pickRankedRecipe(
+        favorites.filter((candidate) => !usedIds.has(candidate.id)),
+        target ? getSlotContext(slotContexts, target.dayIndex, mealType) : undefined
+      );
 
       if (!target || !recipe) {
         return;
@@ -134,8 +494,63 @@ function placeFavoriteRecipes(
 export interface DayConfig {
   enabled: boolean;
   breakfast: boolean;
+  brunch: boolean;
   lunch: boolean;
   dinner: boolean;
+}
+
+function normalizeDayConfig(
+  config: DayConfig | undefined,
+  mealAvailability: Record<MealType, boolean>
+): DayConfig {
+  const merged = {
+    enabled: true,
+    breakfast: true,
+    brunch: true,
+    lunch: true,
+    dinner: true,
+    ...config
+  } satisfies DayConfig;
+
+  const breakfast = Boolean(merged.enabled && merged.breakfast && mealAvailability.breakfast);
+  const brunch = Boolean(merged.enabled && merged.brunch && mealAvailability.brunch);
+  const lunch = Boolean(merged.enabled && merged.lunch && mealAvailability.lunch);
+  const dinner = Boolean(merged.enabled && merged.dinner && mealAvailability.dinner);
+
+  return {
+    enabled: breakfast || brunch || lunch || dinner,
+    breakfast,
+    brunch,
+    lunch,
+    dinner
+  };
+}
+
+export function syncPlanMealParticipation(plan: MealPlan, preferences: UserPreferences): MealPlan {
+  const mealAvailability = getMealParticipationAvailability(preferences.householdMembers);
+  let changed = false;
+
+  const days = plan.days.map((day) => {
+    const meals = { ...day.meals };
+
+    (Object.keys(meals) as MealType[]).forEach((mealType) => {
+      const slot = normalizeSlot(meals[mealType]);
+      const enabled = Boolean(slot.enabled && mealAvailability[mealType]);
+      const recipeId = enabled ? slot.recipeId : undefined;
+
+      if (enabled !== slot.enabled || recipeId !== slot.recipeId) {
+        changed = true;
+      }
+
+      meals[mealType] = recipeId
+        ? { enabled, recipeId, ...(slot.consumed ? { consumed: true } : {}) }
+        : { enabled };
+    });
+
+    return changed ? { ...day, meals } : day;
+  });
+
+  return changed ? { ...plan, days } : plan;
 }
 
 export function createDefaultPlan(preferences: UserPreferences): MealPlan {
@@ -149,39 +564,38 @@ export function createPlanFromConfig(
 ): MealPlan {
   const weekStart = getMonday();
   const usedIds = new Set<string>();
-  const defaultConfig: DayConfig = { enabled: true, breakfast: true, lunch: true, dinner: true };
   const recipePool = getAllRecipes(customRecipes);
+  const mealAvailability = getMealParticipationAvailability(preferences.householdMembers);
 
   const days = Array.from({ length: 7 }, (_, index) => {
     const date = toIsoDate(addDays(weekStart, index));
-    const config = dayConfigs?.[index] ?? defaultConfig;
+    const config = normalizeDayConfig(dayConfigs?.[index], mealAvailability);
 
     if (!config.enabled) {
       return {
         date,
-        meals: {
-          breakfast: { enabled: false },
-          lunch: { enabled: false },
-          dinner: { enabled: false }
-        }
+        meals: makeEmptyMeals()
       };
     }
 
     return {
       date,
       meals: {
-        breakfast: { enabled: Boolean(config.breakfast) },
-        lunch: { enabled: Boolean(config.lunch) },
+        breakfast: { enabled: Boolean(config.breakfast && !preferences.brunchMode) },
+        brunch: { enabled: Boolean(config.brunch && preferences.brunchMode) },
+        lunch: { enabled: Boolean(config.lunch && !preferences.brunchMode) },
         dinner: { enabled: Boolean(config.dinner) }
-      } as Record<MealType, { enabled: boolean; recipeId?: string }>
+      } as Record<MealType, MealSlot>
     };
   });
+
+  const slotContexts = getLunchDinnerSlotContexts(days);
 
   placeFavoriteRecipes(days, preferences, usedIds, recipePool, dayConfigs);
 
   return {
     weekOf: toIsoDate(weekStart),
-    days: days.map((day) => {
+    days: days.map((day, dayIndex) => {
       const meals = { ...day.meals };
 
       (Object.keys(meals) as MealType[]).forEach((mealType) => {
@@ -191,7 +605,14 @@ export function createPlanFromConfig(
           return;
         }
 
-        const recipe = pickRecipe(recipePool, mealType, preferences, usedIds);
+        const recipe = pickRecipe(
+          recipePool,
+          mealType,
+          preferences,
+          usedIds,
+          [],
+          getSlotContext(slotContexts, dayIndex, mealType)
+        );
         usedIds.add(recipe.id);
         meals[mealType] = { enabled: true, recipeId: recipe.id };
       });
@@ -201,7 +622,7 @@ export function createPlanFromConfig(
   };
 }
 
-export function normalizePlan(plan: MealPlan | null, _preferences: UserPreferences): MealPlan | null {
+export function normalizePlan(plan: MealPlan | null, preferences: UserPreferences): MealPlan | null {
   const currentWeek = toIsoDate(getMonday());
 
   // If there's no saved plan or it's from a different week, return null
@@ -210,7 +631,18 @@ export function normalizePlan(plan: MealPlan | null, _preferences: UserPreferenc
     return null;
   }
 
-  return plan;
+  return syncPlanMealParticipation({
+    ...plan,
+    days: plan.days.map((day) => ({
+      ...day,
+      meals: {
+        ...makeEmptyMeals(),
+        ...Object.fromEntries(
+          MEAL_TYPES.map((mealType) => [mealType, normalizeSlot(day.meals?.[mealType])])
+        )
+      } as Record<MealType, MealSlot>
+    }))
+  }, preferences);
 }
 
 export function regenerateWeek(
@@ -220,20 +652,41 @@ export function regenerateWeek(
 ): MealPlan {
   const usedIds = new Set<string>();
   const recipePool = getAllRecipes(customRecipes);
+  const mealAvailability = getMealParticipationAvailability(preferences.householdMembers);
   const days = plan.days.map((day) => ({
     ...day,
     meals: {
-      breakfast: { enabled: day.meals.breakfast.enabled },
-      lunch: { enabled: day.meals.lunch.enabled },
-      dinner: { enabled: day.meals.dinner.enabled }
-    } as Record<MealType, { enabled: boolean; recipeId?: string }>
+      breakfast: day.meals.breakfast.consumed
+        ? normalizeSlot(day.meals.breakfast)
+        : { enabled: day.meals.breakfast.enabled && mealAvailability.breakfast && !preferences.brunchMode },
+      brunch: day.meals.brunch.consumed
+        ? normalizeSlot(day.meals.brunch)
+        : { enabled: day.meals.brunch.enabled && mealAvailability.brunch && preferences.brunchMode },
+      lunch: day.meals.lunch.consumed
+        ? normalizeSlot(day.meals.lunch)
+        : { enabled: day.meals.lunch.enabled && mealAvailability.lunch && !preferences.brunchMode },
+      dinner: day.meals.dinner.consumed
+        ? normalizeSlot(day.meals.dinner)
+        : { enabled: day.meals.dinner.enabled && mealAvailability.dinner }
+    } as Record<MealType, MealSlot>
   }));
+
+  days.forEach((day) => {
+    (Object.keys(day.meals) as MealType[]).forEach((mealType) => {
+      const slot = day.meals[mealType];
+      if (slot.consumed && slot.recipeId) {
+        usedIds.add(slot.recipeId);
+      }
+    });
+  });
+
+  const slotContexts = getLunchDinnerSlotContexts(days);
 
   placeFavoriteRecipes(days, preferences, usedIds, recipePool);
 
   return {
     ...plan,
-    days: days.map((day) => {
+    days: days.map((day, dayIndex) => {
       const nextMeals = { ...day.meals };
 
       (Object.keys(day.meals) as MealType[]).forEach((mealType) => {
@@ -248,7 +701,14 @@ export function regenerateWeek(
           return;
         }
 
-        const recipe = pickRecipe(recipePool, mealType, preferences, usedIds);
+        const recipe = pickRecipe(
+          recipePool,
+          mealType,
+          preferences,
+          usedIds,
+          [],
+          getSlotContext(slotContexts, dayIndex, mealType)
+        );
         usedIds.add(recipe.id);
         nextMeals[mealType] = { enabled: true, recipeId: recipe.id };
       });
@@ -266,9 +726,42 @@ export function regenerateMealSlot(
   customRecipes: CustomRecipe[] = [],
   proteinOverride?: ProteinType | "any"
 ): MealPlan {
+  const mealAvailability = getMealParticipationAvailability(preferences.householdMembers);
+
+  const currentSlot = plan.days[dayIndex]?.meals[mealType];
+
+  if (currentSlot?.consumed) {
+    return plan;
+  }
+
+  if (!mealAvailability[mealType]) {
+    const days = [...plan.days];
+    const day = days[dayIndex];
+
+    if (!day) {
+      return plan;
+    }
+
+    days[dayIndex] = {
+      ...day,
+      meals: {
+        ...day.meals,
+        [mealType]: {
+          enabled: false
+        }
+      }
+    };
+
+    return {
+      ...plan,
+      days
+    };
+  }
+
   const usedIds = new Set<string>();
-  const currentId = plan.days[dayIndex]?.meals[mealType]?.recipeId;
+  const currentId = currentSlot?.recipeId;
   const recipePool = getAllRecipes(customRecipes);
+  const slotContexts = getLunchDinnerSlotContexts(plan.days);
 
   plan.days.forEach((day, index) => {
     (Object.keys(day.meals) as MealType[]).forEach((slotType) => {
@@ -285,16 +778,18 @@ export function regenerateMealSlot(
   });
 
   // If a specific protein was requested, temporarily override preferences
-  const effectivePrefs = proteinOverride && proteinOverride !== "any"
-    ? { ...preferences, selectedProteins: [proteinOverride] as ProteinType[] }
-    : preferences;
+  const effectivePrefs =
+    proteinOverride && proteinOverride !== "any"
+      ? { ...preferences, selectedProteins: [proteinOverride] as ProteinType[] }
+      : preferences;
 
   const nextRecipe = pickRecipe(
     recipePool,
     mealType,
     effectivePrefs,
     usedIds,
-    currentId ? [currentId] : []
+    currentId ? [currentId] : [],
+    getSlotContext(slotContexts, dayIndex, mealType)
   );
   const days = [...plan.days];
   const day = days[dayIndex];
@@ -314,4 +809,37 @@ export function regenerateMealSlot(
     ...plan,
     days
   };
+}
+
+export function toggleMealSlotEnabled(
+  plan: MealPlan,
+  dayIndex: number,
+  mealType: MealType,
+  preferences: UserPreferences,
+  customRecipes: CustomRecipe[] = []
+): MealPlan {
+  const days = [...plan.days];
+  const day = days[dayIndex];
+  const slot = day?.meals[mealType];
+
+  if (!day || !slot || slot.consumed) {
+    return plan;
+  }
+
+  days[dayIndex] = {
+    ...day,
+    meals: {
+      ...day.meals,
+      [mealType]: {
+        enabled: !slot.enabled,
+        recipeId: !slot.enabled ? slot.recipeId : undefined
+      }
+    }
+  };
+
+  const nextPlan = { ...plan, days };
+
+  return !slot.enabled
+    ? regenerateMealSlot(nextPlan, dayIndex, mealType, preferences, customRecipes)
+    : nextPlan;
 }

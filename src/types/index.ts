@@ -1,5 +1,6 @@
-export type MealType = "breakfast" | "lunch" | "dinner";
+export type MealType = "breakfast" | "brunch" | "lunch" | "dinner";
 export type ProteinType = "chicken" | "pork" | "fish" | "red-meat";
+export type HouseholdMemberKind = "adult" | "child";
 export type IngredientCategory =
   | "produce"
   | "dairy"
@@ -43,6 +44,7 @@ export interface CustomRecipe extends Recipe {
 export interface MealSlot {
   enabled: boolean;
   recipeId?: string;
+  consumed?: boolean;
 }
 
 export interface DayPlan {
@@ -62,6 +64,13 @@ export interface CustomStaple {
   category: IngredientCategory;
 }
 
+export interface HouseholdMember {
+  id: string;
+  name: string;
+  kind: HouseholdMemberKind;
+  mealParticipation: MealType[];
+}
+
 export interface UserPreferences {
   selectedProteins: ProteinType[];
   favoriteProteins: ProteinType[];
@@ -69,8 +78,10 @@ export interface UserPreferences {
   favoriteRecipeIds: string[];
   adults: number;
   children: number;
+  householdMembers: HouseholdMember[];
   customStaples: CustomStaple[];
   sectionOrder: IngredientCategory[];
+  brunchMode: boolean;
 }
 
 export type SharedPreferences = Omit<UserPreferences, "theme">;

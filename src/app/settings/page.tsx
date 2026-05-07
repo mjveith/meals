@@ -4,10 +4,17 @@ import { useState } from "react";
 import { CustomMealForm } from "@/components/CustomMealForm";
 import { ProteinSelector } from "@/components/ProteinSelector";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { CATEGORY_LABELS } from "@/lib/constants";
+import { CATEGORY_LABELS, MEAL_LABELS, MEAL_TYPES } from "@/lib/constants";
+import {
+  formatParticipationCount,
+  getMealParticipants,
+  getMealParticipationWeight
+} from "@/lib/household";
 import { useAppState } from "@/lib/app-state";
 import { getRecipeMap } from "@/lib/meal-generator";
-import { CustomRecipe, IngredientCategory, Recipe } from "@/types";
+import { CustomRecipe, IngredientCategory, MealType, Recipe } from "@/types";
+
+const mealTypes: MealType[] = MEAL_TYPES;
 
 export default function SettingsPage() {
   const {
@@ -17,8 +24,10 @@ export default function SettingsPage() {
     toggleProtein,
     toggleFavoriteProtein,
     setTheme,
-    setAdults,
-    setChildren,
+    setBrunchMode,
+    addHouseholdMember,
+    removeHouseholdMember,
+    updateHouseholdMember,
     addCustomStaple,
     removeCustomStaple,
     sectionOrder,
@@ -42,6 +51,11 @@ export default function SettingsPage() {
   const favoriteRecipes = preferences.favoriteRecipeIds
     .map((recipeId) => recipeMap.get(recipeId))
     .filter((recipe): recipe is Recipe => Boolean(recipe));
+  const mealParticipationSummary = mealTypes.map((mealType) => ({
+    mealType,
+    participants: getMealParticipants(preferences.householdMembers, mealType),
+    weight: getMealParticipationWeight(preferences.householdMembers, mealType)
+  }));
 
   const handleAddCustomStaple = () => {
     const quantity = Number(customStapleQuantity);
@@ -76,61 +90,143 @@ export default function SettingsPage() {
       </section>
 
       <section className="rounded-[32px] border border-border bg-surface p-4">
-        <h2 className="text-lg font-semibold text-text">Household size</h2>
+        <h2 className="text-lg font-semibold text-text">Household</h2>
         <p className="mt-1 text-sm text-muted">
-          Recipe quantities and grocery amounts scale based on who you&apos;re feeding.
+          Set each person&apos;s meal participation. Adults count as full portions, children count as half portions.
         </p>
+        <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
+          <span className="rounded-full bg-surfaceAlt px-3 py-1">
+            {preferences.adults} adult{preferences.adults !== 1 ? "s" : ""}
+          </span>
+          <span className="rounded-full bg-surfaceAlt px-3 py-1">
+            {preferences.children} child{preferences.children !== 1 ? "ren" : ""}
+          </span>
+        </div>
         <div className="mt-4 space-y-3">
-          <div className="flex items-center justify-between rounded-3xl border border-border bg-canvas px-4 py-3">
-            <div>
-              <div className="font-medium text-text">Adults</div>
-              <div className="text-xs text-muted">Full portions</div>
+          {preferences.householdMembers.map((member) => (
+            <div
+              key={member.id}
+              className="rounded-3xl border border-border bg-canvas px-4 py-4"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-[220px] flex-1">
+                  <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    defaultValue={member.name}
+                    onBlur={(event) => {
+                      const nextName = event.target.value.trim();
+                      if (nextName && nextName !== member.name) {
+                        updateHouseholdMember(member.id, { name: nextName });
+                      }
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        (event.target as HTMLInputElement).blur();
+                      }
+                    }}
+                    className="mt-2 w-full rounded-2xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted focus:border-accent focus:outline-none"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeHouseholdMember(member.id)}
+                  disabled={preferences.householdMembers.length <= 1}
+                  className="rounded-full border border-border px-3 py-2 text-sm font-semibold text-muted disabled:opacity-30"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {(["adult", "child"] as const).map((kind) => (
+                  <button
+                    key={kind}
+                    type="button"
+                    onClick={() => updateHouseholdMember(member.id, { kind })}
+                    className={`rounded-full px-3 py-2 text-sm font-semibold transition ${
+                      member.kind === kind
+                        ? "bg-accent text-white"
+                        : "border border-border bg-surfaceAlt text-muted"
+                    }`}
+                  >
+                    {kind === "adult" ? "Adult" : "Child"}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-4">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                  Meals
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {mealTypes.map((mealType) => {
+                    const enabled = member.mealParticipation.includes(mealType);
+                    const nextParticipation = enabled
+                      ? member.mealParticipation.filter((value) => value !== mealType)
+                      : [...member.mealParticipation, mealType];
+
+                    return (
+                      <button
+                        key={mealType}
+                        type="button"
+                        onClick={() => updateHouseholdMember(member.id, { mealParticipation: nextParticipation })}
+                        className={`rounded-full px-3 py-2 text-sm font-semibold transition ${
+                          enabled
+                            ? "bg-accent text-white"
+                            : "border border-border bg-surfaceAlt text-muted"
+                        }`}
+                      >
+                        {MEAL_LABELS[mealType]}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setAdults(preferences.adults - 1)}
-                disabled={preferences.adults <= 1}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surfaceAlt text-lg font-bold text-text transition disabled:opacity-30"
-              >
-                −
-              </button>
-              <span className="w-6 text-center text-lg font-bold text-text">{preferences.adults}</span>
-              <button
-                type="button"
-                onClick={() => setAdults(preferences.adults + 1)}
-                disabled={preferences.adults >= 10}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surfaceAlt text-lg font-bold text-text transition disabled:opacity-30"
-              >
-                +
-              </button>
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={addHouseholdMember}
+            className="rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-white"
+          >
+            + Add person
+          </button>
+        </div>
+        <div className="mt-4 space-y-2 rounded-3xl border border-border bg-canvas px-4 py-4 text-sm text-muted">
+          <div className="font-medium text-text">Meal participation summary</div>
+          {mealParticipationSummary.map(({ mealType, participants, weight }) => (
+            <div key={mealType}>
+              <span className="font-medium text-text">{MEAL_LABELS[mealType]}:</span>{" "}
+              {participants.map((member) => member.name).join(", ") || "No one selected"} · {formatParticipationCount(weight)} serving{weight === 1 ? "" : "s"}
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-[32px] border border-border bg-surface p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold text-text">Brunch Mode</h2>
+            <p className="mt-1 text-sm text-muted">
+              New weekly plans use Brunch and Dinner only. Brunch can use brunch, breakfast, and lunch recipes.
+            </p>
           </div>
-          <div className="flex items-center justify-between rounded-3xl border border-border bg-canvas px-4 py-3">
-            <div>
-              <div className="font-medium text-text">Children</div>
-              <div className="text-xs text-muted">Half portions</div>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setChildren(preferences.children - 1)}
-                disabled={preferences.children <= 0}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surfaceAlt text-lg font-bold text-text transition disabled:opacity-30"
-              >
-                −
-              </button>
-              <span className="w-6 text-center text-lg font-bold text-text">{preferences.children}</span>
-              <button
-                type="button"
-                onClick={() => setChildren(preferences.children + 1)}
-                disabled={preferences.children >= 10}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surfaceAlt text-lg font-bold text-text transition disabled:opacity-30"
-              >
-                +
-              </button>
-            </div>
-          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={preferences.brunchMode}
+            onClick={() => setBrunchMode(!preferences.brunchMode)}
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              preferences.brunchMode ? "bg-accent text-white" : "bg-surfaceAlt text-muted"
+            }`}
+          >
+            {preferences.brunchMode ? "On" : "Off"}
+          </button>
         </div>
       </section>
 

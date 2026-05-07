@@ -1,23 +1,33 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MealCard } from "@/components/MealCard";
 import { ProteinSelector } from "@/components/ProteinSelector";
 import { useAppState } from "@/lib/app-state";
 import { formatDay } from "@/lib/date";
-import { getRecipeMap, type DayConfig } from "@/lib/meal-generator";
-import { MEAL_LABELS } from "@/lib/constants";
-import { MealType, ProteinType } from "@/types";
+import { getMealParticipationAvailability } from "@/lib/household";
+import { getAllRecipes, getRecipeMap, type DayConfig } from "@/lib/meal-generator";
+import { BRUNCH_MODE_MEAL_TYPES, MEAL_LABELS, MEAL_TYPES, STANDARD_MEAL_TYPES } from "@/lib/constants";
+import { MealType, ProteinType, Recipe } from "@/types";
 
-const mealTypes: MealType[] = ["breakfast", "lunch", "dinner"];
+const allMealTypes = MEAL_TYPES;
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-function defaultDayConfigs(): DayConfig[] {
+type SwapTargetOption = {
+  dayIndex: number;
+  mealType: MealType;
+  dayLabel: string;
+  dateLabel: string;
+  recipe: Recipe | null;
+};
+
+function defaultDayConfigs(mealAvailability: Record<MealType, boolean>): DayConfig[] {
   return Array.from({ length: 7 }, () => ({
-    enabled: true,
-    breakfast: true,
-    lunch: true,
-    dinner: true
+    enabled: mealAvailability.breakfast || mealAvailability.brunch || mealAvailability.lunch || mealAvailability.dinner,
+    breakfast: mealAvailability.breakfast,
+    brunch: mealAvailability.brunch,
+    lunch: mealAvailability.lunch,
+    dinner: mealAvailability.dinner
   }));
 }
 
@@ -27,34 +37,69 @@ function PlanSetup({ onGenerate }: { onGenerate: (configs: DayConfig[]) => void 
     toggleProtein,
     toggleFavoriteProtein
   } = useAppState();
-  const [dayConfigs, setDayConfigs] = useState<DayConfig[]>(defaultDayConfigs);
+  const mealAvailability = useMemo(
+    () => getMealParticipationAvailability(preferences.householdMembers),
+    [preferences.householdMembers]
+  );
+  const [dayConfigs, setDayConfigs] = useState<DayConfig[]>(() => defaultDayConfigs(mealAvailability));
+  const setupMealTypes = preferences.brunchMode ? BRUNCH_MODE_MEAL_TYPES : STANDARD_MEAL_TYPES;
+
+  useEffect(() => {
+    setDayConfigs((prev) =>
+      prev.map((day) => {
+        const breakfast = !preferences.brunchMode && day.breakfast && mealAvailability.breakfast;
+        const brunch = preferences.brunchMode && day.brunch && mealAvailability.brunch;
+        const lunch = !preferences.brunchMode && day.lunch && mealAvailability.lunch;
+        const dinner = day.dinner && mealAvailability.dinner;
+        const enabled = breakfast || brunch || lunch || dinner;
+
+        if (day.enabled === enabled && day.breakfast === breakfast && day.brunch === brunch && day.lunch === lunch && day.dinner === dinner) {
+          return day;
+        }
+
+        return { enabled, breakfast, brunch, lunch, dinner };
+      })
+    );
+  }, [mealAvailability, preferences.brunchMode]);
 
   const toggleDay = (index: number) => {
     setDayConfigs((prev) => {
       const next = [...prev];
       const wasEnabled = next[index].enabled;
       next[index] = wasEnabled
-        ? { enabled: false, breakfast: false, lunch: false, dinner: false }
-        : { enabled: true, breakfast: true, lunch: true, dinner: true };
+        ? { enabled: false, breakfast: false, brunch: false, lunch: false, dinner: false }
+        : {
+            enabled: setupMealTypes.some((mealType) => mealAvailability[mealType]),
+            breakfast: !preferences.brunchMode && mealAvailability.breakfast,
+            brunch: preferences.brunchMode && mealAvailability.brunch,
+            lunch: !preferences.brunchMode && mealAvailability.lunch,
+            dinner: mealAvailability.dinner
+          };
       return next;
     });
   };
 
   const toggleMealType = (index: number, meal: MealType) => {
+    if (!mealAvailability[meal]) {
+      return;
+    }
+
     setDayConfigs((prev) => {
       const next = [...prev];
       const day = { ...next[index], [meal]: !next[index][meal] };
       // If at least one meal is on, day is enabled
-      day.enabled = day.breakfast || day.lunch || day.dinner;
+      day.enabled = day.breakfast || day.brunch || day.lunch || day.dinner;
       next[index] = day;
       return next;
     });
   };
 
   const totalMeals = dayConfigs.reduce(
-    (sum, d) => sum + (d.breakfast ? 1 : 0) + (d.lunch ? 1 : 0) + (d.dinner ? 1 : 0),
+    (sum, d) => sum + setupMealTypes.reduce((count, mealType) => count + (d[mealType] ? 1 : 0), 0),
     0
   );
+
+  const availableMealCount = setupMealTypes.filter((mealType) => mealAvailability[mealType]).length;
 
   const enabledDays = dayConfigs.filter((d) => d.enabled).length;
 
@@ -71,7 +116,9 @@ function PlanSetup({ onGenerate }: { onGenerate: (configs: DayConfig[]) => void 
       {/* Day selector */}
       <section className="rounded-[32px] border border-border bg-surface p-4">
         <h2 className="text-lg font-semibold text-text">Days</h2>
-        <p className="mt-1 text-sm text-muted">Tap a day to toggle it. Tap meal types to customize.</p>
+        <p className="mt-1 text-sm text-muted">
+          Tap a day to toggle it. Tap meal types to customize. Unavailable meals are hidden from generation.
+        </p>
         <div className="mt-4 space-y-2">
           {DAY_LABELS.map((label, index) => {
             const config = dayConfigs[index];
@@ -105,20 +152,26 @@ function PlanSetup({ onGenerate }: { onGenerate: (configs: DayConfig[]) => void 
                   </button>
                   {config.enabled && (
                     <div className="flex gap-1.5">
-                      {mealTypes.map((meal) => (
-                        <button
-                          key={meal}
-                          type="button"
-                          onClick={() => toggleMealType(index, meal)}
-                          className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
-                            config[meal]
-                              ? "bg-accent text-white"
-                              : "bg-surfaceAlt text-muted"
-                          }`}
-                        >
-                          {meal.charAt(0).toUpperCase()}
-                        </button>
-                      ))}
+                      {setupMealTypes.map((meal) => {
+                        const available = mealAvailability[meal];
+
+                        return (
+                          <button
+                            key={meal}
+                            type="button"
+                            onClick={() => toggleMealType(index, meal)}
+                            disabled={!available}
+                            title={available ? undefined : `${MEAL_LABELS[meal]} is unavailable for the current household`}
+                            className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
+                              config[meal]
+                                ? "bg-accent text-white"
+                                : "bg-surfaceAlt text-muted"
+                            } ${available ? "" : "cursor-not-allowed opacity-35"}`}
+                          >
+                            {meal.charAt(0).toUpperCase()}
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -143,9 +196,15 @@ function PlanSetup({ onGenerate }: { onGenerate: (configs: DayConfig[]) => void 
       </section>
 
       {/* Generate button */}
+      {availableMealCount === 0 ? (
+        <div className="rounded-[32px] border border-border bg-surface p-4 text-sm text-muted">
+          No meal types are currently enabled for the household. Add at least one meal in Settings to generate a plan.
+        </div>
+      ) : null}
+
       <button
         type="button"
-        disabled={enabledDays === 0}
+        disabled={enabledDays === 0 || availableMealCount === 0}
         onClick={() => onGenerate(dayConfigs)}
         className="w-full rounded-full bg-accent px-5 py-4 text-base font-bold text-white shadow-lg transition disabled:opacity-40"
       >
@@ -161,10 +220,14 @@ export default function PlanPage() {
     mealPlan,
     customRecipes,
     hydrated,
+    syncError,
+    hasLoadedSharedState,
     regenerateWeek,
     regenerateMeal,
+    assignRecipeToMeal,
     swapMeals,
     toggleMealEnabled,
+    toggleMealConsumed,
     toggleFavoriteRecipe,
     generatePlan,
     clearPlan,
@@ -173,12 +236,100 @@ export default function PlanPage() {
     planSavedSinceLastChange
   } = useAppState();
   const recipeMap = useMemo(() => getRecipeMap(customRecipes), [customRecipes]);
+  const recipeOptionsByMealType = useMemo(
+    () => ({
+      breakfast: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("breakfast")),
+      brunch: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.some((type) => type === "brunch" || type === "breakfast" || type === "lunch")),
+      lunch: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("lunch")),
+      dinner: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("dinner"))
+    }),
+    [customRecipes]
+  );
+  const swapTargetsBySlot = useMemo<Record<string, SwapTargetOption[]>>(() => {
+    if (!mealPlan) {
+      return {};
+    }
+
+    const targetsBySlot: Record<string, SwapTargetOption[]> = {};
+
+    mealPlan.days.forEach((sourceDay, sourceDayIndex) => {
+      allMealTypes.forEach((sourceMealType) => {
+        const sourceKey = `${sourceDayIndex}-${sourceMealType}`;
+        const sourceSlot = sourceDay.meals[sourceMealType];
+        const sourceRecipe = sourceSlot?.recipeId ? recipeMap.get(sourceSlot.recipeId) : null;
+
+        if (!sourceSlot?.enabled || sourceSlot.consumed || !sourceRecipe) {
+          targetsBySlot[sourceKey] = [];
+          return;
+        }
+
+        const swapTargets: SwapTargetOption[] = [];
+
+        mealPlan.days.forEach((targetDay, targetDayIndex) => {
+          allMealTypes.forEach((targetMealType) => {
+            if (sourceDayIndex === targetDayIndex && sourceMealType === targetMealType) {
+              return;
+            }
+
+            const targetSlot = targetDay.meals[targetMealType];
+            const targetRecipe = targetSlot?.recipeId ? recipeMap.get(targetSlot.recipeId) ?? null : null;
+
+            if (!targetSlot?.enabled || targetSlot.consumed) {
+              return;
+            }
+
+            const formattedTargetDay = formatDay(targetDay.date);
+
+            swapTargets.push({
+              dayIndex: targetDayIndex,
+              mealType: targetMealType,
+              dayLabel: formattedTargetDay.weekday,
+              dateLabel: formattedTargetDay.label,
+              recipe: targetRecipe
+            });
+          });
+        });
+
+        targetsBySlot[sourceKey] = swapTargets.sort(
+          (left, right) =>
+            left.dayIndex - right.dayIndex ||
+            allMealTypes.indexOf(left.mealType) - allMealTypes.indexOf(right.mealType)
+        );
+      });
+    });
+
+    return targetsBySlot;
+  }, [mealPlan, recipeMap]);
   const [showSetup, setShowSetup] = useState(false);
   const [isSavingWeek, setIsSavingWeek] = useState(false);
   const [pendingAction, setPendingAction] = useState<"regenerate" | "new" | null>(null);
 
   if (!hydrated) {
     return <main className="p-6 text-sm text-muted">Loading your plan...</main>;
+  }
+
+  if (!hasLoadedSharedState && syncError) {
+    return (
+      <main className="space-y-6 p-4 pb-12">
+        <section className="rounded-[32px] bg-gradient-to-br from-amber-200 via-orange-100 to-rose-100 p-6 text-slate-900 shadow-panel dark:from-amber-900 dark:via-orange-950 dark:to-rose-950 dark:text-white">
+          <div className="text-xs font-semibold uppercase tracking-[0.24em]">Meals</div>
+          <h1 className="mt-3 text-3xl font-bold">Couldn&apos;t load your saved plan</h1>
+          <p className="mt-3 max-w-sm text-sm text-slate-800/80 dark:text-white/80">
+            Your data does not look deleted, the app just couldn&apos;t reach shared state right now.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white dark:bg-white dark:text-slate-900"
+            >
+              Retry
+            </button>
+          </div>
+          <p className="mt-4 text-xs text-slate-700/80 dark:text-white/70">{syncError}</p>
+        </section>
+      </main>
+    );
   }
 
   // Show setup screen if no plan exists or user requested it
@@ -194,28 +345,9 @@ export default function PlanPage() {
   }
 
   const totalEnabledMeals = mealPlan.days.reduce(
-    (count, day) => count + mealTypes.filter((mealType) => day.meals[mealType].enabled).length,
+    (count, day) => count + allMealTypes.filter((mealType) => day.meals[mealType]?.enabled).length,
     0
   );
-  const scheduledSlots = mealPlan.days.flatMap((day, dayIndex) => {
-    const formatted = formatDay(day.date);
-
-    return mealTypes.flatMap((mealType) => {
-      const slot = day.meals[mealType];
-      const recipe = slot.recipeId ? recipeMap.get(slot.recipeId) : null;
-
-      if (!slot.enabled || !recipe) {
-        return [];
-      }
-
-      return [{
-        dayIndex,
-        mealType,
-        dayLabel: formatted.weekday,
-        recipeName: recipe.name
-      }];
-    });
-  });
 
   return (
     <main className="space-y-6 p-4 pb-12">
@@ -267,7 +399,8 @@ export default function PlanPage() {
       <section className="space-y-4">
         {mealPlan.days.map((day, dayIndex) => {
           const formatted = formatDay(day.date);
-          const hasAnyEnabled = mealTypes.some((mt) => day.meals[mt].enabled);
+          const visibleMealTypes = allMealTypes.filter((mealType) => day.meals[mealType]?.enabled);
+          const hasAnyEnabled = visibleMealTypes.length > 0;
 
           if (!hasAnyEnabled) return null;
 
@@ -282,21 +415,29 @@ export default function PlanPage() {
                   <div className="text-sm text-muted">{formatted.label}</div>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {mealTypes.map((mealType) => {
-                    const enabled = day.meals[mealType].enabled;
+                  {visibleMealTypes.map((mealType) => {
+                    const slot = day.meals[mealType];
+                    const enabled = slot.enabled;
+                    const consumed = Boolean(slot.consumed);
 
                     return (
                       <button
                         key={mealType}
                         type="button"
-                        onClick={() => toggleMealEnabled(dayIndex, mealType)}
+                        onClick={() => {
+                          if (!consumed) toggleMealEnabled(dayIndex, mealType);
+                        }}
+                        disabled={consumed}
+                        aria-label={consumed ? `${MEAL_LABELS[mealType]} consumed and locked` : undefined}
                         className={`rounded-full px-3 py-2 text-xs font-semibold ${
-                          enabled
-                            ? "bg-accent text-white"
-                            : "bg-surfaceAlt text-muted"
+                          consumed
+                            ? "cursor-not-allowed bg-slate-700 text-white line-through opacity-80"
+                            : enabled
+                              ? "bg-accent text-white"
+                              : "bg-surfaceAlt text-muted"
                         }`}
                       >
-                        {MEAL_LABELS[mealType]}
+                        {MEAL_LABELS[mealType]}{consumed ? " ✓" : ""}
                       </button>
                     );
                   })}
@@ -304,13 +445,26 @@ export default function PlanPage() {
               </div>
 
               <div className="mt-4 space-y-3">
-                {mealTypes.map((mealType) => {
+                {visibleMealTypes.map((mealType) => {
                   const slot = day.meals[mealType];
 
                   if (!slot.enabled) return null;
 
                   const recipe = slot.recipeId ? recipeMap.get(slot.recipeId) : null;
-                  if (!recipe) return null;
+                  if (!recipe) {
+                    return (
+                      <div
+                        key={`${day.date}-${mealType}-empty`}
+                        className="rounded-[28px] border border-dashed border-border bg-surfaceAlt p-4 text-sm text-muted"
+                      >
+                        <div className="text-xs font-semibold uppercase tracking-[0.22em] text-muted">
+                          {MEAL_LABELS[mealType]}
+                        </div>
+                        <div className="mt-2 font-semibold text-text">Empty slot</div>
+                        <div className="mt-1">Use Swap meal from another card to move a meal here.</div>
+                      </div>
+                    );
+                  }
 
                   return (
                     <MealCard
@@ -319,12 +473,14 @@ export default function PlanPage() {
                       mealType={mealType}
                       recipe={recipe}
                       favorite={preferences.favoriteRecipeIds.includes(recipe.id)}
-                      swapTargets={scheduledSlots.filter(
-                        (candidate) =>
-                          candidate.dayIndex !== dayIndex || candidate.mealType !== mealType
-                      )}
-                      onSwap={(target) => swapMeals({ dayIndex, mealType }, target)}
+                      favoriteRecipeIds={preferences.favoriteRecipeIds}
+                      consumed={Boolean(slot.consumed)}
+                      recipeOptions={recipeOptionsByMealType[mealType]}
+                      swapTargets={swapTargetsBySlot[`${dayIndex}-${mealType}`] ?? []}
+                      onAssignRecipe={(recipeId) => assignRecipeToMeal(dayIndex, mealType, recipeId)}
+                      onSwapRecipe={(target) => swapMeals({ dayIndex, mealType }, target)}
                       onRegenerate={(proteinOverride?: ProteinType | "any") => regenerateMeal(dayIndex, mealType, proteinOverride)}
+                      onToggleConsumed={() => toggleMealConsumed(dayIndex, mealType)}
                       onToggleFavorite={() => toggleFavoriteRecipe(recipe.id)}
                       onCreateCustomMeal={async (customRecipe) => {
                         await addCustomRecipe(customRecipe, {

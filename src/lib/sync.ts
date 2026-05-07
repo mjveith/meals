@@ -1,5 +1,15 @@
 import { SharedAppState, SharedStateResponse } from "@/types";
 
+export class SharedStateSyncError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "SharedStateSyncError";
+    this.status = status;
+  }
+}
+
 export async function fetchSharedState(etag?: string): Promise<{
   state: SharedStateResponse | null;
   etag: string | null;
@@ -31,19 +41,21 @@ export async function fetchSharedState(etag?: string): Promise<{
 }
 
 export async function pushSharedState(
-  patch: Partial<SharedAppState>
+  patch: Partial<SharedAppState>,
+  etag?: string
 ): Promise<{ state: SharedStateResponse; etag: string | null }> {
   const response = await fetch("/api/state", {
     method: "PUT",
     cache: "no-store",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      ...(etag ? { "If-Match": etag } : {})
     },
     body: JSON.stringify(patch)
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to update shared state: ${response.status}`);
+    throw new SharedStateSyncError(`Failed to update shared state: ${response.status}`, response.status);
   }
 
   return {

@@ -10,21 +10,33 @@ import {
   useState
 } from "react";
 import { DEFAULT_PREFERENCES } from "@/lib/constants";
+import { migrateLegacyCustomStaplesToSharedState } from "@/lib/custom-staples";
 import { buildGroceryList } from "@/lib/grocery-builder";
 import {
+  countHouseholdMembers,
+  createBlankHouseholdMember,
+  getFullHouseholdServingMultiplier,
+  getMealServingMultipliers,
+  normalizeHouseholdMembers
+} from "@/lib/household";
+import {
+  assignRecipeToSlot,
   normalizePlan,
   regenerateMealSlot,
   regenerateWeek as regenerateWeekPlan,
   createPlanFromConfig,
+  swapRecipesBetweenSlots,
+  toggleMealSlotEnabled,
   type DayConfig
 } from "@/lib/meal-generator";
 import { storage } from "@/lib/storage";
-import { fetchSharedState, pushSharedState } from "@/lib/sync";
+import { SharedStateSyncError, fetchSharedState, pushSharedState } from "@/lib/sync";
 import {
   CustomStaple,
   CustomRecipe,
   CustomGroceryItem,
   GroceryItem,
+  HouseholdMember,
   IngredientCategory,
   MealPlan,
   MealType,
@@ -32,10 +44,12 @@ import {
   SavedWeek,
   SharedAppState,
   SharedPreferences,
+  SharedStateResponse,
   ThemePreference,
   UserPreferences
 } from "@/types";
 import { formatWeekLabel } from "@/lib/date";
+import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
 
 interface AppStateValue {
   preferences: UserPreferences;
@@ -43,23 +57,34 @@ interface AppStateValue {
   groceries: GroceryItem[];
   customRecipes: CustomRecipe[];
   hydrated: boolean;
+  syncError: string | null;
+  hasLoadedSharedState: boolean;
+  householdMembers: HouseholdMember[];
   servingMultiplier: number;
+  mealServingMultipliers: Record<MealType, number>;
+  getServingMultiplierForMeal: (mealType: MealType) => number;
   toggleProtein: (protein: ProteinType) => void;
   toggleFavoriteProtein: (protein: ProteinType) => void;
   toggleMealEnabled: (dayIndex: number, mealType: MealType) => void;
+  toggleMealConsumed: (dayIndex: number, mealType: MealType) => void;
   regenerateMeal: (dayIndex: number, mealType: MealType, proteinOverride?: ProteinType | "any") => void;
   swapMeals: (
     source: { dayIndex: number; mealType: MealType },
     target: { dayIndex: number; mealType: MealType }
-  ) => void;
-  assignRecipeToMeal: (dayIndex: number, mealType: MealType, recipeId: string) => void;
+  ) => Promise<boolean>;
+  assignRecipeToMeal: (dayIndex: number, mealType: MealType, recipeId: string) => Promise<boolean>;
   regenerateWeek: () => void;
   generatePlan: (dayConfigs: DayConfig[]) => void;
   clearPlan: () => void;
   toggleFavoriteRecipe: (recipeId: string) => void;
   setTheme: (theme: ThemePreference) => void;
-  setAdults: (count: number) => void;
-  setChildren: (count: number) => void;
+  setBrunchMode: (enabled: boolean) => void;
+  updateHouseholdMember: (
+    id: string,
+    updates: Partial<Pick<HouseholdMember, "name" | "kind" | "mealParticipation">>
+  ) => void;
+  addHouseholdMember: () => void;
+  removeHouseholdMember: (id: string) => void;
   customStaples: CustomStaple[];
   addCustomStaple: (staple: CustomStaple) => void;
   removeCustomStaple: (name: string, unit: string, category: IngredientCategory) => void;
@@ -97,23 +122,29 @@ const DEFAULT_SHARED_PREFERENCES: SharedPreferences = {
   favoriteRecipeIds: DEFAULT_PREFERENCES.favoriteRecipeIds,
   adults: DEFAULT_PREFERENCES.adults,
   children: DEFAULT_PREFERENCES.children,
+  householdMembers: DEFAULT_PREFERENCES.householdMembers,
   customStaples: DEFAULT_PREFERENCES.customStaples,
-  sectionOrder: DEFAULT_PREFERENCES.sectionOrder
+  sectionOrder: DEFAULT_PREFERENCES.sectionOrder,
+  brunchMode: DEFAULT_PREFERENCES.brunchMode
 };
-
-function getServingMultiplier(preferences: Pick<UserPreferences, "adults" | "children">) {
-  const household = preferences.adults + preferences.children * 0.5;
-  const baseServings = 4;
-  return Math.max(0.5, household / baseServings);
-}
 
 function mergePreferences(
   sharedPreferences: SharedPreferences,
   theme: ThemePreference
 ): UserPreferences {
+  const householdMembers = normalizeHouseholdMembers(
+    sharedPreferences.householdMembers,
+    sharedPreferences.adults ?? DEFAULT_SHARED_PREFERENCES.adults,
+    sharedPreferences.children ?? DEFAULT_SHARED_PREFERENCES.children
+  );
+  const householdCounts = countHouseholdMembers(householdMembers);
+
   return {
     ...DEFAULT_PREFERENCES,
     ...sharedPreferences,
+    adults: householdCounts.adults,
+    children: householdCounts.children,
+    householdMembers,
     selectedProteins: Array.from(
       new Set([
         ...(sharedPreferences.selectedProteins ?? DEFAULT_SHARED_PREFERENCES.selectedProteins),
@@ -134,14 +165,18 @@ function normalizeSharedState(state: SharedAppState, theme: ThemePreference): Sh
       favoriteRecipeIds: preferences.favoriteRecipeIds,
       adults: preferences.adults,
       children: preferences.children,
+      householdMembers: preferences.householdMembers,
       customStaples: preferences.customStaples,
-      sectionOrder: preferences.sectionOrder
+      sectionOrder: preferences.sectionOrder,
+      brunchMode: preferences.brunchMode
     },
     mealPlan: normalizePlan(state.mealPlan, preferences),
     groceryOverrides: state.groceryOverrides ?? {},
     customGroceryItems: state.customGroceryItems ?? [],
     customRecipes: state.customRecipes ?? [],
-    savedWeeks: [...(state.savedWeeks ?? [])].sort((a, b) => b.savedAt.localeCompare(a.savedAt))
+    savedWeeks: [...(state.savedWeeks ?? [])]
+      .map(normalizeArchivedSavedWeek)
+      .sort((a, b) => b.savedAt.localeCompare(a.savedAt))
   };
 }
 
@@ -156,6 +191,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [customRecipes, setCustomRecipes] = useState<CustomRecipe[]>([]);
   const [savedWeeks, setSavedWeeks] = useState<SavedWeek[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [hasLoadedSharedState, setHasLoadedSharedState] = useState(false);
   const [planSavedSinceLastChange, setPlanSavedSinceLastChange] = useState(true);
   const [syncError, setSyncError] = useState<string | null>(null);
 
@@ -171,7 +207,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     savedWeeks: []
   });
   const themeRef = useRef<ThemePreference>("system");
-  const mutationQueueRef = useRef(Promise.resolve());
+  const mutationQueueRef = useRef<Promise<boolean>>(Promise.resolve(false));
 
   const applyRemoteState = (state: SharedAppState, nextVersion: number, nextEtag: string | null) => {
     const normalized = normalizeSharedState(state, themeRef.current);
@@ -205,8 +241,24 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        applyRemoteState(response.state, response.state.version, response.etag);
-        setSyncError(null);
+        const migrated = await migrateLegacyCustomStaplesToSharedState(
+          response.state,
+          response.etag,
+          {
+            hasMigrationCompleted: storage.hasLegacyCustomStaplesMigration,
+            loadLegacyCustomStaples: storage.loadLegacyCustomStaples,
+            markMigrationComplete: storage.markLegacyCustomStaplesMigrationComplete,
+            pushSharedState
+          }
+        );
+
+        if (cancelled) {
+          return;
+        }
+
+        applyRemoteState(migrated.state, migrated.version, migrated.etag);
+        setHasLoadedSharedState(true);
+        setSyncError(migrated.syncError);
       } catch (error) {
         if (!cancelled) {
           setSyncError(error instanceof Error ? error.message : "Unable to load shared state");
@@ -268,11 +320,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     themeRef.current = theme;
   }, [theme]);
 
-  // Recipes assume ~4 servings. Scale based on household size.
-  // Adults = 1 serving each, children = 0.5 serving each.
+  const mealServingMultipliers = useMemo(
+    () => getMealServingMultipliers(preferences.householdMembers),
+    [preferences.householdMembers]
+  );
+
+  // Recipes assume ~4 servings. Scale based on the full household by default,
+  // then use per-meal multipliers where meal participation differs.
   const servingMultiplier = useMemo(
-    () => getServingMultiplier(preferences),
-    [preferences.adults, preferences.children]
+    () => getFullHouseholdServingMultiplier(preferences.householdMembers),
+    [preferences.householdMembers]
   );
 
   const groceries = useMemo(
@@ -282,7 +339,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             mealPlan,
             groceryOverrides,
             customRecipes,
-            servingMultiplier,
+            mealServingMultipliers,
             preferences.customStaples,
             preferences.sectionOrder
           )
@@ -291,9 +348,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       customRecipes,
       mealPlan,
       groceryOverrides,
+      mealServingMultipliers,
       preferences.customStaples,
-      preferences.sectionOrder,
-      servingMultiplier
+      preferences.sectionOrder
     ]
   );
 
@@ -302,25 +359,61 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   ) => {
     mutationQueueRef.current = mutationQueueRef.current.then(async () => {
       if (!hydrated) {
-        return;
+        return false;
       }
 
-      const current = sharedStateRef.current;
-      const currentPreferences = mergePreferences(current.preferences, themeRef.current);
-      const patch = updater(current, currentPreferences);
-
-      if (!patch) {
-        return;
+      if (!hasLoadedSharedState) {
+        setSyncError("Shared state is not loaded yet. Retry once Meals reconnects.");
+        return false;
       }
+
+      const tryMutation = async (current: SharedAppState, etag?: string) => {
+        const currentPreferences = mergePreferences(current.preferences, themeRef.current);
+        const patch = updater(current, currentPreferences);
+
+        if (!patch) {
+          return { status: "noop" as const };
+        }
+
+        const response = await pushSharedState(patch, etag);
+        applyRemoteState(response.state, response.state.version, response.etag);
+        setSyncError(null);
+        return { status: "applied" as const };
+      };
 
       isMutatingRef.current = true;
 
       try {
-        const response = await pushSharedState(patch);
-        applyRemoteState(response.state, response.state.version, response.etag);
-        setSyncError(null);
-      } catch (error) {
-        setSyncError(error instanceof Error ? error.message : "Unable to save shared state");
+        try {
+          const result = await tryMutation(sharedStateRef.current, etagRef.current ?? undefined);
+          return result.status === "applied";
+        } catch (error) {
+          if (error instanceof SharedStateSyncError && error.status === 412) {
+            try {
+              const latest = await fetchSharedState();
+
+              if (latest.state) {
+                applyRemoteState(latest.state, latest.state.version, latest.etag);
+                const retryResult = await tryMutation(latest.state, latest.etag ?? undefined);
+                return retryResult.status === "applied";
+              }
+            } catch (retryError) {
+              if (retryError instanceof SharedStateSyncError && retryError.status === 412) {
+                setSyncError("Meals changed again before this update could finish. Please try that action once more.");
+                return false;
+              }
+
+              setSyncError(retryError instanceof Error ? retryError.message : "Unable to save shared state");
+              return false;
+            }
+
+            setSyncError("Meals was updated elsewhere before this save finished. Latest state is loaded, please retry.");
+            return false;
+          }
+
+          setSyncError(error instanceof Error ? error.message : "Unable to save shared state");
+          return false;
+        }
       } finally {
         isMutatingRef.current = false;
       }
@@ -336,7 +429,12 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       groceries,
       customRecipes,
       hydrated,
+      syncError,
+      hasLoadedSharedState,
+      householdMembers: preferences.householdMembers,
       servingMultiplier,
+      mealServingMultipliers,
+      getServingMultiplierForMeal: (mealType) => mealServingMultipliers[mealType],
       toggleProtein: (protein) => {
         enqueueMutation((current, currentPreferences) => {
           const selected = currentPreferences.selectedProteins.includes(protein)
@@ -387,38 +485,54 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             return null;
           }
 
-          const days = [...current.mealPlan.days];
-          const day = days[dayIndex];
-          const slot = day.meals[mealType];
+          const nextPlan = toggleMealSlotEnabled(
+            current.mealPlan,
+            dayIndex,
+            mealType,
+            currentPreferences,
+            current.customRecipes
+          );
 
-          days[dayIndex] = {
-            ...day,
-            meals: {
-              ...day.meals,
-              [mealType]: {
-                enabled: !slot.enabled,
-                recipeId: !slot.enabled ? slot.recipeId : undefined
-              }
-            }
-          };
-
-          const nextPlan = !slot.enabled
-            ? regenerateMealSlot(
-                { ...current.mealPlan, days },
-                dayIndex,
-                mealType,
-                currentPreferences,
-                current.customRecipes
-              )
-            : { ...current.mealPlan, days };
+          if (nextPlan === current.mealPlan) {
+            return null;
+          }
 
           return { mealPlan: nextPlan };
         });
         setPlanSavedSinceLastChange(false);
       },
+      toggleMealConsumed: (dayIndex, mealType) => {
+        enqueueMutation((current) => {
+          if (!current.mealPlan) {
+            return null;
+          }
+
+          const day = current.mealPlan.days[dayIndex];
+          const slot = day?.meals[mealType];
+
+          if (!day || !slot?.enabled || !slot.recipeId) {
+            return null;
+          }
+
+          const days = [...current.mealPlan.days];
+          days[dayIndex] = {
+            ...day,
+            meals: {
+              ...day.meals,
+              [mealType]: {
+                ...slot,
+                consumed: !slot.consumed
+              }
+            }
+          };
+
+          return { mealPlan: { ...current.mealPlan, days } };
+        });
+        setPlanSavedSinceLastChange(false);
+      },
       regenerateMeal: (dayIndex, mealType, proteinOverride?) => {
         enqueueMutation((current, currentPreferences) =>
-          current.mealPlan
+          current.mealPlan && !current.mealPlan.days[dayIndex]?.meals[mealType]?.consumed
             ? {
                 mealPlan: regenerateMealSlot(
                   current.mealPlan,
@@ -433,96 +547,62 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         );
         setPlanSavedSinceLastChange(false);
       },
-      swapMeals: (source, target) => {
-        enqueueMutation((current) => {
+      swapMeals: async (source, target) => {
+        const changed = await enqueueMutation((current) => {
           if (!current.mealPlan) {
             return null;
           }
 
-          if (source.dayIndex === target.dayIndex && source.mealType === target.mealType) {
+          const nextPlan = swapRecipesBetweenSlots(
+            current.mealPlan,
+            source,
+            target,
+            current.customRecipes
+          );
+
+          if (nextPlan === current.mealPlan) {
             return null;
           }
-
-          const sourceDay = current.mealPlan.days[source.dayIndex];
-          const targetDay = current.mealPlan.days[target.dayIndex];
-
-          if (!sourceDay || !targetDay) {
-            return null;
-          }
-
-          const sourceSlot = sourceDay.meals[source.mealType];
-          const targetSlot = targetDay.meals[target.mealType];
-
-          if (!sourceSlot.enabled || !targetSlot.enabled || !sourceSlot.recipeId || !targetSlot.recipeId) {
-            return null;
-          }
-
-          const days = current.mealPlan.days.map((day, index) => {
-            if (index === source.dayIndex) {
-              return {
-                ...day,
-                meals: {
-                  ...day.meals,
-                  [source.mealType]: {
-                    ...sourceSlot,
-                    recipeId: targetSlot.recipeId
-                  }
-                }
-              };
-            }
-
-            if (index === target.dayIndex) {
-              return {
-                ...day,
-                meals: {
-                  ...day.meals,
-                  [target.mealType]: {
-                    ...targetSlot,
-                    recipeId: sourceSlot.recipeId
-                  }
-                }
-              };
-            }
-
-            return day;
-          });
 
           return {
-            mealPlan: {
-              ...current.mealPlan,
-              days
-            }
+            mealPlan: nextPlan
           };
         });
-        setPlanSavedSinceLastChange(false);
+
+        if (changed) {
+          setPlanSavedSinceLastChange(false);
+        }
+
+        return changed;
       },
-      assignRecipeToMeal: (dayIndex, mealType, recipeId) => {
-        enqueueMutation((current) => {
+      assignRecipeToMeal: async (dayIndex, mealType, recipeId) => {
+        const changed = await enqueueMutation((current) => {
           if (!current.mealPlan) {
             return null;
           }
 
-          const days = [...current.mealPlan.days];
-          const day = days[dayIndex];
+          const nextPlan = assignRecipeToSlot(
+            current.mealPlan,
+            dayIndex,
+            mealType,
+            recipeId,
+            current.customRecipes
+          );
 
-          days[dayIndex] = {
-            ...day,
-            meals: {
-              ...day.meals,
-              [mealType]: {
-                enabled: true,
-                recipeId
-              }
-            }
-          };
+          if (nextPlan === current.mealPlan) {
+            return null;
+          }
 
           return {
-            mealPlan: {
-              ...current.mealPlan,
-              days
-            }
+            mealPlan: nextPlan
           };
         });
+
+        if (changed) {
+          setPlanSavedSinceLastChange(false);
+        }
+
+        return changed;
       },
       regenerateWeek: () => {
         enqueueMutation((current, currentPreferences) =>
@@ -567,21 +647,82 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         themeRef.current = nextTheme;
         setThemeState(nextTheme);
       },
-      setAdults: (count) => {
+      setBrunchMode: (enabled) => {
         enqueueMutation((current) => ({
           preferences: {
             ...current.preferences,
-            adults: Math.max(1, Math.min(10, count))
+            brunchMode: enabled
           }
         }));
       },
-      setChildren: (count) => {
-        enqueueMutation((current) => ({
-          preferences: {
-            ...current.preferences,
-            children: Math.max(0, Math.min(10, count))
+      updateHouseholdMember: (id, updates) => {
+        enqueueMutation((current, currentPreferences) => {
+          const householdMembers = currentPreferences.householdMembers.map((member) =>
+            member.id === id
+              ? {
+                  ...member,
+                  ...updates,
+                  name: updates.name?.trim() || member.name,
+                  mealParticipation: updates.mealParticipation ?? member.mealParticipation
+                }
+              : member
+          );
+          const normalizedMembers = normalizeHouseholdMembers(
+            householdMembers,
+            currentPreferences.adults,
+            currentPreferences.children
+          );
+          const householdCounts = countHouseholdMembers(normalizedMembers);
+
+          return {
+            preferences: {
+              ...current.preferences,
+              adults: householdCounts.adults,
+              children: householdCounts.children,
+              householdMembers: normalizedMembers
+            }
+          };
+        });
+        setPlanSavedSinceLastChange(false);
+      },
+      addHouseholdMember: () => {
+        enqueueMutation((current, currentPreferences) => {
+          const householdMembers = [
+            ...currentPreferences.householdMembers,
+            createBlankHouseholdMember(currentPreferences.householdMembers)
+          ];
+          const householdCounts = countHouseholdMembers(householdMembers);
+
+          return {
+            preferences: {
+              ...current.preferences,
+              adults: householdCounts.adults,
+              children: householdCounts.children,
+              householdMembers
+            }
+          };
+        });
+        setPlanSavedSinceLastChange(false);
+      },
+      removeHouseholdMember: (id) => {
+        enqueueMutation((current, currentPreferences) => {
+          if (currentPreferences.householdMembers.length <= 1) {
+            return null;
           }
-        }));
+
+          const householdMembers = currentPreferences.householdMembers.filter((member) => member.id !== id);
+          const householdCounts = countHouseholdMembers(householdMembers);
+
+          return {
+            preferences: {
+              ...current.preferences,
+              adults: householdCounts.adults,
+              children: householdCounts.children,
+              householdMembers
+            }
+          };
+        });
+        setPlanSavedSinceLastChange(false);
       },
       customStaples: preferences.customStaples,
       sectionOrder: preferences.sectionOrder,
@@ -702,6 +843,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           throw new Error("Unable to create custom recipe");
         }
 
+        setPlanSavedSinceLastChange(false);
         return nextRecipe;
       },
       removeCustomRecipe: (id) => {
@@ -721,6 +863,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
                       day.meals.breakfast.recipeId === id
                         ? { enabled: day.meals.breakfast.enabled }
                         : day.meals.breakfast,
+                    brunch:
+                      day.meals.brunch.recipeId === id
+                        ? { enabled: day.meals.brunch.enabled }
+                        : day.meals.brunch,
                     lunch:
                       day.meals.lunch.recipeId === id
                         ? { enabled: day.meals.lunch.enabled }
@@ -783,7 +929,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             current.mealPlan,
             {},
             current.customRecipes,
-            getServingMultiplier(currentPreferences),
+            getMealServingMultipliers(currentPreferences.householdMembers),
             currentPreferences.customStaples,
             currentPreferences.sectionOrder
           ).find((item) => item.key === key);
@@ -828,7 +974,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             current.mealPlan,
             current.groceryOverrides,
             current.customRecipes,
-            getServingMultiplier(currentPreferences),
+            getMealServingMultipliers(currentPreferences.householdMembers),
             currentPreferences.customStaples,
             currentPreferences.sectionOrder
           );
@@ -861,12 +1007,15 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       customItems,
       customRecipes,
       groceries,
+      hasLoadedSharedState,
       hydrated,
+      mealServingMultipliers,
       mealPlan,
       planSavedSinceLastChange,
       preferences,
       savedWeeks,
-      servingMultiplier
+      servingMultiplier,
+      syncError
     ]
   );
 
