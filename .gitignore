@@ -1,2 +1,7 @@
 node_modules/
 .next/
+meals-state-history/
+meals-state.backup.json
+*.db-wal
+*.db-shm
+*.tsbuildinfo
