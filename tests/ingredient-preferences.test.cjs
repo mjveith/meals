@@ -39,11 +39,29 @@ test('recipe archive honors household lettuce and herb preferences', () => {
   );
 });
 
+test('Beef Kofta Rice Plates uses cilantro instead of parsley everywhere', () => {
+  const recipes = readJson('src/data/recipes.json');
+  const kofta = recipes.find((recipe) => recipe.id === 'beef-kofta-rice-plates');
+
+  assert.ok(kofta, 'expected Beef Kofta Rice Plates to exist in the recipe archive');
+  assert.equal(asSearchText(kofta).includes('parsley'), false);
+  assert.equal(
+    kofta.ingredients.some((ingredient) => ingredient.name === 'cilantro'),
+    true
+  );
+  assert.equal(kofta.instructions.some((step) => step.toLowerCase().includes('cilantro')), true);
+});
+
 test('tracked saved meal state has no retired romaine or parsley grocery terms', () => {
-  const state = readJson('meals-state.json');
+  const appState = readJson('meals-state.json');
+  const sharedState = JSON.parse(
+    fs.readFileSync(path.resolve(projectRoot, '../shared-state/meals-state.json'), 'utf8')
+  );
   const searchText = asSearchText({
-    groceryOverrides: state.groceryOverrides,
-    savedWeeks: state.savedWeeks
+    appGroceryOverrides: appState.groceryOverrides,
+    appSavedWeeks: appState.savedWeeks,
+    sharedGroceryOverrides: sharedState.groceryOverrides,
+    sharedSavedWeeks: sharedState.savedWeeks
   });
 
   assert.equal(searchText.includes('romaine'), false);
