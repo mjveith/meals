@@ -56,35 +56,56 @@ function ArchivedMealCard({
   );
 }
 
-function RecipeArchiveCard({ recipe }: { recipe: Recipe }) {
+function RecipeArchiveCard({
+  recipe,
+  favorite,
+  onToggleFavorite
+}: {
+  recipe: Recipe;
+  favorite: boolean;
+  onToggleFavorite: (recipeId: string) => void;
+}) {
   const [expanded, setExpanded] = useState(false);
   const primaryMealType = recipe.mealType[0] ?? "dinner";
 
   return (
     <article className="rounded-[28px] border border-border bg-surface p-4 shadow-panel">
-      <button type="button" onClick={() => setExpanded((current) => !current)} className="w-full text-left">
-        <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted">
-          {recipe.mealType.map((mealType) => (
-            <span key={`${recipe.id}-${mealType}`} className="rounded-full bg-surfaceAlt px-3 py-1">
-              {MEAL_LABELS[mealType]}
-            </span>
-          ))}
-        </div>
-        <h3 className="mt-3 text-lg font-semibold text-text">{recipe.name}</h3>
-        <p className="mt-2 text-sm text-muted">{recipe.description}</p>
-        <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
-          <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.cuisine}</span>
-          <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.prepTime + recipe.cookTime} min</span>
-          {recipe.proteins.map((protein) => (
-            <span key={`${recipe.id}-${protein}`} className="rounded-full bg-surfaceAlt px-3 py-1">
-              {proteinLabels.get(protein) ?? protein}
-            </span>
-          ))}
-          {"isCustom" in recipe && recipe.isCustom ? (
-            <span className="rounded-full bg-accentSoft px-3 py-1 font-semibold text-text">Custom</span>
-          ) : null}
-        </div>
-      </button>
+      <div className="flex items-start gap-3">
+        <button type="button" onClick={() => setExpanded((current) => !current)} className="flex-1 text-left">
+          <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted">
+            {recipe.mealType.map((mealType) => (
+              <span key={`${recipe.id}-${mealType}`} className="rounded-full bg-surfaceAlt px-3 py-1">
+                {MEAL_LABELS[mealType]}
+              </span>
+            ))}
+          </div>
+          <h3 className="mt-3 text-lg font-semibold text-text">{recipe.name}</h3>
+          <p className="mt-2 text-sm text-muted">{recipe.description}</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
+            <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.cuisine}</span>
+            <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.prepTime + recipe.cookTime} min</span>
+            {recipe.proteins.map((protein) => (
+              <span key={`${recipe.id}-${protein}`} className="rounded-full bg-surfaceAlt px-3 py-1">
+                {proteinLabels.get(protein) ?? protein}
+              </span>
+            ))}
+            {"isCustom" in recipe && recipe.isCustom ? (
+              <span className="rounded-full bg-accentSoft px-3 py-1 font-semibold text-text">Custom</span>
+            ) : null}
+          </div>
+        </button>
+        <button
+          type="button"
+          aria-pressed={favorite}
+          aria-label={`${favorite ? "Unfavorite" : "Favorite"} ${recipe.name}`}
+          onClick={() => onToggleFavorite(recipe.id)}
+          className={`shrink-0 rounded-full px-3 py-2 text-sm font-semibold transition ${
+            favorite ? "bg-accent text-white" : "bg-surfaceAlt text-muted hover:text-accent"
+          }`}
+        >
+          {favorite ? "★" : "☆"}
+        </button>
+      </div>
       {expanded ? <RecipeDetail recipe={recipe} mealType={primaryMealType} /> : null}
     </article>
   );
@@ -119,7 +140,15 @@ function ReadOnlyGrocerySection({ title, items }: { title: string; items: Grocer
 }
 
 function SavedPageContent() {
-  const { hydrated, customRecipes, savedWeeks, deleteSavedWeek, sectionOrder } = useAppState();
+  const {
+    hydrated,
+    customRecipes,
+    preferences,
+    savedWeeks,
+    deleteSavedWeek,
+    sectionOrder,
+    toggleFavoriteRecipe
+  } = useAppState();
   const recipeMap = useMemo(() => getRecipeMap(customRecipes), [customRecipes]);
   const allRecipes = useMemo(() => getAllRecipes(customRecipes), [customRecipes]);
   const [visibleSavedWeekCount, setVisibleSavedWeekCount] = useState(SAVED_WEEKS_PAGE_SIZE);
@@ -318,7 +347,14 @@ function SavedPageContent() {
 
         <div className="mt-4 space-y-3">
           {filteredArchiveRecipes.length > 0 ? (
-            filteredArchiveRecipes.map((recipe) => <RecipeArchiveCard key={recipe.id} recipe={recipe} />)
+            filteredArchiveRecipes.map((recipe) => (
+              <RecipeArchiveCard
+                key={recipe.id}
+                recipe={recipe}
+                favorite={preferences.favoriteRecipeIds.includes(recipe.id)}
+                onToggleFavorite={toggleFavoriteRecipe}
+              />
+            ))
           ) : (
             <div className="rounded-[28px] border border-dashed border-border bg-canvas px-4 py-5 text-sm text-muted">
               No recipes matched that search. Try a recipe name, cuisine, or ingredient.

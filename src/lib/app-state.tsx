@@ -49,6 +49,7 @@ import {
   UserPreferences
 } from "@/types";
 import { formatWeekLabel } from "@/lib/date";
+import { toggleFavoriteRecipeIds } from "@/lib/favorites";
 import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
 
 interface AppStateValue {
@@ -636,9 +637,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         enqueueMutation((current, currentPreferences) => ({
           preferences: {
             ...current.preferences,
-            favoriteRecipeIds: currentPreferences.favoriteRecipeIds.includes(recipeId)
-              ? currentPreferences.favoriteRecipeIds.filter((id) => id !== recipeId)
-              : [...currentPreferences.favoriteRecipeIds, recipeId]
+            favoriteRecipeIds: toggleFavoriteRecipeIds(currentPreferences.favoriteRecipeIds, recipeId)
           }
         }));
       },
