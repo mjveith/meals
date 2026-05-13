@@ -389,10 +389,6 @@
       "collected": true,
       "adjustment": 0
     },
-    "produce::parsley::cup": {
-      "collected": true,
-      "adjustment": 0
-    },
     "produce::spinach::cup": {
       "collected": true,
       "adjustment": 0
@@ -410,6 +406,10 @@
       "adjustment": 0
     },
     "protein::chicken thigh::lb": {
+      "collected": true,
+      "adjustment": 0
+    },
+    "produce::cilantro::cup": {
       "collected": true,
       "adjustment": 0
     }
@@ -778,8 +778,8 @@
           "collected": false
         },
         {
-          "key": "produce::parsley::cup",
-          "name": "parsley",
+          "key": "produce::cilantro::cup",
+          "name": "cilantro",
           "quantity": 0.32,
           "unit": "cup",
           "category": "produce",
@@ -1231,8 +1231,8 @@
           "collected": false
         },
         {
-          "key": "produce::parsley::tbsp",
-          "name": "parsley",
+          "key": "produce::cilantro::tbsp",
+          "name": "cilantro",
           "quantity": 0.75,
           "unit": "tbsp",
           "category": "produce",
@@ -1870,8 +1870,8 @@
           "collected": false
         },
         {
-          "key": "produce::parsley::cup",
-          "name": "parsley",
+          "key": "produce::cilantro::cup",
+          "name": "cilantro",
           "quantity": 1.63,
           "unit": "cup",
           "category": "produce",
@@ -1879,10 +1879,10 @@
           "collected": false
         },
         {
-          "key": "produce::romaine::head",
-          "name": "romaine",
-          "quantity": 1.26,
-          "unit": "head",
+          "key": "produce::arugula::oz",
+          "name": "arugula",
+          "quantity": 6.3,
+          "unit": "oz",
           "category": "produce",
           "isStaple": false,
           "collected": false

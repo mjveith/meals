@@ -826,7 +826,7 @@
         "category": "pantry"
       },
       {
-        "name": "parsley",
+        "name": "cilantro",
         "quantity": 2,
         "unit": "tbsp",
         "category": "produce"
@@ -842,7 +842,7 @@
       "Preheat the oven to 375\u00b0F (190\u00b0C). Halve the cherry tomatoes and mince the garlic finely so it disperses evenly through the sauce.",
       "Heat the olive oil in a small oven-safe skillet over medium heat. Add the tomatoes and garlic and cook for 4 to 5 minutes, stirring occasionally, until the tomatoes soften and begin to collapse into a chunky sauce.",
       "Make small wells in the tomatoes and crack the eggs into them. Transfer the skillet to the oven and bake for 8 to 12 minutes, until the whites are fully set and the yolks are still slightly jiggly, or longer if you prefer firmer yolks.",
-      "Sprinkle with parsley and feta, then let the dish rest for 2 minutes before serving. The residual heat will finish setting the eggs without overbaking them."
+      "Sprinkle with cilantro and feta, then let the dish rest for 2 minutes before serving. The residual heat will finish setting the eggs without overbaking them."
     ],
     "mealType": [
       "breakfast"
@@ -1259,7 +1259,7 @@
   {
     "id": "mediterranean-chicken-pitas",
     "name": "Mediterranean Chicken Pitas",
-    "description": "Warm pita pockets stuffed with chicken, lettuce, cucumber, and tzatziki.",
+    "description": "Warm pita pockets stuffed with chicken, arugula, cucumber, and tzatziki.",
     "mealType": [
       "lunch"
     ],
@@ -1283,9 +1283,9 @@
         "category": "bakery"
       },
       {
-        "name": "romaine",
-        "quantity": 1,
-        "unit": "head",
+        "name": "arugula",
+        "quantity": 5,
+        "unit": "oz",
         "category": "produce"
       },
       {
@@ -1328,9 +1328,9 @@
     "instructions": [
       "Make the tzatziki: grate half the cucumber on the coarse side of a box grater and squeeze out the excess liquid. Stir together the yogurt, grated cucumber, minced garlic, lemon juice, chopped dill, and a pinch of salt. Refrigerate until serving.",
       "Pat the chicken dry and season both sides with paprika, salt, and pepper. Heat a skillet over medium-high heat and cook the chicken for 5 to 6 minutes per side, until browned and the center reaches 165\u00b0F (74\u00b0C).",
-      "Rest the chicken for 5 minutes on a cutting board, then slice it thinly across the grain. Dice the remaining cucumber into small pieces and shred the romaine.",
+      "Rest the chicken for 5 minutes on a cutting board, then slice it thinly across the grain. Dice the remaining cucumber into small pieces and roughly chop the arugula.",
       "Warm the pita bread in a dry skillet over medium heat for 20 seconds per side or in a 300\u00b0F (150\u00b0C) oven for 4 minutes, just until pliable. Cut or open the pitas carefully so they do not tear.",
-      "Fill each pita with romaine, cucumber, sliced chicken, and a generous spoonful of tzatziki. Serve immediately while the pita is warm and the chicken is juicy."
+      "Fill each pita with arugula, cucumber, sliced chicken, and a generous spoonful of tzatziki. Serve immediately while the pita is warm and the chicken is juicy."
     ],
     "servings": 4,
     "difficulty": "easy"
@@ -1824,7 +1824,7 @@
   {
     "id": "mediterranean-tuna-pasta",
     "name": "Mediterranean Tuna Pasta",
-    "description": "Pasta tossed with tuna, capers, tomatoes, parsley, and olive oil.",
+    "description": "Pasta tossed with tuna, capers, tomatoes, cilantro, and olive oil.",
     "mealType": [
       "lunch"
     ],
@@ -1860,7 +1860,7 @@
         "category": "pantry"
       },
       {
-        "name": "parsley",
+        "name": "cilantro",
         "quantity": 0.25,
         "unit": "cup",
         "category": "produce"
@@ -1876,7 +1876,7 @@
       "Bring a large pot of salted water to a boil and cook the penne for 9 to 11 minutes until al dente. Reserve 1/4 cup of the pasta water, then drain the pasta.",
       "Halve the cherry tomatoes and drain the tuna well. Heat the olive oil in a large skillet over medium heat, add the tomatoes and capers, and cook for 2 to 3 minutes until the tomatoes soften slightly and release a little juice.",
       "Add the tuna and cooked pasta to the skillet along with a splash of reserved pasta water. Toss over medium-low heat for 1 to 2 minutes until the mixture looks lightly glossy and the pasta is evenly coated.",
-      "Stir in the chopped parsley and serve warm or at room temperature. Let it stand 2 minutes before serving so the sauce clings to the pasta."
+      "Stir in the chopped cilantro and serve warm or at room temperature. Let it stand 2 minutes before serving so the sauce clings to the pasta."
     ],
     "servings": 4,
     "difficulty": "easy"
@@ -2285,7 +2285,7 @@
         "category": "dairy"
       },
       {
-        "name": "parsley",
+        "name": "cilantro",
         "quantity": 0.25,
         "unit": "cup",
         "category": "produce"
@@ -2298,7 +2298,7 @@
       }
     ],
     "instructions": [
-      "Combine the ground beef with chopped parsley, oregano, salt, and pepper, then mix just until combined. Form into small meatballs about 1 1/2 inches wide so they cook evenly.",
+      "Combine the ground beef with chopped cilantro, oregano, salt, and pepper, then mix just until combined. Form into small meatballs about 1 1/2 inches wide so they cook evenly.",
       "Heat a skillet over medium-high heat with a thin layer of oil and cook the meatballs for 8 to 10 minutes, turning every 2 minutes, until browned all over and the centers reach 160\u00b0F (71\u00b0C).",
       "Dice the cucumber into small pieces and stir the Greek yogurt with a squeeze of lemon if available, plus a pinch of salt, until smooth. Warm the pita bread in a 300\u00b0F (150\u00b0C) oven for 4 minutes or in a dry skillet for 20 seconds per side.",
       "Let the meatballs rest for 2 minutes, then tuck them into the warm pitas with the cucumber and yogurt sauce. Serve while the pitas are soft and the meatballs are juicy."
@@ -2412,14 +2412,14 @@
         "category": "spice"
       },
       {
-        "name": "parsley",
+        "name": "cilantro",
         "quantity": 0.25,
         "unit": "cup",
         "category": "produce"
       }
     ],
     "instructions": [
-      "Combine the ground lamb with cumin, chopped parsley, salt, and pepper, then mix gently and shape into oval kofta about 3 inches long. Avoid overmixing so the kofta stay tender.",
+      "Combine the ground lamb with cumin, chopped cilantro, salt, and pepper, then mix gently and shape into oval kofta about 3 inches long. Avoid overmixing so the kofta stay tender.",
       "Bring water for the couscous to a boil according to the package directions, stir in the couscous, cover, and let stand off the heat for 5 minutes. Fluff with a fork so the grains separate.",
       "Heat a skillet or grill pan over medium-high heat and cook the kofta for 4 to 5 minutes per side, until browned and the centers reach 160\u00b0F (71\u00b0C). Dice the cucumber while the kofta cooks.",
       "Rest the kofta for 2 minutes, then serve over couscous with cucumber and a spoonful of Greek yogurt. The exterior should be well browned while the inside stays juicy."
@@ -2491,7 +2491,7 @@
   {
     "id": "steakhouse-salad",
     "name": "Steakhouse Salad",
-    "description": "Sliced steak over romaine with tomatoes, blue cheese, and crispy onions.",
+    "description": "Sliced steak over arugula with tomatoes, blue cheese, and crispy onions.",
     "mealType": [
       "lunch"
     ],
@@ -2509,9 +2509,9 @@
         "category": "protein"
       },
       {
-        "name": "romaine",
-        "quantity": 1,
-        "unit": "head",
+        "name": "arugula",
+        "quantity": 5,
+        "unit": "oz",
         "category": "produce"
       },
       {
@@ -2543,7 +2543,7 @@
       "Pat the steak dry and season generously with salt and pepper.",
       "Heat a heavy skillet over medium-high heat and sear the steak for 3 to 4 minutes per side for medium-rare or 4 to 5 minutes per side for medium, until the center reaches 130 to 140\u00b0F (54 to 60\u00b0C).",
       "Transfer the steak to a cutting board and let it rest for 5 to 7 minutes before slicing thinly across the grain.",
-      "Chop the romaine and cut the tomato into wedges or bite-size pieces. Arrange in a large serving bowl.",
+      "Roughly chop the arugula and cut the tomato into wedges or bite-size pieces. Arrange in a large serving bowl.",
       "Top with sliced steak, blue cheese, crispy onions, and ranch dressing."
     ],
     "servings": 4,
@@ -2923,7 +2923,7 @@
   {
     "id": "salmon-caesar-wraps",
     "name": "Salmon Caesar Wraps",
-    "description": "Flaked salmon, romaine, and parmesan wrapped with creamy Caesar dressing.",
+    "description": "Flaked salmon, butter lettuce, and parmesan wrapped with creamy Caesar dressing.",
     "mealType": [
       "lunch"
     ],
@@ -2949,7 +2949,7 @@
         "category": "bakery"
       },
       {
-        "name": "romaine",
+        "name": "butter lettuce",
         "quantity": 1,
         "unit": "head",
         "category": "produce"
@@ -2975,7 +2975,7 @@
     ],
     "instructions": [
       "Pat the salmon dry, season lightly with salt and pepper, and cook it in a skillet over medium-high heat for 3 to 4 minutes per side or bake at 425\u00b0F (220\u00b0C) for 8 to 10 minutes, until it flakes easily. Rest for 2 minutes, then break into large pieces.",
-      "Chop the romaine into bite-size pieces and toss with the Caesar dressing, parmesan, and crushed croutons just until coated.",
+      "Separate and chop the butter lettuce leaves into bite-size pieces and toss with the Caesar dressing, parmesan, and crushed croutons just until coated.",
       "Warm the tortillas in a dry skillet over medium heat for 20 seconds per side or in a 300\u00b0F (150\u00b0C) oven for 4 minutes until pliable.",
       "Lay the tortillas flat, divide the salad between them, and top with salmon.",
       "Roll tightly and serve immediately. If cutting in half, let the wraps stand seam-side down for 30 seconds first so they hold their shape."
@@ -3150,14 +3150,14 @@
         "category": "dairy"
       },
       {
-        "name": "parsley",
+        "name": "cilantro",
         "quantity": 0.25,
         "unit": "cup",
         "category": "produce"
       }
     ],
     "instructions": [
-      "Mix the ground beef with chopped parsley, salt, and pepper, then shape into oblong kofta about 3 inches long. Refrigerate for 10 minutes if the mixture feels very soft so it holds its shape better in the pan.",
+      "Mix the ground beef with chopped cilantro, salt, and pepper, then shape into oblong kofta about 3 inches long. Refrigerate for 10 minutes if the mixture feels very soft so it holds its shape better in the pan.",
       "Cook the rice according to package directions. Heat a skillet or grill pan over medium-high heat and cook the kofta for 4 to 5 minutes per side, until browned and the centers reach 160\u00b0F (71\u00b0C).",
       "Dice the cucumber and tomato into small pieces and season lightly with salt. Spoon the Greek yogurt into a serving bowl so it is ready for plating.",
       "Rest the kofta for 2 minutes, then serve with the rice, cucumber-tomato salad, and yogurt. The outside should be browned and slightly crisp while the inside stays moist."
@@ -3286,7 +3286,7 @@
   {
     "id": "southwest-chicken-chopped-salad",
     "name": "Southwest Chicken Chopped Salad",
-    "description": "Chopped salad with chicken, corn, black beans, avocado, and tortilla strips.",
+    "description": "Chopped salad with chicken, corn, black beans, avocado, butter lettuce, and tortilla strips.",
     "mealType": [
       "lunch"
     ],
@@ -3306,7 +3306,7 @@
         "category": "protein"
       },
       {
-        "name": "romaine",
+        "name": "butter lettuce",
         "quantity": 1,
         "unit": "head",
         "category": "produce"
@@ -3338,8 +3338,8 @@
     ],
     "instructions": [
       "Season the chicken breasts lightly with salt and pepper. Cook them in a skillet over medium-high heat for 5 to 6 minutes per side, until browned and the thickest part reaches 165\u00b0F (74\u00b0C), then rest for 5 minutes before slicing.",
-      "While the chicken rests, chop the romaine into bite-size pieces and place it in a large bowl. Drain the black beans and corn, and dice the avocado just before serving.",
-      "Add the corn, black beans, avocado, and tortilla strips to the romaine. Slice the chicken and arrange it over the salad so the warm meat slightly softens the greens.",
+      "While the chicken rests, separate and chop the butter lettuce into bite-size pieces and place it in a large bowl. Drain the black beans and corn, and dice the avocado just before serving.",
+      "Add the corn, black beans, avocado, and tortilla strips to the butter lettuce. Slice the chicken and arrange it over the salad so the warm meat slightly softens the greens.",
       "Serve immediately with your preferred vinaigrette or salsa-ranch dressing. The salad should stay crisp, so dress it only at the table if making ahead."
     ]
   },
@@ -4053,7 +4053,7 @@
         "category": "produce"
       },
       {
-        "name": "parsley",
+        "name": "cilantro",
         "quantity": 0.25,
         "unit": "cup",
         "category": "produce"
@@ -4063,7 +4063,7 @@
       "Trim the green beans and bring a pot of salted water to a boil. Cook the beans for 3 to 4 minutes, then drain and rinse briefly with cool water so they stay bright green.",
       "Toast the almonds in a large skillet over medium heat for 2 minutes, stirring often, then transfer them to a bowl.",
       "Add 2 tablespoons of butter to the skillet and sear the trout skin-side down for 3 to 4 minutes per side, until the flesh flakes easily. Move the fish to a plate.",
-      "Melt the remaining butter in the skillet until lightly browned, then stir in the almonds, lemon juice, parsley, and green beans. Spoon the almondine mixture over the trout and serve."
+      "Melt the remaining butter in the skillet until lightly browned, then stir in the almonds, lemon juice, cilantro, and green beans. Spoon the almondine mixture over the trout and serve."
     ]
   },
   {
@@ -4108,7 +4108,7 @@
         "category": "produce"
       },
       {
-        "name": "parsley",
+        "name": "cilantro",
         "quantity": 1,
         "unit": "cup",
         "category": "produce"
@@ -4122,7 +4122,7 @@
     ],
     "instructions": [
       "Cook the farro in salted water according to the package directions until tender, then drain well.",
-      "Finely chop the parsley and stir it with the red wine vinegar, 3 tablespoons of olive oil, minced garlic, and a pinch of red pepper flakes to make a quick chimichurri.",
+      "Finely chop the cilantro and stir it with the red wine vinegar, 3 tablespoons of olive oil, minced garlic, and a pinch of red pepper flakes to make a quick chimichurri.",
       "Season the flank steak generously with salt and pepper. Sear in a hot skillet for 4 to 5 minutes per side for medium, then rest for 5 minutes before slicing thinly.",
       "Build bowls with the farro, halved tomatoes, diced cucumber, and sliced steak. Spoon the chimichurri over everything just before serving."
     ]
