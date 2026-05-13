@@ -52,18 +52,28 @@ test('Beef Kofta Rice Plates uses cilantro instead of parsley everywhere', () =>
   assert.equal(kofta.instructions.some((step) => step.toLowerCase().includes('cilantro')), true);
 });
 
-test('tracked saved meal state has no retired romaine or parsley grocery terms', () => {
-  const appState = readJson('meals-state.json');
-  const sharedState = JSON.parse(
-    fs.readFileSync(path.resolve(projectRoot, '../shared-state/meals-state.json'), 'utf8')
-  );
-  const searchText = asSearchText({
-    appGroceryOverrides: appState.groceryOverrides,
-    appSavedWeeks: appState.savedWeeks,
-    sharedGroceryOverrides: sharedState.groceryOverrides,
-    sharedSavedWeeks: sharedState.savedWeeks
-  });
+function assertNoRetiredTerms(label, value) {
+  const searchText = asSearchText(value);
 
-  assert.equal(searchText.includes('romaine'), false);
-  assert.equal(searchText.includes('parsley'), false);
+  assert.equal(searchText.includes('romaine'), false, `${label} should not include retired romaine text`);
+  assert.equal(searchText.includes('parsley'), false, `${label} should not include retired parsley text`);
+}
+
+test('tracked UI-fed meal state has no retired romaine or parsley terms', () => {
+  const stateFiles = [
+    ['app meals-state.json', path.resolve(projectRoot, 'meals-state.json')],
+    ['shared meals-state.json', path.resolve(projectRoot, '../shared-state/meals-state.json')],
+    ['shared meals-state.backup.json', path.resolve(projectRoot, '../shared-state/meals-state.backup.json')]
+  ];
+
+  for (const [label, filePath] of stateFiles) {
+    const state = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    assertNoRetiredTerms(label, {
+      mealPlan: state.mealPlan,
+      savedWeeks: state.savedWeeks,
+      groceryOverrides: state.groceryOverrides,
+      customGroceryItems: state.customGroceryItems,
+      customRecipes: state.customRecipes
+    });
+  }
 });
