@@ -10,7 +10,7 @@ import {
   useState
 } from "react";
 import { DEFAULT_PREFERENCES } from "@/lib/constants";
-import { ingredientMatchesExcluded, normalizeExcludedIngredients } from "@/lib/allergens";
+import { ingredientMatchesExcluded, normalizeExcludedIngredients, recipeExcludedAllergens } from "@/lib/allergens";
 import { migrateLegacyCustomStaplesToSharedState } from "@/lib/custom-staples";
 import { buildGroceryList } from "@/lib/grocery-builder";
 import {
@@ -676,10 +676,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           const excludedIngredients = currentExcluded.includes(normalized)
             ? currentExcluded.filter((item) => item !== normalized)
             : normalizeExcludedIngredients([...currentExcluded, normalized]);
-          const unsafeRecipeIds = new Set(
+          const unsafeRecipes = new Map(
             [...getRecipeMap(current.customRecipes).values()]
-              .filter((recipe) => recipe.ingredients.some((item) => ingredientMatchesExcluded(item.name, excludedIngredients)))
-              .map((recipe) => recipe.id)
+              .map((recipe) => [recipe.id, recipeExcludedAllergens(recipe, excludedIngredients)] as const)
+              .filter(([, allergens]) => allergens.length > 0)
           );
           const mealPlan = current.mealPlan
             ? {
@@ -689,7 +689,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
                   meals: Object.fromEntries(
                     (Object.entries(day.meals) as Array<[MealType, MealSlot]>).map(([mealType, slot]) => [
                       mealType,
-                      slot.recipeId && unsafeRecipeIds.has(slot.recipeId) ? { enabled: slot.enabled } : slot
+                      slot.recipeId && unsafeRecipes.has(slot.recipeId)
+                        ? {
+                            enabled: slot.enabled,
+                            unsafeRecipeId: slot.recipeId,
+                            unsafeExcludedIngredients: unsafeRecipes.get(slot.recipeId)
+                          }
+                        : slot
                     ])
                   ) as Record<MealType, MealSlot>
                 }))

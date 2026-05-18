@@ -46,6 +46,7 @@ export function CustomMealForm({
   const [ingredients, setIngredients] = useState<IngredientDraft[]>([emptyIngredient()]);
   const [steps, setSteps] = useState([""]);
   const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const parsedIngredients = useMemo(
     () =>
@@ -95,6 +96,7 @@ export function CustomMealForm({
     }
 
     setIsSaving(true);
+    setSaveError(null);
 
     try {
       const trimmedName = name.trim();
@@ -111,6 +113,8 @@ export function CustomMealForm({
         ingredients: parsedIngredients,
         instructions: parsedSteps
       });
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "This custom recipe could not be saved.");
     } finally {
       setIsSaving(false);
     }
@@ -261,6 +265,12 @@ export function CustomMealForm({
           </div>
         </div>
       </div>
+
+      {saveError && (
+        <div className="mt-4 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900" role="alert">
+          {saveError}
+        </div>
+      )}
 
       <button
         type="submit"

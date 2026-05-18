@@ -45,7 +45,7 @@ for (const extension of ['.ts', '.tsx']) {
 const { DEFAULT_PREFERENCES } = require(path.join(projectRoot, 'src/lib/constants.ts'));
 const { buildGroceryList } = require(path.join(projectRoot, 'src/lib/grocery-builder.ts'));
 const { ingredientMatchesExcluded, recipeExcludedAllergens } = require(path.join(projectRoot, 'src/lib/allergens.ts'));
-const { createPlanFromConfig, getSafeRecipes } = require(path.join(projectRoot, 'src/lib/meal-generator.ts'));
+const { createPlanFromConfig, getSafeRecipes, syncPlanMealParticipation } = require(path.join(projectRoot, 'src/lib/meal-generator.ts'));
 
 const excludedIngredients = ['pistachio', 'cashew'];
 
@@ -80,7 +80,7 @@ test('safe recipe pool excludes pistachios and cashews when selected', () => {
   const unsafeCashewRecipe = customRecipe('cashew-test', 'Cashew Curry', 'cashews');
   const safeRecipes = getSafeRecipes([unsafeCashewRecipe], excludedIngredients);
 
-  assert.equal(safeRecipes.some((recipe) => recipe.id === 'strawberry-ricotta-toast'), false);
+  assert.equal(safeRecipes.some((recipe) => recipe.id === 'strawberry-ricotta-toast'), true);
   assert.equal(safeRecipes.some((recipe) => recipe.id === 'cashew-test'), false);
 });
 
@@ -104,7 +104,7 @@ test('generated plans never include selected pistachio or cashew allergens', () 
   const plannedRecipeIds = plan.days.flatMap((day) => Object.values(day.meals).map((slot) => slot.recipeId).filter(Boolean));
 
   assert.ok(plannedRecipeIds.length > 0);
-  assert.equal(plannedRecipeIds.includes('strawberry-ricotta-toast'), false);
+  assert.equal(recipeExcludedAllergens(safeRecipesById.get('strawberry-ricotta-toast'), excludedIngredients).length, 0);
   assert.equal(plannedRecipeIds.includes('cashew-test'), false);
   plannedRecipeIds.forEach((recipeId) => {
     const recipe = safeRecipesById.get(recipeId);
@@ -141,4 +141,34 @@ test('grocery list omits selected allergens and recipes containing them', () => 
   );
 
   assert.deepEqual(groceries.map((item) => item.name), []);
+});
+
+test('unsafe existing plan slots are preserved with allergen metadata instead of silently cleared', () => {
+  const unsafePistachioRecipe = customRecipe('pistachio-test', 'Pistachio Bowl', 'Pistachios');
+  const plan = {
+    weekOf: '2026-05-18',
+    days: [
+      {
+        date: '2026-05-18',
+        meals: {
+          breakfast: { enabled: false },
+          brunch: { enabled: false },
+          lunch: { enabled: false },
+          dinner: { enabled: true, recipeId: 'pistachio-test' }
+        }
+      }
+    ]
+  };
+
+  const nextPlan = syncPlanMealParticipation(
+    plan,
+    { ...DEFAULT_PREFERENCES, excludedIngredients },
+    [unsafePistachioRecipe]
+  );
+  const dinner = nextPlan.days[0].meals.dinner;
+
+  assert.equal(dinner.enabled, true);
+  assert.equal(dinner.recipeId, undefined);
+  assert.equal(dinner.unsafeRecipeId, 'pistachio-test');
+  assert.deepEqual(dinner.unsafeExcludedIngredients, ['Pistachios']);
 });

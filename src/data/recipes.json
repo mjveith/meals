@@ -3770,7 +3770,7 @@
   {
     "id": "strawberry-ricotta-toast",
     "name": "Strawberry Ricotta Toast",
-    "description": "Toasted sourdough with whipped ricotta, strawberries, and a drizzle of honey.",
+    "description": "Toasted sourdough with whipped ricotta, strawberries, toasted pumpkin seeds, and a drizzle of honey.",
     "mealType": [
       "breakfast"
     ],
@@ -3812,7 +3812,7 @@
         "category": "produce"
       },
       {
-        "name": "pistachios",
+        "name": "toasted pumpkin seeds",
         "quantity": 0.25,
         "unit": "cup",
         "category": "pantry"
@@ -3822,7 +3822,7 @@
       "Hull and slice the strawberries. In a small bowl, stir the ricotta with the lemon zest and 1 tablespoon of honey until light and spreadable.",
       "Toast the sourdough until golden and crisp at the edges, either in a toaster or on a sheet pan under the broiler for 1 to 2 minutes per side.",
       "Spread the whipped ricotta over each slice while the toast is still warm, then fan the strawberries over the top.",
-      "Finish with the remaining honey and a sprinkle of chopped pistachios. Serve right away so the toast stays crisp."
+      "Finish with the remaining honey and a sprinkle of toasted pumpkin seeds. Serve right away so the toast stays crisp."
     ]
   },
   {

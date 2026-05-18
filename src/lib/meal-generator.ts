@@ -1,5 +1,5 @@
 import recipesJson from "@/data/recipes.json";
-import { filterSafeRecipes, formatExcludedIngredients } from "@/lib/allergens";
+import { filterSafeRecipes, formatExcludedIngredients, recipeExcludedAllergens } from "@/lib/allergens";
 import { addDays, getMonday, toIsoDate } from "@/lib/date";
 import { BRUNCH_MODE_MEAL_TYPES, MEAL_TYPES, STANDARD_MEAL_TYPES } from "@/lib/constants";
 import { getMealParticipationAvailability } from "@/lib/household";
@@ -105,6 +105,19 @@ function normalizeSlot(slot: MealSlot | undefined): MealSlot {
   return {
     enabled: true,
     ...(slot.recipeId ? { recipeId: slot.recipeId } : {}),
+    ...(!slot.recipeId && slot.unsafeRecipeId ? { unsafeRecipeId: slot.unsafeRecipeId } : {}),
+    ...(!slot.recipeId && slot.unsafeExcludedIngredients?.length
+      ? { unsafeExcludedIngredients: slot.unsafeExcludedIngredients }
+      : {}),
+    ...(slot.consumed ? { consumed: true } : {})
+  };
+}
+
+function blockUnsafeSlot(slot: MealSlot, recipeId: string, allergens: string[]): MealSlot {
+  return {
+    enabled: slot.enabled,
+    unsafeRecipeId: recipeId,
+    unsafeExcludedIngredients: allergens,
     ...(slot.consumed ? { consumed: true } : {})
   };
 }
@@ -147,8 +160,9 @@ export function assignRecipeToSlot(
     meals: {
       ...day.meals,
       [mealType]: {
-        ...slot,
-        recipeId
+        enabled: true,
+        recipeId,
+        ...(slot.consumed ? { consumed: true } : {})
       }
     }
   };
@@ -553,28 +567,40 @@ export function syncPlanMealParticipation(
 
   const days = plan.days.map((day) => {
     const meals = { ...day.meals };
+    let dayChanged = false;
 
     (Object.keys(meals) as MealType[]).forEach((mealType) => {
       const slot = normalizeSlot(meals[mealType]);
       const enabled = Boolean(slot.enabled && mealAvailability[mealType]);
-      const recipe = slot.recipeId ? recipeMap.get(slot.recipeId) : null;
-      const safeRecipeId = !slot.recipeId
-        ? undefined
-        : !recipe || filterSafeRecipes([recipe], preferences.excludedIngredients).length
-          ? slot.recipeId
-          : undefined;
-      const recipeId = enabled ? safeRecipeId : undefined;
 
-      if (enabled !== slot.enabled || recipeId !== slot.recipeId) {
+      if (!slot.recipeId) {
+        if (enabled !== slot.enabled) {
+          changed = true;
+          dayChanged = true;
+        }
+        meals[mealType] = enabled
+          ? { ...slot, enabled: true }
+          : { enabled: false };
+        return;
+      }
+
+      const recipe = recipeMap.get(slot.recipeId);
+      const unsafeAllergens = recipe ? recipeExcludedAllergens(recipe, preferences.excludedIngredients) : [];
+      const recipeId = enabled && (!recipe || unsafeAllergens.length === 0) ? slot.recipeId : undefined;
+
+      if (enabled !== slot.enabled || recipeId !== slot.recipeId || (!recipeId && unsafeAllergens.length > 0)) {
         changed = true;
+        dayChanged = true;
       }
 
       meals[mealType] = recipeId
         ? { enabled, recipeId, ...(slot.consumed ? { consumed: true } : {}) }
-        : { enabled };
+        : enabled && unsafeAllergens.length > 0
+          ? blockUnsafeSlot(slot, slot.recipeId, unsafeAllergens)
+          : { enabled };
     });
 
-    return changed ? { ...day, meals } : day;
+    return dayChanged ? { ...day, meals } : day;
   });
 
   return changed ? { ...plan, days } : plan;

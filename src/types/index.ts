@@ -44,6 +44,8 @@ export interface CustomRecipe extends Recipe {
 export interface MealSlot {
   enabled: boolean;
   recipeId?: string;
+  unsafeRecipeId?: string;
+  unsafeExcludedIngredients?: string[];
   consumed?: boolean;
 }
 

@@ -459,16 +459,38 @@ export default function PlanPage() {
 
                   const recipe = slot.recipeId ? recipeMap.get(slot.recipeId) : null;
                   if (!recipe) {
+                    const unsafeRecipe = slot.unsafeRecipeId ? recipeMap.get(slot.unsafeRecipeId) : null;
+                    const unsafeAllergens = slot.unsafeExcludedIngredients ?? [];
+
                     return (
                       <div
                         key={`${day.date}-${mealType}-empty`}
-                        className="rounded-[28px] border border-dashed border-border bg-surfaceAlt p-4 text-sm text-muted"
+                        className={`rounded-[28px] border border-dashed p-4 text-sm ${unsafeRecipe ? "border-amber-300 bg-amber-50 text-amber-900" : "border-border bg-surfaceAlt text-muted"}`}
                       >
                         <div className="text-xs font-semibold uppercase tracking-[0.22em] text-muted">
                           {MEAL_LABELS[mealType]}
                         </div>
-                        <div className="mt-2 font-semibold text-text">Empty slot</div>
-                        <div className="mt-1">Use Swap meal from another card to move a meal here.</div>
+                        {unsafeRecipe ? (
+                          <>
+                            <div className="mt-2 font-semibold text-amber-950">Allergen blocked: {unsafeRecipe.name}</div>
+                            <div className="mt-1">
+                              This saved meal contains excluded {unsafeAllergens.length === 1 ? "allergen" : "allergens"}
+                              {unsafeAllergens.length ? ` (${unsafeAllergens.join(", ")})` : ""}. It was preserved in place but removed from groceries and future generation.
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => regenerateMeal(dayIndex, mealType)}
+                              className="mt-3 rounded-full bg-amber-600 px-4 py-2 text-xs font-semibold text-white"
+                            >
+                              Replace with safe meal
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="mt-2 font-semibold text-text">Empty slot</div>
+                            <div className="mt-1">Use Swap meal from another card to move a meal here.</div>
+                          </>
+                        )}
                       </div>
                     );
                   }
