@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { DEFAULT_PREFERENCES, DEFAULT_SECTION_ORDER } from "@/lib/constants";
+import { normalizeExcludedIngredients } from "@/lib/allergens";
 import { countHouseholdMembers, normalizeHouseholdMembers } from "@/lib/household";
 import { dedupeCustomStaples, normalizeIngredientCategory } from "@/lib/custom-staples";
 import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
@@ -34,7 +35,8 @@ const defaultState: SharedAppState = {
     householdMembers: DEFAULT_PREFERENCES.householdMembers,
     customStaples: [],
     sectionOrder: DEFAULT_PREFERENCES.sectionOrder,
-    brunchMode: DEFAULT_PREFERENCES.brunchMode
+    brunchMode: DEFAULT_PREFERENCES.brunchMode,
+    excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients
   },
   mealPlan: null,
   groceryOverrides: {},
@@ -130,7 +132,8 @@ function sanitizeState(value: Partial<SharedAppState> | null | undefined): Share
       children: householdCounts.children,
       householdMembers,
       customStaples: dedupeCustomStaples(value?.preferences?.customStaples ?? []),
-      sectionOrder: normalizeSectionOrder(value?.preferences?.sectionOrder)
+      sectionOrder: normalizeSectionOrder(value?.preferences?.sectionOrder),
+      excludedIngredients: normalizeExcludedIngredients(value?.preferences?.excludedIngredients)
     },
     mealPlan: value?.mealPlan ?? null,
     groceryOverrides: value?.groceryOverrides ?? {},

@@ -6,7 +6,7 @@ import { ProteinSelector } from "@/components/ProteinSelector";
 import { useAppState } from "@/lib/app-state";
 import { formatDay } from "@/lib/date";
 import { getMealParticipationAvailability } from "@/lib/household";
-import { getAllRecipes, getRecipeMap, type DayConfig } from "@/lib/meal-generator";
+import { getRecipeMap, getSafeRecipes, type DayConfig } from "@/lib/meal-generator";
 import { BRUNCH_MODE_MEAL_TYPES, MEAL_LABELS, MEAL_TYPES, STANDARD_MEAL_TYPES } from "@/lib/constants";
 import { MealType, ProteinType, Recipe } from "@/types";
 
@@ -236,15 +236,16 @@ export default function PlanPage() {
     planSavedSinceLastChange
   } = useAppState();
   const recipeMap = useMemo(() => getRecipeMap(customRecipes), [customRecipes]);
-  const recipeOptionsByMealType = useMemo(
-    () => ({
-      breakfast: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("breakfast")),
-      brunch: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.some((type) => type === "brunch" || type === "breakfast" || type === "lunch")),
-      lunch: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("lunch")),
-      dinner: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("dinner"))
-    }),
-    [customRecipes]
-  );
+  const recipeOptionsByMealType = useMemo(() => {
+    const safeRecipes = getSafeRecipes(customRecipes, preferences.excludedIngredients);
+
+    return {
+      breakfast: safeRecipes.filter((recipe) => recipe.mealType.includes("breakfast")),
+      brunch: safeRecipes.filter((recipe) => recipe.mealType.some((type) => type === "brunch" || type === "breakfast" || type === "lunch")),
+      lunch: safeRecipes.filter((recipe) => recipe.mealType.includes("lunch")),
+      dinner: safeRecipes.filter((recipe) => recipe.mealType.includes("dinner"))
+    };
+  }, [customRecipes, preferences.excludedIngredients]);
   const swapTargetsBySlot = useMemo<Record<string, SwapTargetOption[]>>(() => {
     if (!mealPlan) {
       return {};
@@ -395,6 +396,12 @@ export default function PlanPage() {
           </button>
         </div>
       </section>
+
+      {syncError ? (
+        <section className="rounded-[28px] border border-amber-400/40 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-200">
+          {syncError}
+        </section>
+      ) : null}
 
       <section className="space-y-4">
         {mealPlan.days.map((day, dayIndex) => {

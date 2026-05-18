@@ -1,3 +1,4 @@
+import { filterSafeIngredients, isRecipeSafeForExcludedIngredients } from "@/lib/allergens";
 import { DEFAULT_SECTION_ORDER } from "@/lib/constants";
 import { getRecipeMap } from "@/lib/meal-generator";
 import {
@@ -73,7 +74,8 @@ export function buildGroceryList(
   customRecipes: CustomRecipe[] = [],
   servingMultiplier: ServingMultiplier = 1,
   customStaples: CustomStaple[] = [],
-  sectionOrder: IngredientCategory[] = DEFAULT_SECTION_ORDER
+  sectionOrder: IngredientCategory[] = DEFAULT_SECTION_ORDER,
+  excludedIngredients: string[] = []
 ): GroceryItem[] {
   const recipeMap = getRecipeMap(customRecipes);
   const aggregated = new Map<string, GroceryItem>();
@@ -111,7 +113,11 @@ export function buildGroceryList(
 
       const recipe = recipeMap.get(slot.recipeId);
 
-      recipe?.ingredients.forEach((ingredient) => {
+      if (!recipe || !isRecipeSafeForExcludedIngredients(recipe, excludedIngredients)) {
+        return;
+      }
+
+      recipe.ingredients.forEach((ingredient) => {
         const mealServingMultiplier = typeof servingMultiplier === "number"
           ? servingMultiplier
           : servingMultiplier[mealType] ?? 1;
@@ -130,7 +136,7 @@ export function buildGroceryList(
     });
   });
 
-  customStaples.forEach((staple) => {
+  filterSafeIngredients(customStaples, excludedIngredients).forEach((staple) => {
     const normalizedName = normalizeName(staple.name);
     const matchingKeys = nameToKeys.get(normalizedName) ?? [];
     const matchedKey = matchingKeys[0];

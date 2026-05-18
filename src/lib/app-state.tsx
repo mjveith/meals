@@ -10,6 +10,7 @@ import {
   useState
 } from "react";
 import { DEFAULT_PREFERENCES } from "@/lib/constants";
+import { ingredientMatchesExcluded, normalizeExcludedIngredients } from "@/lib/allergens";
 import { migrateLegacyCustomStaplesToSharedState } from "@/lib/custom-staples";
 import { buildGroceryList } from "@/lib/grocery-builder";
 import {
@@ -21,6 +22,7 @@ import {
 } from "@/lib/household";
 import {
   assignRecipeToSlot,
+  getRecipeMap,
   normalizePlan,
   regenerateMealSlot,
   regenerateWeek as regenerateWeekPlan,
@@ -39,6 +41,7 @@ import {
   HouseholdMember,
   IngredientCategory,
   MealPlan,
+  MealSlot,
   MealType,
   ProteinType,
   SavedWeek,
@@ -80,6 +83,7 @@ interface AppStateValue {
   toggleFavoriteRecipe: (recipeId: string) => void;
   setTheme: (theme: ThemePreference) => void;
   setBrunchMode: (enabled: boolean) => void;
+  toggleExcludedIngredient: (ingredient: string) => void;
   updateHouseholdMember: (
     id: string,
     updates: Partial<Pick<HouseholdMember, "name" | "kind" | "mealParticipation">>
@@ -126,7 +130,8 @@ const DEFAULT_SHARED_PREFERENCES: SharedPreferences = {
   householdMembers: DEFAULT_PREFERENCES.householdMembers,
   customStaples: DEFAULT_PREFERENCES.customStaples,
   sectionOrder: DEFAULT_PREFERENCES.sectionOrder,
-  brunchMode: DEFAULT_PREFERENCES.brunchMode
+  brunchMode: DEFAULT_PREFERENCES.brunchMode,
+  excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients
 };
 
 function mergePreferences(
@@ -152,6 +157,7 @@ function mergePreferences(
         ...(sharedPreferences.favoriteProteins ?? DEFAULT_SHARED_PREFERENCES.favoriteProteins)
       ])
     ) as ProteinType[],
+    excludedIngredients: normalizeExcludedIngredients(sharedPreferences.excludedIngredients),
     theme
   };
 }
@@ -169,9 +175,10 @@ function normalizeSharedState(state: SharedAppState, theme: ThemePreference): Sh
       householdMembers: preferences.householdMembers,
       customStaples: preferences.customStaples,
       sectionOrder: preferences.sectionOrder,
-      brunchMode: preferences.brunchMode
+      brunchMode: preferences.brunchMode,
+      excludedIngredients: preferences.excludedIngredients
     },
-    mealPlan: normalizePlan(state.mealPlan, preferences),
+    mealPlan: normalizePlan(state.mealPlan, preferences, state.customRecipes ?? []),
     groceryOverrides: state.groceryOverrides ?? {},
     customGroceryItems: state.customGroceryItems ?? [],
     customRecipes: state.customRecipes ?? [],
@@ -333,6 +340,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     [preferences.householdMembers]
   );
 
+  const safeCustomItems = useMemo(
+    () => customItems.filter((item) => !ingredientMatchesExcluded(item.name, preferences.excludedIngredients)),
+    [customItems, preferences.excludedIngredients]
+  );
+
   const groceries = useMemo(
     () =>
       mealPlan
@@ -342,7 +354,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             customRecipes,
             mealServingMultipliers,
             preferences.customStaples,
-            preferences.sectionOrder
+            preferences.sectionOrder,
+            preferences.excludedIngredients
           )
         : [],
     [
@@ -351,7 +364,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       groceryOverrides,
       mealServingMultipliers,
       preferences.customStaples,
-      preferences.sectionOrder
+      preferences.sectionOrder,
+      preferences.excludedIngredients
     ]
   );
 
@@ -577,7 +591,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         return changed;
       },
       assignRecipeToMeal: async (dayIndex, mealType, recipeId) => {
-        const changed = await enqueueMutation((current) => {
+        const changed = await enqueueMutation((current, currentPreferences) => {
           if (!current.mealPlan) {
             return null;
           }
@@ -587,7 +601,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             dayIndex,
             mealType,
             recipeId,
-            current.customRecipes
+            current.customRecipes,
+            currentPreferences.excludedIngredients
           );
 
           if (nextPlan === current.mealPlan) {
@@ -653,6 +668,44 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             brunchMode: enabled
           }
         }));
+      },
+      toggleExcludedIngredient: (ingredient) => {
+        enqueueMutation((current, currentPreferences) => {
+          const currentExcluded = normalizeExcludedIngredients(currentPreferences.excludedIngredients);
+          const normalized = ingredient.trim().toLowerCase();
+          const excludedIngredients = currentExcluded.includes(normalized)
+            ? currentExcluded.filter((item) => item !== normalized)
+            : normalizeExcludedIngredients([...currentExcluded, normalized]);
+          const unsafeRecipeIds = new Set(
+            [...getRecipeMap(current.customRecipes).values()]
+              .filter((recipe) => recipe.ingredients.some((item) => ingredientMatchesExcluded(item.name, excludedIngredients)))
+              .map((recipe) => recipe.id)
+          );
+          const mealPlan = current.mealPlan
+            ? {
+                ...current.mealPlan,
+                days: current.mealPlan.days.map((day) => ({
+                  ...day,
+                  meals: Object.fromEntries(
+                    (Object.entries(day.meals) as Array<[MealType, MealSlot]>).map(([mealType, slot]) => [
+                      mealType,
+                      slot.recipeId && unsafeRecipeIds.has(slot.recipeId) ? { enabled: slot.enabled } : slot
+                    ])
+                  ) as Record<MealType, MealSlot>
+                }))
+              }
+            : current.mealPlan;
+
+          return {
+            preferences: {
+              ...current.preferences,
+              excludedIngredients
+            },
+            mealPlan,
+            groceryOverrides: {}
+          };
+        });
+        setPlanSavedSinceLastChange(false);
       },
       updateHouseholdMember: (id, updates) => {
         enqueueMutation((current, currentPreferences) => {
@@ -777,8 +830,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           };
         });
       },
-      customItems,
+      customItems: safeCustomItems,
       addCustomItem: (name, category, quantity = 1, unit = "") => {
+        if (ingredientMatchesExcluded(name, preferences.excludedIngredients)) {
+          setSyncError(`${name} is excluded by allergen preferences and was not added.`);
+          return;
+        }
+
         enqueueMutation((current) => {
           const id = `custom::${Date.now()}::${name.toLowerCase()}`;
           return {
@@ -795,6 +853,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         }));
       },
       addCustomRecipe: async (recipe, options) => {
+        if (recipe.ingredients.some((item) => ingredientMatchesExcluded(item.name, preferences.excludedIngredients))) {
+          throw new Error("Custom recipe contains an excluded allergen and was not saved.");
+        }
+
         let nextRecipe: CustomRecipe | null = null;
 
         await enqueueMutation((current) => {
@@ -930,7 +992,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             current.customRecipes,
             getMealServingMultipliers(currentPreferences.householdMembers),
             currentPreferences.customStaples,
-            currentPreferences.sectionOrder
+            currentPreferences.sectionOrder,
+            currentPreferences.excludedIngredients
           ).find((item) => item.key === key);
 
           if (!baseItem) {
@@ -975,7 +1038,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             current.customRecipes,
             getMealServingMultipliers(currentPreferences.householdMembers),
             currentPreferences.customStaples,
-            currentPreferences.sectionOrder
+            currentPreferences.sectionOrder,
+            currentPreferences.excludedIngredients
           );
           const savedWeek: SavedWeek = {
             id: `week-${current.mealPlan.weekOf}-${Date.now().toString(36)}`,
@@ -984,7 +1048,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             label: formatWeekLabel(current.mealPlan.weekOf),
             mealPlan: current.mealPlan,
             groceryList: groceryList.filter((item) => !item.collected),
-            customGroceryItems: current.customGroceryItems.filter((item) => !item.collected)
+            customGroceryItems: current.customGroceryItems.filter(
+              (item) => !item.collected && !ingredientMatchesExcluded(item.name, currentPreferences.excludedIngredients)
+            )
           };
           nextSavedWeek = savedWeek;
 
@@ -1003,7 +1069,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       }
     }),
     [
-      customItems,
+      safeCustomItems,
       customRecipes,
       groceries,
       hasLoadedSharedState,

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
 import { RecipeDetail } from "@/components/RecipeDetail";
+import { recipeExcludedAllergens } from "@/lib/allergens";
 import { CATEGORY_LABELS, MEAL_LABELS, PROTEIN_OPTIONS } from "@/lib/constants";
 import { useAppState } from "@/lib/app-state";
 import { formatDay, formatSavedAt } from "@/lib/date";
@@ -27,12 +28,14 @@ function ArchivedMealCard({
   recipeName,
   description,
   metadata,
+  warning,
   children
 }: {
   mealType: MealType;
   recipeName: string;
   description: string;
   metadata?: string;
+  warning?: string;
   children?: React.ReactNode;
 }) {
   const [expanded, setExpanded] = useState(false);
@@ -45,11 +48,18 @@ function ArchivedMealCard({
         </div>
         <h3 className="mt-2 text-lg font-semibold text-text">{recipeName}</h3>
         <p className="mt-2 text-sm text-muted">{description}</p>
-        {metadata ? (
-          <div className="mt-3 inline-flex rounded-full bg-surfaceAlt px-3 py-1 text-xs text-muted">
-            {metadata}
-          </div>
-        ) : null}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {metadata ? (
+            <div className="inline-flex rounded-full bg-surfaceAlt px-3 py-1 text-xs text-muted">
+              {metadata}
+            </div>
+          ) : null}
+          {warning ? (
+            <div className="inline-flex rounded-full bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-700 dark:text-rose-200">
+              {warning}
+            </div>
+          ) : null}
+        </div>
       </button>
       {expanded ? children : null}
     </article>
@@ -59,14 +69,17 @@ function ArchivedMealCard({
 function RecipeArchiveCard({
   recipe,
   favorite,
-  onToggleFavorite
+  onToggleFavorite,
+  excludedIngredients
 }: {
   recipe: Recipe;
   favorite: boolean;
   onToggleFavorite: (recipeId: string) => void;
+  excludedIngredients: string[];
 }) {
   const [expanded, setExpanded] = useState(false);
   const primaryMealType = recipe.mealType[0] ?? "dinner";
+  const excludedAllergens = recipeExcludedAllergens(recipe, excludedIngredients);
 
   return (
     <article className="rounded-[28px] border border-border bg-surface p-4 shadow-panel">
@@ -91,6 +104,11 @@ function RecipeArchiveCard({
             ))}
             {"isCustom" in recipe && recipe.isCustom ? (
               <span className="rounded-full bg-accentSoft px-3 py-1 font-semibold text-text">Custom</span>
+            ) : null}
+            {excludedAllergens.length > 0 ? (
+              <span className="rounded-full bg-rose-500/10 px-3 py-1 font-semibold text-rose-700 dark:text-rose-200">
+                Excluded: {excludedAllergens.join(", ")}
+              </span>
             ) : null}
           </div>
         </button>
@@ -244,6 +262,7 @@ function SavedPageContent() {
                   {enabledMeals.map((mealType) => {
                     const recipeId = getArchivedMealSlot(day, mealType).recipeId;
                     const recipe = recipeId ? recipeMap.get(recipeId) : null;
+                    const excludedAllergens = recipe ? recipeExcludedAllergens(recipe, preferences.excludedIngredients) : [];
 
                     return (
                       <ArchivedMealCard
@@ -252,6 +271,7 @@ function SavedPageContent() {
                         recipeName={recipe?.name ?? "Recipe unavailable"}
                         description={recipe?.description ?? "This recipe is no longer available in the shared recipe set."}
                         metadata={recipe ? `${recipe.cuisine} · ${recipe.prepTime + recipe.cookTime} min` : undefined}
+                        warning={excludedAllergens.length > 0 ? `Excluded allergen: ${excludedAllergens.join(", ")}` : undefined}
                       >
                         {recipe ? <RecipeDetail recipe={recipe} mealType={mealType} /> : null}
                       </ArchivedMealCard>
@@ -353,6 +373,7 @@ function SavedPageContent() {
                 recipe={recipe}
                 favorite={preferences.favoriteRecipeIds.includes(recipe.id)}
                 onToggleFavorite={toggleFavoriteRecipe}
+                excludedIngredients={preferences.excludedIngredients}
               />
             ))
           ) : (

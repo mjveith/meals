@@ -82,6 +82,7 @@ export interface UserPreferences {
   customStaples: CustomStaple[];
   sectionOrder: IngredientCategory[];
   brunchMode: boolean;
+  excludedIngredients: string[];
 }
 
 export type SharedPreferences = Omit<UserPreferences, "theme">;
