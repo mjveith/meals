@@ -1,5 +1,6 @@
 import { DEFAULT_EXCLUDED_INGREDIENTS } from "@/lib/allergens";
 import { createHouseholdMembers } from "@/lib/household";
+import { DEFAULT_MEAL_PROFILE_ID } from "@/lib/meal-profiles";
 import { IngredientCategory, MealType, ProteinType, UserPreferences } from "@/types";
 
 export const PROTEIN_OPTIONS: { id: ProteinType; label: string }[] = [
@@ -33,7 +34,8 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   customStaples: [],
   sectionOrder: DEFAULT_SECTION_ORDER,
   brunchMode: false,
-  excludedIngredients: DEFAULT_EXCLUDED_INGREDIENTS
+  excludedIngredients: DEFAULT_EXCLUDED_INGREDIENTS,
+  mealProfileId: DEFAULT_MEAL_PROFILE_ID
 };
 
 export const MEAL_TYPES: MealType[] = ["breakfast", "brunch", "lunch", "dinner"];

@@ -13,6 +13,7 @@ export type IngredientCategory =
   | "household"
   | "other";
 export type ThemePreference = "light" | "dark" | "system";
+export type MealProfileId = "home" | "bajan";
 
 export interface Ingredient {
   name: string;
@@ -85,6 +86,7 @@ export interface UserPreferences {
   sectionOrder: IngredientCategory[];
   brunchMode: boolean;
   excludedIngredients: string[];
+  mealProfileId: MealProfileId;
 }
 
 export type SharedPreferences = Omit<UserPreferences, "theme">;

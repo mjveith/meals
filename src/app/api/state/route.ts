@@ -7,6 +7,7 @@ import { normalizeExcludedIngredients } from "@/lib/allergens";
 import { countHouseholdMembers, normalizeHouseholdMembers } from "@/lib/household";
 import { dedupeCustomStaples, normalizeIngredientCategory } from "@/lib/custom-staples";
 import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
+import { normalizeMealProfileId } from "@/lib/meal-profiles";
 import {
   CustomGroceryItem,
   GroceryItem,
@@ -36,7 +37,8 @@ const defaultState: SharedAppState = {
     customStaples: [],
     sectionOrder: DEFAULT_PREFERENCES.sectionOrder,
     brunchMode: DEFAULT_PREFERENCES.brunchMode,
-    excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients
+    excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients,
+    mealProfileId: DEFAULT_PREFERENCES.mealProfileId
   },
   mealPlan: null,
   groceryOverrides: {},
@@ -133,7 +135,8 @@ function sanitizeState(value: Partial<SharedAppState> | null | undefined): Share
       householdMembers,
       customStaples: dedupeCustomStaples(value?.preferences?.customStaples ?? []),
       sectionOrder: normalizeSectionOrder(value?.preferences?.sectionOrder),
-      excludedIngredients: normalizeExcludedIngredients(value?.preferences?.excludedIngredients)
+      excludedIngredients: normalizeExcludedIngredients(value?.preferences?.excludedIngredients),
+      mealProfileId: normalizeMealProfileId(value?.preferences?.mealProfileId)
     },
     mealPlan: value?.mealPlan ?? null,
     groceryOverrides: value?.groceryOverrides ?? {},

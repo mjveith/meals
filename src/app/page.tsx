@@ -235,9 +235,9 @@ export default function PlanPage() {
     saveCurrentWeek,
     planSavedSinceLastChange
   } = useAppState();
-  const recipeMap = useMemo(() => getRecipeMap(customRecipes), [customRecipes]);
+  const recipeMap = useMemo(() => getRecipeMap(customRecipes, preferences.mealProfileId), [customRecipes, preferences.mealProfileId]);
   const recipeOptionsByMealType = useMemo(() => {
-    const safeRecipes = getSafeRecipes(customRecipes, preferences.excludedIngredients);
+    const safeRecipes = getSafeRecipes(customRecipes, preferences.excludedIngredients, preferences.mealProfileId);
 
     return {
       breakfast: safeRecipes.filter((recipe) => recipe.mealType.includes("breakfast")),
@@ -245,7 +245,7 @@ export default function PlanPage() {
       lunch: safeRecipes.filter((recipe) => recipe.mealType.includes("lunch")),
       dinner: safeRecipes.filter((recipe) => recipe.mealType.includes("dinner"))
     };
-  }, [customRecipes, preferences.excludedIngredients]);
+  }, [customRecipes, preferences.excludedIngredients, preferences.mealProfileId]);
   const swapTargetsBySlot = useMemo<Record<string, SwapTargetOption[]>>(() => {
     if (!mealPlan) {
       return {};

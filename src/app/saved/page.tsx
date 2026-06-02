@@ -167,8 +167,8 @@ function SavedPageContent() {
     sectionOrder,
     toggleFavoriteRecipe
   } = useAppState();
-  const recipeMap = useMemo(() => getRecipeMap(customRecipes), [customRecipes]);
-  const allRecipes = useMemo(() => getAllRecipes(customRecipes), [customRecipes]);
+  const recipeMap = useMemo(() => getRecipeMap(customRecipes, preferences.mealProfileId), [customRecipes, preferences.mealProfileId]);
+  const allRecipes = useMemo(() => getAllRecipes(customRecipes, preferences.mealProfileId), [customRecipes, preferences.mealProfileId]);
   const [visibleSavedWeekCount, setVisibleSavedWeekCount] = useState(SAVED_WEEKS_PAGE_SIZE);
   const [archiveQuery, setArchiveQuery] = useState("");
   const visibleSavedWeeks = useMemo(

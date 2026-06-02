@@ -41,6 +41,7 @@ import {
   HouseholdMember,
   IngredientCategory,
   MealPlan,
+  MealProfileId,
   MealSlot,
   MealType,
   ProteinType,
@@ -54,6 +55,7 @@ import {
 import { formatWeekLabel } from "@/lib/date";
 import { toggleFavoriteRecipeIds } from "@/lib/favorites";
 import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
+import { normalizeMealProfileId } from "@/lib/meal-profiles";
 
 interface AppStateValue {
   preferences: UserPreferences;
@@ -83,6 +85,7 @@ interface AppStateValue {
   toggleFavoriteRecipe: (recipeId: string) => void;
   setTheme: (theme: ThemePreference) => void;
   setBrunchMode: (enabled: boolean) => void;
+  setMealProfile: (mealProfileId: MealProfileId) => void;
   toggleExcludedIngredient: (ingredient: string) => void;
   updateHouseholdMember: (
     id: string,
@@ -131,7 +134,8 @@ const DEFAULT_SHARED_PREFERENCES: SharedPreferences = {
   customStaples: DEFAULT_PREFERENCES.customStaples,
   sectionOrder: DEFAULT_PREFERENCES.sectionOrder,
   brunchMode: DEFAULT_PREFERENCES.brunchMode,
-  excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients
+  excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients,
+  mealProfileId: DEFAULT_PREFERENCES.mealProfileId
 };
 
 function mergePreferences(
@@ -158,6 +162,7 @@ function mergePreferences(
       ])
     ) as ProteinType[],
     excludedIngredients: normalizeExcludedIngredients(sharedPreferences.excludedIngredients),
+    mealProfileId: normalizeMealProfileId(sharedPreferences.mealProfileId),
     theme
   };
 }
@@ -176,7 +181,8 @@ function normalizeSharedState(state: SharedAppState, theme: ThemePreference): Sh
       customStaples: preferences.customStaples,
       sectionOrder: preferences.sectionOrder,
       brunchMode: preferences.brunchMode,
-      excludedIngredients: preferences.excludedIngredients
+      excludedIngredients: preferences.excludedIngredients,
+      mealProfileId: preferences.mealProfileId
     },
     mealPlan: normalizePlan(state.mealPlan, preferences, state.customRecipes ?? []),
     groceryOverrides: state.groceryOverrides ?? {},
@@ -355,7 +361,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             mealServingMultipliers,
             preferences.customStaples,
             preferences.sectionOrder,
-            preferences.excludedIngredients
+            preferences.excludedIngredients,
+            preferences.mealProfileId
           )
         : [],
     [
@@ -365,7 +372,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       mealServingMultipliers,
       preferences.customStaples,
       preferences.sectionOrder,
-      preferences.excludedIngredients
+      preferences.excludedIngredients,
+      preferences.mealProfileId
     ]
   );
 
@@ -602,7 +610,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             mealType,
             recipeId,
             current.customRecipes,
-            currentPreferences.excludedIngredients
+            currentPreferences.excludedIngredients,
+            currentPreferences.mealProfileId
           );
 
           if (nextPlan === current.mealPlan) {
@@ -668,6 +677,17 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             brunchMode: enabled
           }
         }));
+      },
+      setMealProfile: (mealProfileId) => {
+        enqueueMutation((current) => ({
+          preferences: {
+            ...current.preferences,
+            mealProfileId: normalizeMealProfileId(mealProfileId)
+          },
+          mealPlan: null,
+          groceryOverrides: {}
+        }));
+        setPlanSavedSinceLastChange(false);
       },
       toggleExcludedIngredient: (ingredient) => {
         enqueueMutation((current, currentPreferences) => {
@@ -999,7 +1019,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             getMealServingMultipliers(currentPreferences.householdMembers),
             currentPreferences.customStaples,
             currentPreferences.sectionOrder,
-            currentPreferences.excludedIngredients
+            currentPreferences.excludedIngredients,
+            currentPreferences.mealProfileId
           ).find((item) => item.key === key);
 
           if (!baseItem) {
@@ -1045,7 +1066,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             getMealServingMultipliers(currentPreferences.householdMembers),
             currentPreferences.customStaples,
             currentPreferences.sectionOrder,
-            currentPreferences.excludedIngredients
+            currentPreferences.excludedIngredients,
+            currentPreferences.mealProfileId
           );
           const savedWeek: SavedWeek = {
             id: `week-${current.mealPlan.weekOf}-${Date.now().toString(36)}`,

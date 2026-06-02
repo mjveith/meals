@@ -75,9 +75,10 @@ export function buildGroceryList(
   servingMultiplier: ServingMultiplier = 1,
   customStaples: CustomStaple[] = [],
   sectionOrder: IngredientCategory[] = DEFAULT_SECTION_ORDER,
-  excludedIngredients: string[] = []
+  excludedIngredients: string[] = [],
+  mealProfileId: unknown = "home"
 ): GroceryItem[] {
-  const recipeMap = getRecipeMap(customRecipes);
+  const recipeMap = getRecipeMap(customRecipes, mealProfileId);
   const aggregated = new Map<string, GroceryItem>();
   const nameToKeys = new Map<string, string[]>();
 

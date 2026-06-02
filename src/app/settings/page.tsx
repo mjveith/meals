@@ -6,6 +6,7 @@ import { ALLERGEN_OPTIONS, recipeExcludedAllergens } from "@/lib/allergens";
 import { ProteinSelector } from "@/components/ProteinSelector";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CATEGORY_LABELS, MEAL_LABELS, MEAL_TYPES } from "@/lib/constants";
+import { MEAL_PROFILES } from "@/lib/meal-profiles";
 import {
   formatParticipationCount,
   getMealParticipants,
@@ -26,6 +27,7 @@ export default function SettingsPage() {
     toggleFavoriteProtein,
     setTheme,
     setBrunchMode,
+    setMealProfile,
     toggleExcludedIngredient,
     addHouseholdMember,
     removeHouseholdMember,
@@ -49,7 +51,7 @@ export default function SettingsPage() {
     return <main className="p-6 text-sm text-muted">Loading settings...</main>;
   }
 
-  const recipeMap = getRecipeMap(customRecipes);
+  const recipeMap = getRecipeMap(customRecipes, preferences.mealProfileId);
   const favoriteRecipes = preferences.favoriteRecipeIds
     .map((recipeId) => recipeMap.get(recipeId))
     .filter((recipe): recipe is Recipe => Boolean(recipe));
@@ -92,6 +94,38 @@ export default function SettingsPage() {
         <p className="mt-3 text-sm text-slate-800/80 dark:text-white/80">
           Meal preferences are shared across devices. Theme stays local to this device.
         </p>
+      </section>
+
+      <section className="rounded-[32px] border border-border bg-surface p-4">
+        <h2 className="text-lg font-semibold text-text">Meal profile</h2>
+        <p className="mt-1 text-sm text-muted">
+          Choose the recipe repository and planning bias for generated weeks. Home keeps the current behavior; Bajan adds Barbados-friendly meals while retaining feasible Home overlap.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {MEAL_PROFILES.map((profile) => {
+            const selected = preferences.mealProfileId === profile.id;
+
+            return (
+              <button
+                key={profile.id}
+                type="button"
+                onClick={() => setMealProfile(profile.id)}
+                className={`rounded-3xl border px-4 py-4 text-left transition ${
+                  selected
+                    ? "border-accent bg-accent/10 text-text"
+                    : "border-border bg-canvas text-muted hover:border-accent/60"
+                }`}
+                aria-pressed={selected}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="font-semibold text-text">{profile.name}</div>
+                  <div className={`h-4 w-4 rounded-full border ${selected ? "border-accent bg-accent" : "border-border"}`} />
+                </div>
+                <p className="mt-2 text-sm text-muted">{profile.description}</p>
+              </button>
+            );
+          })}
+        </div>
       </section>
 
       <section className="rounded-[32px] border border-border bg-surface p-4">
