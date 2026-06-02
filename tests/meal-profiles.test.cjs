@@ -51,7 +51,7 @@ for (const extension of ['.ts', '.tsx']) {
 const { createHouseholdMembers } = require(path.join(projectRoot, 'src/lib/household.ts'));
 const { DEFAULT_PREFERENCES } = require(path.join(projectRoot, 'src/lib/constants.ts'));
 const { getSafeRecipes, createPlanFromConfig } = require(path.join(projectRoot, 'src/lib/meal-generator.ts'));
-const { normalizeMealProfileId } = require(path.join(projectRoot, 'src/lib/meal-profiles.ts'));
+const { normalizeMealProfileId, scoreRecipeForMealProfile } = require(path.join(projectRoot, 'src/lib/meal-profiles.ts'));
 
 function createPreferences(overrides = {}) {
   return {
@@ -93,6 +93,20 @@ test('Bajan generation uses Bajan repository candidates while Home remains uncha
 
   assert.equal(homeIds.some((id) => id.startsWith('bajan-')), false);
   assert.ok(bajanIds.some((id) => id.startsWith('bajan-')));
+});
+
+test('Bajan scoring keeps Home overlap while down-ranking ground-beef-heavy meals specifically', () => {
+  const bajanRecipes = getSafeRecipes([], [], 'bajan');
+  const recipeById = new Map(bajanRecipes.map((recipe) => [recipe.id, recipe]));
+  const groundBeef = recipeById.get('classic-spaghetti-bolognese');
+  const wholeCutSteak = recipeById.get('steak-fajita-bowls');
+  const lamb = recipeById.get('lamb-kofta-with-couscous');
+
+  assert.ok(groundBeef, 'ground beef Home recipe remains in inherited Bajan pool');
+  assert.ok(wholeCutSteak, 'whole-cut red meat Home recipe remains feasible in Bajan pool');
+  assert.ok(lamb, 'lamb Home recipe remains feasible in Bajan pool');
+  assert.ok(scoreRecipeForMealProfile(groundBeef, 'bajan') < scoreRecipeForMealProfile(wholeCutSteak, 'bajan'));
+  assert.ok(scoreRecipeForMealProfile(lamb, 'bajan') > scoreRecipeForMealProfile(groundBeef, 'bajan'));
 });
 
 test('meal profile selection has a persisted default and normalizes stored preference values', () => {
