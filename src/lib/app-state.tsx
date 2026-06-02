@@ -684,7 +684,6 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             ...current.preferences,
             mealProfileId: normalizeMealProfileId(mealProfileId)
           },
-          mealPlan: null,
           groceryOverrides: {}
         }));
         setPlanSavedSinceLastChange(false);
