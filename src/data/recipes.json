@@ -1655,13 +1655,13 @@
     "ingredients": [
       {
         "name": "pork shoulder",
-        "quantity": 1.5,
+        "quantity": 4,
         "unit": "lb",
         "category": "protein"
       },
       {
         "name": "barbecue sauce",
-        "quantity": 1,
+        "quantity": 2.67,
         "unit": "cup",
         "category": "pantry"
       },
