@@ -2612,6 +2612,84 @@
     ]
   },
   {
+    "id": "soy-braised-short-ribs",
+    "name": "Soy-Braised Short Ribs",
+    "description": "Tender beef short ribs braised with soy, ginger, garlic, carrots, and rice.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 15,
+    "cookTime": 180,
+    "servings": 4,
+    "difficulty": "medium",
+    "ingredients": [
+      {
+        "name": "bone-in beef short ribs",
+        "quantity": 3,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "brown sugar",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "beef broth",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "fresh ginger",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 4,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 3,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "green onion",
+        "quantity": 4,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 325\u00b0F (165\u00b0C). Pat the short ribs dry and season lightly with salt and pepper, then sear them in a Dutch oven over medium-high heat for 3 to 4 minutes per side until browned.",
+      "Whisk the soy sauce, brown sugar, and beef broth together. Add the ginger, garlic, carrots, and sauce to the Dutch oven, scraping up browned bits from the bottom.",
+      "Cover and braise in the oven for 2 1/2 to 3 hours, turning the ribs once, until the meat is fork-tender and starting to pull away from the bone.",
+      "Cook the rice while the ribs rest for 10 minutes. Skim excess fat from the sauce, spoon it over the ribs and carrots, and finish with sliced green onion."
+    ]
+  },
+  {
     "id": "thai-chicken-peanut-noodles",
     "name": "Thai Chicken Peanut Noodles",
     "description": "Rice noodles tossed with chicken, crunchy vegetables, and peanut sauce.",
@@ -3770,7 +3848,7 @@
   {
     "id": "strawberry-ricotta-toast",
     "name": "Strawberry Ricotta Toast",
-    "description": "Toasted sourdough with whipped ricotta, strawberries, toasted pumpkin seeds, and a drizzle of honey.",
+    "description": "Toasted sourdough with whipped ricotta, strawberries, toasted sunflower seeds, and a drizzle of honey.",
     "mealType": [
       "breakfast"
     ],
@@ -3812,7 +3890,7 @@
         "category": "produce"
       },
       {
-        "name": "toasted pumpkin seeds",
+        "name": "toasted sunflower seeds",
         "quantity": 0.25,
         "unit": "cup",
         "category": "pantry"
@@ -3822,7 +3900,7 @@
       "Hull and slice the strawberries. In a small bowl, stir the ricotta with the lemon zest and 1 tablespoon of honey until light and spreadable.",
       "Toast the sourdough until golden and crisp at the edges, either in a toaster or on a sheet pan under the broiler for 1 to 2 minutes per side.",
       "Spread the whipped ricotta over each slice while the toast is still warm, then fan the strawberries over the top.",
-      "Finish with the remaining honey and a sprinkle of toasted pumpkin seeds. Serve right away so the toast stays crisp."
+      "Finish with the remaining honey and a sprinkle of toasted sunflower seeds. Serve right away so the toast stays crisp."
     ]
   },
   {

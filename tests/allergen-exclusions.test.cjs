@@ -84,6 +84,16 @@ test('safe recipe pool excludes pistachios and cashews when selected', () => {
   assert.equal(safeRecipes.some((recipe) => recipe.id === 'cashew-test'), false);
 });
 
+test('strawberry ricotta recipe permanently uses sunflower seeds instead of pistachios', () => {
+  const recipe = getSafeRecipes([], excludedIngredients).find((candidate) => candidate.id === 'strawberry-ricotta-toast');
+  const recipeText = JSON.stringify(recipe).toLowerCase();
+
+  assert.ok(recipe, 'expected Strawberry Ricotta Toast to remain in the safe recipe pool');
+  assert.match(recipeText, /sunflower seed/);
+  assert.doesNotMatch(recipeText, /pistachio/);
+  assert.deepEqual(recipeExcludedAllergens(recipe, excludedIngredients), []);
+});
+
 test('generated plans never include selected pistachio or cashew allergens', () => {
   const preferences = {
     ...DEFAULT_PREFERENCES,
@@ -141,6 +151,37 @@ test('grocery list omits selected allergens and recipes containing them', () => 
   );
 
   assert.deepEqual(groceries.map((item) => item.name), []);
+});
+
+test('BBQ pulled pork contributes cabbage slaw mix without plain cabbage', () => {
+  const plan = {
+    weekOf: '2026-06-29',
+    days: [
+      {
+        date: '2026-06-29',
+        meals: {
+          breakfast: { enabled: false },
+          brunch: { enabled: false },
+          lunch: { enabled: false },
+          dinner: { enabled: true, recipeId: 'bbq-pulled-pork-sandwiches' }
+        }
+      }
+    ]
+  };
+
+  const groceries = buildGroceryList(
+    plan,
+    {},
+    [],
+    1,
+    [],
+    DEFAULT_PREFERENCES.sectionOrder,
+    excludedIngredients
+  );
+  const groceryNames = groceries.map((item) => item.name);
+
+  assert.ok(groceryNames.includes('cabbage slaw mix'));
+  assert.equal(groceryNames.includes('cabbage'), false);
 });
 
 test('unsafe existing plan slots are preserved with allergen metadata instead of silently cleared', () => {
