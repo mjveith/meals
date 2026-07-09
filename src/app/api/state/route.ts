@@ -5,11 +5,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { DEFAULT_PREFERENCES, DEFAULT_SECTION_ORDER } from "@/lib/constants";
 import { countHouseholdMembers, normalizeHouseholdMembers } from "@/lib/household";
 import { dedupeCustomStaples, normalizeIngredientCategory } from "@/lib/custom-staples";
+import { normalizePlan } from "@/lib/meal-generator";
 import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
 import {
+  CustomRecipe,
   CustomGroceryItem,
+  GroceryOverride,
   GroceryItem,
+  Ingredient,
   IngredientCategory,
+  MealType,
+  ProteinType,
   SharedAppState,
   SharedPreferences,
   SharedStatePatch
@@ -24,6 +30,9 @@ const backupStateFilePath = path.join(dataRoot, "meals-state.backup.json");
 const historyDirectoryPath = path.join(dataRoot, "meals-state-history");
 const tempStateFilePath = path.join(dataRoot, "meals-state.json.tmp");
 const maxHistorySnapshots = 200;
+export const maxPutBodyBytes = 1024 * 1024;
+const mealTypes = ["breakfast", "brunch", "lunch", "dinner"] as const;
+const proteinTypes = ["chicken", "pork", "fish", "red-meat"] as const;
 
 const defaultState: SharedAppState = {
   preferences: {
@@ -101,6 +110,207 @@ function normalizeCustomGroceryItem(value: unknown): CustomGroceryItem | null {
   };
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function normalizeString(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizeFiniteNumber(value: unknown, fallback = 0): number {
+  const numberValue = Number(value);
+  return Number.isFinite(numberValue) ? numberValue : fallback;
+}
+
+function normalizeStringList(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.map(normalizeString).filter((item) => item.length > 0);
+}
+
+function normalizeMealTypes(value: unknown): MealType[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const validMealTypes = new Set<string>(mealTypes);
+  const seen = new Set<MealType>();
+  const normalized: MealType[] = [];
+
+  for (const item of value) {
+    if (typeof item === "string" && validMealTypes.has(item) && !seen.has(item as MealType)) {
+      normalized.push(item as MealType);
+      seen.add(item as MealType);
+    }
+  }
+
+  return normalized;
+}
+
+function normalizeProteinTypes(value: unknown): ProteinType[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const validProteinTypes = new Set<string>(proteinTypes);
+  const seen = new Set<ProteinType>();
+  const normalized: ProteinType[] = [];
+
+  for (const item of value) {
+    if (typeof item === "string" && validProteinTypes.has(item) && !seen.has(item as ProteinType)) {
+      normalized.push(item as ProteinType);
+      seen.add(item as ProteinType);
+    }
+  }
+
+  return normalized;
+}
+
+function normalizeRecipeIngredient(value: unknown): Ingredient | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const name = normalizeString(value.name);
+  const quantity = normalizeFiniteNumber(value.quantity, Number.NaN);
+
+  if (!name || !Number.isFinite(quantity) || quantity <= 0) {
+    return null;
+  }
+
+  return {
+    name,
+    quantity,
+    unit: normalizeString(value.unit),
+    category: normalizeCategory(value.category)
+  };
+}
+
+function normalizeCustomRecipe(value: unknown): CustomRecipe | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const id = normalizeString(value.id);
+  const name = normalizeString(value.name);
+  const mealType = normalizeMealTypes(value.mealType);
+
+  if (!id.startsWith("custom-") || !name || mealType.length === 0) {
+    return null;
+  }
+
+  const ingredients = Array.isArray(value.ingredients)
+    ? value.ingredients
+        .map(normalizeRecipeIngredient)
+        .filter((ingredient): ingredient is Ingredient => Boolean(ingredient))
+    : [];
+
+  return {
+    id: id as CustomRecipe["id"],
+    isCustom: true,
+    name,
+    description: normalizeString(value.description),
+    mealType,
+    proteins: normalizeProteinTypes(value.proteins),
+    cuisine: normalizeString(value.cuisine),
+    prepTime: Math.max(0, normalizeFiniteNumber(value.prepTime)),
+    cookTime: Math.max(0, normalizeFiniteNumber(value.cookTime)),
+    servings: Math.max(1, normalizeFiniteNumber(value.servings, 1)),
+    difficulty: value.difficulty === "medium" ? "medium" : "easy",
+    ingredients,
+    instructions: normalizeStringList(value.instructions)
+  };
+}
+
+function normalizeCustomRecipes(value: unknown): CustomRecipe[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.map(normalizeCustomRecipe).filter((recipe): recipe is CustomRecipe => Boolean(recipe));
+}
+
+function normalizeGroceryOverrides(value: unknown): Record<string, GroceryOverride> {
+  if (!isRecord(value)) {
+    return {};
+  }
+
+  const overrides: Record<string, GroceryOverride> = {};
+
+  for (const [key, override] of Object.entries(value)) {
+    if (!key || !isRecord(override)) {
+      continue;
+    }
+
+    const hasAdjustment = typeof override.adjustment === "number" && Number.isFinite(override.adjustment);
+    const hasCollected = typeof override.collected === "boolean";
+
+    if (!hasAdjustment && !hasCollected) {
+      continue;
+    }
+
+    overrides[key] = {
+      adjustment: hasAdjustment ? Number(override.adjustment) : 0,
+      collected: hasCollected ? Boolean(override.collected) : false
+    };
+  }
+
+  return overrides;
+}
+
+export function normalizeSharedStatePatch(value: unknown): SharedStatePatch {
+  if (!isRecord(value)) {
+    return {};
+  }
+
+  const patch = value as Partial<SharedStatePatch>;
+  const normalized: SharedStatePatch = { ...patch };
+
+  if (Object.hasOwn(value, "customRecipes")) {
+    normalized.customRecipes = normalizeCustomRecipes(value.customRecipes);
+  }
+
+  if (Object.hasOwn(value, "groceryOverrides")) {
+    normalized.groceryOverrides = normalizeGroceryOverrides(value.groceryOverrides);
+  }
+
+  if (Object.hasOwn(value, "mealPlan")) {
+    normalized.mealPlan = normalizePlan(
+      patch.mealPlan ?? null,
+      { ...defaultState.preferences, ...(patch.preferences ?? {}), theme: "system" }
+    );
+  }
+
+  return normalized;
+}
+
+export async function parsePutStateRequest(request: Request): Promise<
+  | { ok: true; patch: SharedStatePatch }
+  | { ok: false; status: 400 | 413; body: { error: string } }
+> {
+  const contentLength = request.headers.get("content-length");
+  const parsedContentLength = contentLength ? Number(contentLength) : null;
+
+  if (parsedContentLength !== null && Number.isFinite(parsedContentLength) && parsedContentLength > maxPutBodyBytes) {
+    return { ok: false, status: 413, body: { error: "request body too large" } };
+  }
+
+  const rawBody = await request.text();
+
+  if (Buffer.byteLength(rawBody, "utf8") > maxPutBodyBytes) {
+    return { ok: false, status: 413, body: { error: "request body too large" } };
+  }
+
+  try {
+    return { ok: true, patch: normalizeSharedStatePatch(JSON.parse(rawBody) as unknown) };
+  } catch {
+    return { ok: false, status: 400, body: { error: "invalid JSON" } };
+  }
+}
+
 function normalizeSavedGroceryItem(item: GroceryItem): GroceryItem {
   return {
     ...item,
@@ -133,12 +343,12 @@ function sanitizeState(value: Partial<SharedAppState> | null | undefined): Share
       customStaples: dedupeCustomStaples(value?.preferences?.customStaples ?? []),
       sectionOrder: normalizeSectionOrder(value?.preferences?.sectionOrder)
     },
-    mealPlan: value?.mealPlan ?? null,
-    groceryOverrides: value?.groceryOverrides ?? {},
+    mealPlan: normalizePlan(value?.mealPlan ?? null, { ...mergedPreferences, theme: "system" }),
+    groceryOverrides: normalizeGroceryOverrides(value?.groceryOverrides),
     customGroceryItems: (value?.customGroceryItems ?? [])
       .map(normalizeCustomGroceryItem)
       .filter((item): item is CustomGroceryItem => Boolean(item)),
-    customRecipes: value?.customRecipes ?? [],
+    customRecipes: normalizeCustomRecipes(value?.customRecipes),
     savedWeeks: (value?.savedWeeks ?? []).map((week) => normalizeArchivedSavedWeek({
       ...week,
       groceryList: (week.groceryList ?? []).map(normalizeSavedGroceryItem),
@@ -311,7 +521,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const patch = (await request.json()) as SharedStatePatch;
+  const parsedRequest = await parsePutStateRequest(request);
+
+  if (!parsedRequest.ok) {
+    return NextResponse.json(parsedRequest.body, { status: parsedRequest.status });
+  }
+
+  const patch = parsedRequest.patch;
   const ifMatch = request.headers.get("if-match");
 
   const recordPromise = writeQueue.catch(() => undefined).then(async () => {
