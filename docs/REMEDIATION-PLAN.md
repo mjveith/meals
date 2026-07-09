@@ -33,7 +33,7 @@ CI pins Node 22 for parity with fitness). State dir controlled by `MEALS_DATA_DI
 | P0-3 | Make deleting the last custom staple / last saved week possible | P0 | ✅ (#4) |
 | P0-4 | Validate PUT /api/state bodies | P0 | ✅ (#5) |
 | P1-1 | Replace mtime-based state version with a monotonic counter | P1 | ✅ (#6) |
-| P1-2 | Break up the 1,039-line app-state god context | P1 | ⬜ |
+| P1-2 | Break up the 1,039-line app-state god context | P1 | ✅ (#8) |
 | P1-3 | Extract state-file persistence from the route and test it | P1 | ✅ (#7) |
 | P2-1 | Service worker cache hygiene | P2 | ⬜ |
 | P2-2 | Add README, ESLint config, and CI | P2 (CI done first) | ⬜ |
