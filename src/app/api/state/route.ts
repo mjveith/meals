@@ -11,7 +11,8 @@ import {
   GroceryItem,
   IngredientCategory,
   SharedAppState,
-  SharedPreferences
+  SharedPreferences,
+  SharedStatePatch
 } from "@/types";
 
 export const runtime = "nodejs";
@@ -235,12 +236,17 @@ function jsonResponse(record: Awaited<ReturnType<typeof readStateRecord>>) {
   });
 }
 
-function mergeSavedWeeks(current: SharedAppState["savedWeeks"], incoming: SharedAppState["savedWeeks"]) {
-  const merged = [...incoming];
+function mergeSavedWeeks(
+  current: SharedAppState["savedWeeks"],
+  incoming: SharedAppState["savedWeeks"],
+  deletedIds: string[] = []
+) {
+  const deletedIdSet = new Set(deletedIds);
+  const merged = incoming.filter((week) => !deletedIdSet.has(week.id));
   const seen = new Set(merged.map((week) => week.id));
 
   for (const week of current) {
-    if (!seen.has(week.id)) {
+    if (!seen.has(week.id) && !deletedIdSet.has(week.id)) {
       merged.push(week);
       seen.add(week.id);
     }
@@ -249,7 +255,7 @@ function mergeSavedWeeks(current: SharedAppState["savedWeeks"], incoming: Shared
   return merged;
 }
 
-function mergeStatePatch(current: SharedAppState, patch: Partial<SharedAppState>): Partial<SharedAppState> {
+export function mergeStatePatch(current: SharedAppState, patch: SharedStatePatch): Partial<SharedAppState> {
   let mergedPreferences: SharedPreferences = patch.preferences
     ? {
         ...current.preferences,
@@ -262,7 +268,8 @@ function mergeStatePatch(current: SharedAppState, patch: Partial<SharedAppState>
   if (
     patch.preferences?.customStaples &&
     patch.preferences.customStaples.length === 0 &&
-    current.preferences.customStaples.length > 0
+    current.preferences.customStaples.length > 0 &&
+    !patch.customStaplesReplace
   ) {
     mergedPreferences = {
       ...mergedPreferences,
@@ -274,11 +281,13 @@ function mergeStatePatch(current: SharedAppState, patch: Partial<SharedAppState>
     ...patch,
     preferences: mergedPreferences
   };
+  delete (merged as SharedStatePatch).customStaplesReplace;
+  delete (merged as SharedStatePatch).savedWeekDeletedIds;
 
   // Saved archives are durable records. If a stale client sends a shorter archive list,
   // merge instead of deleting live history.
-  if (patch.savedWeeks && patch.savedWeeks.length < current.savedWeeks.length) {
-    merged.savedWeeks = mergeSavedWeeks(current.savedWeeks, patch.savedWeeks);
+  if (patch.savedWeeks && (patch.savedWeeks.length < current.savedWeeks.length || patch.savedWeekDeletedIds)) {
+    merged.savedWeeks = mergeSavedWeeks(current.savedWeeks, patch.savedWeeks, patch.savedWeekDeletedIds);
   }
 
   return merged;
@@ -302,7 +311,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const patch = (await request.json()) as Partial<SharedAppState>;
+  const patch = (await request.json()) as SharedStatePatch;
   const ifMatch = request.headers.get("if-match");
 
   const recordPromise = writeQueue.catch(() => undefined).then(async () => {

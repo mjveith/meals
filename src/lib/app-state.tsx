@@ -44,6 +44,7 @@ import {
   SavedWeek,
   SharedAppState,
   SharedPreferences,
+  SharedStatePatch,
   SharedStateResponse,
   ThemePreference,
   UserPreferences
@@ -355,7 +356,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   );
 
   const enqueueMutation = (
-    updater: (current: SharedAppState, currentPreferences: UserPreferences) => Partial<SharedAppState> | null
+    updater: (current: SharedAppState, currentPreferences: UserPreferences) => SharedStatePatch | null
   ) => {
     mutationQueueRef.current = mutationQueueRef.current.then(async () => {
       if (!hydrated) {
@@ -750,7 +751,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
               (staple) =>
                 !(staple.name === name && staple.unit === unit && staple.category === category)
             )
-          }
+          },
+          customStaplesReplace: true
         }));
       },
       moveSection: (category, direction) => {
@@ -999,7 +1001,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       },
       deleteSavedWeek: (id) => {
         enqueueMutation((current) => ({
-          savedWeeks: current.savedWeeks.filter((week) => week.id !== id)
+          savedWeeks: current.savedWeeks.filter((week) => week.id !== id),
+          savedWeekDeletedIds: [id]
         }));
       }
     }),
