@@ -1,5 +1,6 @@
 node_modules/
 .next/
+meals-state.json
 meals-state-history/
 meals-state.backup.json
 *.db-wal

@@ -1,0 +1,68 @@
+{
+  "preferences": {
+    "selectedProteins": [
+      "chicken",
+      "pork",
+      "fish",
+      "red-meat"
+    ],
+    "favoriteProteins": [],
+    "favoriteRecipeIds": [],
+    "adults": 2,
+    "children": 1,
+    "householdMembers": [
+      {
+        "id": "adult-1",
+        "name": "Adult 1",
+        "kind": "adult",
+        "mealParticipation": [
+          "breakfast",
+          "brunch",
+          "lunch",
+          "dinner"
+        ]
+      },
+      {
+        "id": "adult-2",
+        "name": "Adult 2",
+        "kind": "adult",
+        "mealParticipation": [
+          "breakfast",
+          "brunch",
+          "lunch",
+          "dinner"
+        ]
+      },
+      {
+        "id": "child-1",
+        "name": "Child 1",
+        "kind": "child",
+        "mealParticipation": [
+          "breakfast",
+          "brunch",
+          "lunch",
+          "dinner"
+        ]
+      }
+    ],
+    "customStaples": [],
+    "sectionOrder": [
+      "produce",
+      "dairy",
+      "protein",
+      "pantry",
+      "spice",
+      "bakery",
+      "frozen",
+      "beverage",
+      "household",
+      "other"
+    ],
+    "brunchMode": false
+  },
+  "mealPlan": null,
+  "groceryOverrides": {},
+  "customGroceryItems": [],
+  "customRecipes": [],
+  "savedWeeks": []
+}
