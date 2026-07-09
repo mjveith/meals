@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { CustomMealForm } from "@/components/CustomMealForm";
 import { RecipeDetail } from "@/components/RecipeDetail";
-import { useAppState } from "@/lib/app-state";
+import { usePreferencesState } from "@/lib/app-state";
 import { MEAL_LABELS, PROTEIN_OPTIONS } from "@/lib/constants";
 import { formatParticipationCount } from "@/lib/household";
 import { CustomRecipe, Recipe, MealType, ProteinType } from "@/types";
@@ -60,7 +60,7 @@ export function MealCard({
   onToggleFavorite,
   onCreateCustomMeal
 }: MealCardProps) {
-  const { getServingMultiplierForMeal } = useAppState();
+  const { getServingMultiplierForMeal } = usePreferencesState();
   const [expanded, setExpanded] = useState(false);
   const [showAssignPicker, setShowAssignPicker] = useState(false);
   const [showSwapPicker, setShowSwapPicker] = useState(false);

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAppState } from "@/lib/app-state";
+import { usePreferencesState } from "@/lib/app-state";
 
 export function ThemeWatcher() {
-  const { preferences } = useAppState();
+  const { preferences } = usePreferencesState();
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");

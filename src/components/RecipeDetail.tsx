@@ -1,5 +1,5 @@
 import { getMealParticipants } from "@/lib/household";
-import { useAppState } from "@/lib/app-state";
+import { usePreferencesState } from "@/lib/app-state";
 import { MealType, Recipe } from "@/types";
 
 function formatQty(n: number): string {
@@ -9,7 +9,7 @@ function formatQty(n: number): string {
 }
 
 export function RecipeDetail({ recipe, mealType }: { recipe: Recipe; mealType: MealType }) {
-  const { getServingMultiplierForMeal, householdMembers } = useAppState();
+  const { getServingMultiplierForMeal, householdMembers } = usePreferencesState();
   const servingMultiplier = getServingMultiplierForMeal(mealType);
   const participantLabel = getMealParticipants(householdMembers, mealType)
     .map((member) => member.name)
