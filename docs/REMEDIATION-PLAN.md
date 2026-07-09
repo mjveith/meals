@@ -35,8 +35,8 @@ CI pins Node 22 for parity with fitness). State dir controlled by `MEALS_DATA_DI
 | P1-1 | Replace mtime-based state version with a monotonic counter | P1 | ✅ (#6) |
 | P1-2 | Break up the 1,039-line app-state god context | P1 | ✅ (#8) |
 | P1-3 | Extract state-file persistence from the route and test it | P1 | ✅ (#7) |
-| P2-1 | Service worker cache hygiene | P2 | ⬜ |
-| P2-2 | Add README, ESLint config, and CI | P2 (CI done first) | ⬜ |
+| P2-1 | Service worker cache hygiene | P2 | ✅ (#9) |
+| P2-2 | Add README, ESLint config, and CI | P2 (CI done first) | ✅ (#1 foundation + #10 dep audit) |
 
 ---
 
