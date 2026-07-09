@@ -43,11 +43,11 @@ for (const extension of ['.ts', '.tsx']) {
 }
 
 const {
-  PUT,
   normalizeSharedStatePatch,
   parsePutStateRequest,
   maxPutBodyBytes
-} = require(path.join(projectRoot, 'src/app/api/state/route.ts'));
+} = require(path.join(projectRoot, 'src/lib/state-store.ts'));
+const { PUT } = require(path.join(projectRoot, 'src/app/api/state/route.ts'));
 
 test('normalizeSharedStatePatch drops invalid customRecipes and preserves valid normalized recipes', () => {
   const patch = normalizeSharedStatePatch({

@@ -42,7 +42,7 @@ for (const extension of ['.ts', '.tsx']) {
   };
 }
 
-const { mergeStatePatch } = require(path.join(projectRoot, 'src/app/api/state/route.ts'));
+const { mergeStatePatch } = require(path.join(projectRoot, 'src/lib/state-store.ts'));
 
 function createState(overrides = {}) {
   return {
