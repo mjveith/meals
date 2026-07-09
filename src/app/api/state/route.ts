@@ -53,6 +53,14 @@ const defaultState: SharedAppState = {
   savedWeeks: []
 };
 
+type StoredState = SharedAppState & { stateVersion?: number };
+
+interface StateRecord {
+  raw: string;
+  state: SharedAppState;
+  version: number;
+}
+
 let writeQueue: Promise<unknown> = Promise.resolve();
 
 function normalizeCategory(value: unknown): IngredientCategory {
@@ -359,24 +367,38 @@ function sanitizeState(value: Partial<SharedAppState> | null | undefined): Share
   };
 }
 
+function normalizeStateVersion(value: unknown): number {
+  return typeof value === "number" && Number.isInteger(value) && value >= 0 ? value : 0;
+}
+
+function serializeStoredState(state: SharedAppState, stateVersion: number, space?: number): string {
+  return JSON.stringify({
+    ...state,
+    stateVersion
+  } satisfies StoredState, null, space);
+}
+
 async function ensureStateFile() {
   try {
     await fs.access(stateFilePath);
   } catch {
-    await fs.writeFile(stateFilePath, `${JSON.stringify(defaultState, null, 2)}\n`, "utf8");
+    await fs.writeFile(stateFilePath, `${serializeStoredState(defaultState, 0, 2)}\n`, "utf8");
   }
 }
 
-async function readStateRecord() {
+async function readStateRecord(): Promise<StateRecord> {
   await ensureStateFile();
   const raw = await fs.readFile(stateFilePath, "utf8");
-  const parsed = sanitizeState(JSON.parse(raw) as Partial<SharedAppState>);
-  const stats = await fs.stat(stateFilePath);
+  const stored = JSON.parse(raw) as Partial<StoredState>;
+  const parsed = sanitizeState(stored);
+  const version = normalizeStateVersion(stored.stateVersion);
 
   return {
-    raw: JSON.stringify(parsed),
+    // The ETag hashes the sanitized client state plus the server-only counter so
+    // every successful write changes validators even when visible state repeats.
+    raw: serializeStoredState(parsed, version),
     state: parsed,
-    version: Math.trunc(stats.mtimeMs)
+    version
   };
 }
 
@@ -409,8 +431,9 @@ async function writeHistorySnapshot() {
   }
 }
 
-async function writeStateRecord(nextState: SharedAppState) {
-  const formatted = `${JSON.stringify(nextState, null, 2)}\n`;
+async function writeStateRecord(nextState: SharedAppState, currentVersion: number): Promise<StateRecord> {
+  const nextVersion = currentVersion + 1;
+  const formatted = `${serializeStoredState(nextState, nextVersion, 2)}\n`;
 
   try {
     await fs.copyFile(stateFilePath, backupStateFilePath);
@@ -421,23 +444,22 @@ async function writeStateRecord(nextState: SharedAppState) {
 
   await fs.writeFile(tempStateFilePath, formatted, "utf8");
   await fs.rename(tempStateFilePath, stateFilePath);
-  const stats = await fs.stat(stateFilePath);
 
   return {
-    raw: JSON.stringify(nextState),
+    raw: serializeStoredState(nextState, nextVersion),
     state: nextState,
-    version: Math.trunc(stats.mtimeMs)
+    version: nextVersion
   };
 }
 
-function createResponseBody(record: Awaited<ReturnType<typeof readStateRecord>>) {
+function createResponseBody(record: StateRecord) {
   return {
     version: record.version,
     ...record.state
   };
 }
 
-function jsonResponse(record: Awaited<ReturnType<typeof readStateRecord>>) {
+function jsonResponse(record: StateRecord) {
   return NextResponse.json(createResponseBody(record), {
     headers: {
       ETag: createEtag(record.raw),
@@ -545,7 +567,7 @@ export async function PUT(request: NextRequest) {
       ...current.state,
       ...guardedPatch
     });
-    return { conflict: false as const, record: await writeStateRecord(nextState) };
+    return { conflict: false as const, record: await writeStateRecord(nextState, current.version) };
   });
 
   writeQueue = recordPromise;
