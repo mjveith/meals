@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "MEALS_DATA_DIR=../shared-state next start -p 3113",
     "lint": "next lint",
-    "test": "node --test tests/**/*.test.cjs"
+    "test": "node --test \"tests/**/*.test.cjs\""
   },
   "dependencies": {
     "next": "14.2.35",
@@ -20,6 +20,8 @@
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
     "autoprefixer": "10.4.27",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
     "postcss": "8.5.8",
     "sharp": "^0.34.5",
     "tailwindcss": "3.4.19",
