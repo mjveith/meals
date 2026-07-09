@@ -15,10 +15,15 @@ type ServingMultiplier = number | Partial<Record<MealType, number>>;
 
 // Conversion factors to a canonical unit within each group.
 // Each entry maps a unit alias to [canonicalUnit, multiplier].
-const UNIT_CONVERSIONS: Record<string, [string, number]> = {
+export const UNIT_CONVERSIONS: Record<string, [string, number]> = {
+  cup: ["cup", 1],
+  cups: ["cup", 1],
   pint: ["cup", 2],
+  pints: ["cup", 2],
   quart: ["cup", 4],
+  quarts: ["cup", 4],
   gallon: ["cup", 16],
+  gallons: ["cup", 16],
   tbsp: ["tbsp", 1],
   tablespoon: ["tbsp", 1],
   tablespoons: ["tbsp", 1],
@@ -132,14 +137,19 @@ export function buildGroceryList(
 
   customStaples.forEach((staple) => {
     const normalizedName = normalizeName(staple.name);
+    const [canonicalUnit, multiplier] = canonicalizeUnit(staple.unit);
+    const canonicalQuantity = Math.round(staple.quantity * multiplier * 100) / 100;
     const matchingKeys = nameToKeys.get(normalizedName) ?? [];
-    const matchedKey = matchingKeys[0];
+    const matchedKey = matchingKeys.find((key) => {
+      const item = aggregated.get(key);
+      return item?.category === staple.category && item.unit === canonicalUnit;
+    });
 
     if (matchedKey) {
       const existing = aggregated.get(matchedKey);
 
       if (existing) {
-        existing.quantity += staple.quantity;
+        existing.quantity += canonicalQuantity;
         existing.isStaple = true;
       }
 
