@@ -1,4 +1,4 @@
-import { SharedAppState, SharedStateResponse } from "@/types";
+import { SharedStatePatch, SharedStateResponse } from "@/types";
 
 export class SharedStateSyncError extends Error {
   status: number;
@@ -41,7 +41,7 @@ export async function fetchSharedState(etag?: string): Promise<{
 }
 
 export async function pushSharedState(
-  patch: Partial<SharedAppState>,
+  patch: SharedStatePatch,
   etag?: string
 ): Promise<{ state: SharedStateResponse; etag: string | null }> {
   const response = await fetch("/api/state", {

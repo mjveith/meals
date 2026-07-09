@@ -130,6 +130,11 @@ export interface SharedAppState {
   savedWeeks: SavedWeek[];
 }
 
+export type SharedStatePatch = Partial<SharedAppState> & {
+  customStaplesReplace?: true;
+  savedWeekDeletedIds?: string[];
+};
+
 export interface SharedStateResponse extends SharedAppState {
   version: number;
 }
