@@ -2,7 +2,7 @@
 
 import { KeyboardEvent, useMemo, useState } from "react";
 import { CATEGORY_LABELS } from "@/lib/constants";
-import { useAppState } from "@/lib/app-state";
+import { useGroceryState } from "@/lib/app-state";
 import { CustomGroceryItem, GroceryItem, IngredientCategory } from "@/types";
 
 type GrocerySectionItem =
@@ -29,7 +29,7 @@ export default function GroceryPage() {
     addCustomItem,
     removeCustomItem,
     toggleCustomItemCollected
-  } = useAppState();
+  } = useGroceryState();
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newItem, setNewItem] = useState(defaultForm);
