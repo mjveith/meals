@@ -27,7 +27,7 @@ CI pins Node 22 for parity with fitness). State dir controlled by `MEALS_DATA_DI
 
 | ID | Title | Priority | Status |
 |----|-------|----------|--------|
-| CI | CI workflow + README + ESLint | infra (first) | ⬜ |
+| CI | CI workflow + README + ESLint | infra (first) | ✅ (#1) |
 | P0-1 | Remove committed personal data (meals-state.json); fix start.sh paths | P0 | ⬜ |
 | P0-2 | Fix grocery-list unit aggregation bugs | P0 | ⬜ |
 | P0-3 | Make deleting the last custom staple / last saved week possible | P0 | ⬜ |
