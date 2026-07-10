@@ -9,6 +9,7 @@ import {
   useMemo,
   useState
 } from "react";
+import { ingredientMatchesExcluded, normalizeExcludedIngredients, recipeExcludedAllergens } from "@/lib/allergens";
 import { buildGroceryList } from "@/lib/grocery-builder";
 import {
   countHouseholdMembers,
@@ -20,6 +21,7 @@ import {
 import {
   assignRecipeToSlot,
   createPlanFromConfig,
+  getRecipeMap,
   regenerateMealSlot,
   regenerateWeek as regenerateWeekPlan,
   swapRecipesBetweenSlots,
@@ -28,6 +30,8 @@ import {
 import { storage } from "@/lib/storage";
 import { mergePreferences, SharedStateMutator, useSharedStateSync } from "@/lib/use-shared-state-sync";
 import { formatWeekLabel } from "@/lib/date";
+import { toggleFavoriteRecipeIds } from "@/lib/favorites";
+import { normalizeMealProfileId } from "@/lib/meal-profiles";
 import {
   AppStateInternals,
   AppStateValue,
@@ -38,6 +42,7 @@ import {
 } from "@/lib/app-state-types";
 import {
   CustomRecipe,
+  MealSlot,
   MealType,
   SavedWeek,
   ThemePreference,
@@ -106,9 +111,7 @@ function usePreferencesValue(
       void mutate((current, currentPreferences) => ({
         preferences: {
           ...current.preferences,
-          favoriteRecipeIds: currentPreferences.favoriteRecipeIds.includes(recipeId)
-            ? currentPreferences.favoriteRecipeIds.filter((id) => id !== recipeId)
-            : [...currentPreferences.favoriteRecipeIds, recipeId]
+          favoriteRecipeIds: toggleFavoriteRecipeIds(currentPreferences.favoriteRecipeIds, recipeId)
         }
       }));
     },
@@ -118,6 +121,62 @@ function usePreferencesValue(
     },
     setBrunchMode: (enabled) => {
       void mutate((current) => ({ preferences: { ...current.preferences, brunchMode: enabled } }));
+    },
+    setMealProfile: (mealProfileId) => {
+      void mutate((current) => ({
+        preferences: {
+          ...current.preferences,
+          mealProfileId: normalizeMealProfileId(mealProfileId)
+        },
+        mealPlan: null,
+        groceryOverrides: {}
+      }));
+      setPlanSavedSinceLastChange(false);
+    },
+    toggleExcludedIngredient: (ingredient) => {
+      void mutate((current, currentPreferences) => {
+        const currentExcluded = normalizeExcludedIngredients(currentPreferences.excludedIngredients);
+        const normalized = ingredient.trim().toLowerCase();
+        const excludedIngredients = currentExcluded.includes(normalized)
+          ? currentExcluded.filter((item) => item !== normalized)
+          : normalizeExcludedIngredients([...currentExcluded, normalized]);
+        const unsafeRecipes = new Map(
+          [...getRecipeMap(current.customRecipes, currentPreferences.mealProfileId).values()]
+            .map((recipe) => [recipe.id, recipeExcludedAllergens(recipe, excludedIngredients)] as const)
+            .filter(([, allergens]) => allergens.length > 0)
+        );
+        const mealPlan = current.mealPlan
+          ? {
+              ...current.mealPlan,
+              days: current.mealPlan.days.map((day) => ({
+                ...day,
+                meals: Object.fromEntries(
+                  (Object.entries(day.meals) as Array<[MealType, MealSlot]>).map(([mealType, slot]) => [
+                    mealType,
+                    slot.recipeId && unsafeRecipes.has(slot.recipeId)
+                      ? {
+                          enabled: slot.enabled,
+                          unsafeRecipeId: slot.recipeId,
+                          unsafeExcludedIngredients: unsafeRecipes.get(slot.recipeId),
+                          ...(slot.consumed ? { consumed: true } : {})
+                        }
+                      : slot
+                  ])
+                ) as Record<MealType, MealSlot>
+              }))
+            }
+          : current.mealPlan;
+
+        return {
+          preferences: {
+            ...current.preferences,
+            excludedIngredients
+          },
+          mealPlan,
+          groceryOverrides: {}
+        };
+      });
+      setPlanSavedSinceLastChange(false);
     },
     updateHouseholdMember: (id, updates) => {
       void mutate((current, currentPreferences) => {
@@ -231,9 +290,9 @@ function useMealPlanValue(
       return changed;
     },
     assignRecipeToMeal: async (dayIndex, mealType, recipeId) => {
-      const changed = await mutate((current) => {
+      const changed = await mutate((current, currentPreferences) => {
         if (!current.mealPlan) return null;
-        const nextPlan = assignRecipeToSlot(current.mealPlan, dayIndex, mealType, recipeId, current.customRecipes);
+        const nextPlan = assignRecipeToSlot(current.mealPlan, dayIndex, mealType, recipeId, current.customRecipes, currentPreferences.excludedIngredients, currentPreferences.mealProfileId);
         return nextPlan === current.mealPlan ? null : { mealPlan: nextPlan };
       });
       if (changed) setPlanSavedSinceLastChange(false);
@@ -252,6 +311,10 @@ function useMealPlanValue(
       setPlanSavedSinceLastChange(true);
     },
     addCustomRecipe: async (recipe, options) => {
+      if (recipe.ingredients.some((item) => ingredientMatchesExcluded(item.name, preferences.excludedIngredients))) {
+        throw new Error("Custom recipe contains an excluded allergen and was not saved.");
+      }
+
       let nextRecipe: CustomRecipe | null = null;
       await mutate((current) => {
         const createdRecipe: CustomRecipe = { ...recipe, id: `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`, isCustom: true };
@@ -278,8 +341,25 @@ function useMealPlanValue(
       await mutate((current, currentPreferences) => {
         if (!current.mealPlan) return null;
         const savedAt = new Date().toISOString();
-        const groceryList = buildGroceryList(current.mealPlan, current.groceryOverrides, current.customRecipes, getMealServingMultipliers(currentPreferences.householdMembers), currentPreferences.customStaples, currentPreferences.sectionOrder);
-        const savedWeek: SavedWeek = { id: `week-${current.mealPlan.weekOf}-${Date.now().toString(36)}`, savedAt, weekOf: current.mealPlan.weekOf, label: formatWeekLabel(current.mealPlan.weekOf), mealPlan: current.mealPlan, groceryList: groceryList.filter((item) => !item.collected), customGroceryItems: current.customGroceryItems.filter((item) => !item.collected) };
+        const groceryList = buildGroceryList(
+          current.mealPlan,
+          current.groceryOverrides,
+          current.customRecipes,
+          getMealServingMultipliers(currentPreferences.householdMembers),
+          currentPreferences.customStaples,
+          currentPreferences.sectionOrder,
+          currentPreferences.excludedIngredients,
+          currentPreferences.mealProfileId
+        );
+        const savedWeek: SavedWeek = {
+          id: `week-${current.mealPlan.weekOf}-${Date.now().toString(36)}`,
+          savedAt,
+          weekOf: current.mealPlan.weekOf,
+          label: formatWeekLabel(current.mealPlan.weekOf),
+          mealPlan: current.mealPlan,
+          groceryList: groceryList.filter((item) => !item.collected),
+          customGroceryItems: current.customGroceryItems.filter((item) => !item.collected && !ingredientMatchesExcluded(item.name, currentPreferences.excludedIngredients))
+        };
         nextSavedWeek = savedWeek;
         return { savedWeeks: [savedWeek, ...current.savedWeeks].sort((a, b) => b.savedAt.localeCompare(a.savedAt)) };
       });
@@ -289,7 +369,7 @@ function useMealPlanValue(
     deleteSavedWeek: (id) => {
       void mutate((current) => ({ savedWeeks: current.savedWeeks.filter((week) => week.id !== id), savedWeekDeletedIds: [id] }));
     }
-  }), [mutate, planSavedSinceLastChange, setPlanSavedSinceLastChange, status, syncState.customRecipes, syncState.mealPlan, syncState.savedWeeks]);
+  }), [mutate, planSavedSinceLastChange, preferences, setPlanSavedSinceLastChange, status, syncState.customRecipes, syncState.mealPlan, syncState.savedWeeks]);
 }
 
 function useGroceryValue(
@@ -300,16 +380,34 @@ function useGroceryValue(
   mutate: SharedStateMutator
 ): GroceryContextValue {
   const groceries = useMemo(
-    () => syncState.mealPlan ? buildGroceryList(syncState.mealPlan, syncState.groceryOverrides, syncState.customRecipes, mealServingMultipliers, preferences.customStaples, preferences.sectionOrder) : [],
-    [mealServingMultipliers, preferences.customStaples, preferences.sectionOrder, syncState.customRecipes, syncState.groceryOverrides, syncState.mealPlan]
+    () => syncState.mealPlan
+      ? buildGroceryList(
+          syncState.mealPlan,
+          syncState.groceryOverrides,
+          syncState.customRecipes,
+          mealServingMultipliers,
+          preferences.customStaples,
+          preferences.sectionOrder,
+          preferences.excludedIngredients,
+          preferences.mealProfileId
+        )
+      : [],
+    [mealServingMultipliers, preferences.customStaples, preferences.excludedIngredients, preferences.mealProfileId, preferences.sectionOrder, syncState.customRecipes, syncState.groceryOverrides, syncState.mealPlan]
+  );
+  const safeCustomItems = useMemo(
+    () => syncState.customGroceryItems.filter((item) => !ingredientMatchesExcluded(item.name, preferences.excludedIngredients)),
+    [preferences.excludedIngredients, syncState.customGroceryItems]
   );
 
   return useMemo(() => ({
     ...status,
     groceries,
-    customItems: syncState.customGroceryItems,
+    customItems: safeCustomItems,
     sectionOrder: preferences.sectionOrder,
     addCustomItem: (name, category, quantity = 1, unit = "") => {
+      if (ingredientMatchesExcluded(name, preferences.excludedIngredients)) {
+        return;
+      }
       void mutate((current) => ({ customGroceryItems: [...current.customGroceryItems, { id: `custom::${Date.now()}::${name.toLowerCase()}`, name, quantity, unit, category, collected: false }] }));
     },
     removeCustomItem: (id) => {
@@ -334,7 +432,16 @@ function useGroceryValue(
       void mutate((current) => {
         if (!current.mealPlan) return null;
         const currentPreferences = mergePreferences(current.preferences, preferences.theme);
-        const baseItem = buildGroceryList(current.mealPlan, {}, current.customRecipes, getMealServingMultipliers(currentPreferences.householdMembers), currentPreferences.customStaples, currentPreferences.sectionOrder).find((item) => item.key === key);
+        const baseItem = buildGroceryList(
+          current.mealPlan,
+          {},
+          current.customRecipes,
+          getMealServingMultipliers(currentPreferences.householdMembers),
+          currentPreferences.customStaples,
+          currentPreferences.sectionOrder,
+          currentPreferences.excludedIngredients,
+          currentPreferences.mealProfileId
+        ).find((item) => item.key === key);
         if (!baseItem) return null;
         const override = current.groceryOverrides[key] ?? { collected: false, adjustment: 0 };
         return { groceryOverrides: { ...current.groceryOverrides, [key]: { ...override, adjustment: Math.max(0, quantity) - baseItem.quantity } } };
@@ -346,7 +453,7 @@ function useGroceryValue(
         customGroceryItems: current.customGroceryItems.filter((item) => !item.collected)
       }));
     }
-  }), [groceries, mutate, preferences.sectionOrder, preferences.theme, status, syncState.customGroceryItems]);
+  }), [groceries, mutate, preferences.excludedIngredients, preferences.sectionOrder, preferences.theme, safeCustomItems, status]);
 }
 
 export function AppStateProvider({ children }: { children: ReactNode }) {

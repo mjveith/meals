@@ -8,6 +8,7 @@ import {
   HouseholdMember,
   IngredientCategory,
   MealPlan,
+  MealProfileId,
   MealType,
   ProteinType,
   SavedWeek,
@@ -34,6 +35,8 @@ export interface PreferencesContextValue extends SyncStatusValue {
   toggleFavoriteRecipe: (recipeId: string) => void;
   setTheme: (theme: ThemePreference) => void;
   setBrunchMode: (enabled: boolean) => void;
+  setMealProfile: (mealProfileId: MealProfileId) => void;
+  toggleExcludedIngredient: (ingredient: string) => void;
   updateHouseholdMember: (
     id: string,
     updates: Partial<Pick<HouseholdMember, "name" | "kind" | "mealParticipation">>

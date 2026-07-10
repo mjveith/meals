@@ -4,7 +4,7 @@ export function getMonday(date = new Date()): Date {
   const result = new Date(date);
   result.setHours(0, 0, 0, 0);
   const day = result.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
+  const diff = day === 0 ? 1 : 1 - day;
   result.setDate(result.getDate() + diff);
   return result;
 }

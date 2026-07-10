@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DEFAULT_PREFERENCES } from "@/lib/constants";
+import { normalizeExcludedIngredients } from "@/lib/allergens";
 import { migrateLegacyCustomStaplesToSharedState } from "@/lib/custom-staples";
 import { normalizePlan } from "@/lib/meal-generator";
+import { normalizeMealProfileId } from "@/lib/meal-profiles";
 import { storage } from "@/lib/storage";
 import { SharedStateSyncError, fetchSharedState, pushSharedState } from "@/lib/sync";
 import { countHouseholdMembers, normalizeHouseholdMembers } from "@/lib/household";
@@ -23,7 +25,9 @@ export const DEFAULT_SHARED_PREFERENCES: SharedPreferences = {
   householdMembers: DEFAULT_PREFERENCES.householdMembers,
   customStaples: DEFAULT_PREFERENCES.customStaples,
   sectionOrder: DEFAULT_PREFERENCES.sectionOrder,
-  brunchMode: DEFAULT_PREFERENCES.brunchMode
+  brunchMode: DEFAULT_PREFERENCES.brunchMode,
+  excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients,
+  mealProfileId: DEFAULT_PREFERENCES.mealProfileId
 };
 
 const EMPTY_SHARED_STATE: SharedAppState = {
@@ -62,6 +66,8 @@ export function mergePreferences(
         ...(sharedPreferences.favoriteProteins ?? DEFAULT_SHARED_PREFERENCES.favoriteProteins)
       ])
     ),
+    excludedIngredients: normalizeExcludedIngredients(sharedPreferences.excludedIngredients),
+    mealProfileId: normalizeMealProfileId(sharedPreferences.mealProfileId),
     theme
   };
 }
@@ -79,9 +85,11 @@ function normalizeSharedState(state: SharedAppState, theme: ThemePreference): Sh
       householdMembers: preferences.householdMembers,
       customStaples: preferences.customStaples,
       sectionOrder: preferences.sectionOrder,
-      brunchMode: preferences.brunchMode
+      brunchMode: preferences.brunchMode,
+      excludedIngredients: preferences.excludedIngredients,
+      mealProfileId: preferences.mealProfileId
     },
-    mealPlan: normalizePlan(state.mealPlan, preferences),
+    mealPlan: normalizePlan(state.mealPlan, preferences, state.customRecipes ?? []),
     groceryOverrides: state.groceryOverrides ?? {},
     customGroceryItems: state.customGroceryItems ?? [],
     customRecipes: state.customRecipes ?? [],

@@ -1,3 +1,4 @@
+import { filterSafeIngredients, isRecipeSafeForExcludedIngredients } from "@/lib/allergens";
 import { DEFAULT_SECTION_ORDER } from "@/lib/constants";
 import { getRecipeMap } from "@/lib/meal-generator";
 import {
@@ -78,9 +79,11 @@ export function buildGroceryList(
   customRecipes: CustomRecipe[] = [],
   servingMultiplier: ServingMultiplier = 1,
   customStaples: CustomStaple[] = [],
-  sectionOrder: IngredientCategory[] = DEFAULT_SECTION_ORDER
+  sectionOrder: IngredientCategory[] = DEFAULT_SECTION_ORDER,
+  excludedIngredients: string[] = [],
+  mealProfileId: unknown = "home"
 ): GroceryItem[] {
-  const recipeMap = getRecipeMap(customRecipes);
+  const recipeMap = getRecipeMap(customRecipes, mealProfileId);
   const aggregated = new Map<string, GroceryItem>();
   const nameToKeys = new Map<string, string[]>();
 
@@ -116,7 +119,11 @@ export function buildGroceryList(
 
       const recipe = recipeMap.get(slot.recipeId);
 
-      recipe?.ingredients.forEach((ingredient) => {
+      if (!recipe || !isRecipeSafeForExcludedIngredients(recipe, excludedIngredients)) {
+        return;
+      }
+
+      recipe.ingredients.forEach((ingredient) => {
         const mealServingMultiplier = typeof servingMultiplier === "number"
           ? servingMultiplier
           : servingMultiplier[mealType] ?? 1;
@@ -135,21 +142,17 @@ export function buildGroceryList(
     });
   });
 
-  customStaples.forEach((staple) => {
+  filterSafeIngredients(customStaples, excludedIngredients).forEach((staple) => {
     const normalizedName = normalizeName(staple.name);
-    const [canonicalUnit, multiplier] = canonicalizeUnit(staple.unit);
-    const canonicalQuantity = Math.round(staple.quantity * multiplier * 100) / 100;
     const matchingKeys = nameToKeys.get(normalizedName) ?? [];
-    const matchedKey = matchingKeys.find((key) => {
-      const item = aggregated.get(key);
-      return item?.category === staple.category && item.unit === canonicalUnit;
-    });
+    const [canonicalUnit, multiplier] = canonicalizeUnit(staple.unit);
+    const matchedKey = matchingKeys.find((key) => key.endsWith(`::${canonicalUnit}`));
 
     if (matchedKey) {
       const existing = aggregated.get(matchedKey);
 
       if (existing) {
-        existing.quantity += canonicalQuantity;
+        existing.quantity += Math.round(staple.quantity * multiplier * 100) / 100;
         existing.isStaple = true;
       }
 
