@@ -6,7 +6,7 @@ import { ProteinSelector } from "@/components/ProteinSelector";
 import { useAppState } from "@/lib/app-state";
 import { formatDay } from "@/lib/date";
 import { getMealParticipationAvailability } from "@/lib/household";
-import { getAllRecipes, getRecipeMap, type DayConfig } from "@/lib/meal-generator";
+import { getRecipeMap, getSafeRecipes, type DayConfig } from "@/lib/meal-generator";
 import { BRUNCH_MODE_MEAL_TYPES, MEAL_LABELS, MEAL_TYPES, STANDARD_MEAL_TYPES } from "@/lib/constants";
 import { MealType, ProteinType, Recipe } from "@/types";
 
@@ -235,16 +235,17 @@ export default function PlanPage() {
     saveCurrentWeek,
     planSavedSinceLastChange
   } = useAppState();
-  const recipeMap = useMemo(() => getRecipeMap(customRecipes), [customRecipes]);
-  const recipeOptionsByMealType = useMemo(
-    () => ({
-      breakfast: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("breakfast")),
-      brunch: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.some((type) => type === "brunch" || type === "breakfast" || type === "lunch")),
-      lunch: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("lunch")),
-      dinner: getAllRecipes(customRecipes).filter((recipe) => recipe.mealType.includes("dinner"))
-    }),
-    [customRecipes]
-  );
+  const recipeMap = useMemo(() => getRecipeMap(customRecipes, preferences.mealProfileId), [customRecipes, preferences.mealProfileId]);
+  const recipeOptionsByMealType = useMemo(() => {
+    const safeRecipes = getSafeRecipes(customRecipes, preferences.excludedIngredients, preferences.mealProfileId);
+
+    return {
+      breakfast: safeRecipes.filter((recipe) => recipe.mealType.includes("breakfast")),
+      brunch: safeRecipes.filter((recipe) => recipe.mealType.some((type) => type === "brunch" || type === "breakfast" || type === "lunch")),
+      lunch: safeRecipes.filter((recipe) => recipe.mealType.includes("lunch")),
+      dinner: safeRecipes.filter((recipe) => recipe.mealType.includes("dinner"))
+    };
+  }, [customRecipes, preferences.excludedIngredients, preferences.mealProfileId]);
   const swapTargetsBySlot = useMemo<Record<string, SwapTargetOption[]>>(() => {
     if (!mealPlan) {
       return {};
@@ -396,6 +397,12 @@ export default function PlanPage() {
         </div>
       </section>
 
+      {syncError ? (
+        <section className="rounded-[28px] border border-amber-400/40 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-200">
+          {syncError}
+        </section>
+      ) : null}
+
       <section className="space-y-4">
         {mealPlan.days.map((day, dayIndex) => {
           const formatted = formatDay(day.date);
@@ -452,16 +459,38 @@ export default function PlanPage() {
 
                   const recipe = slot.recipeId ? recipeMap.get(slot.recipeId) : null;
                   if (!recipe) {
+                    const unsafeRecipe = slot.unsafeRecipeId ? recipeMap.get(slot.unsafeRecipeId) : null;
+                    const unsafeAllergens = slot.unsafeExcludedIngredients ?? [];
+
                     return (
                       <div
                         key={`${day.date}-${mealType}-empty`}
-                        className="rounded-[28px] border border-dashed border-border bg-surfaceAlt p-4 text-sm text-muted"
+                        className={`rounded-[28px] border border-dashed p-4 text-sm ${unsafeRecipe ? "border-amber-300 bg-amber-50 text-amber-900" : "border-border bg-surfaceAlt text-muted"}`}
                       >
                         <div className="text-xs font-semibold uppercase tracking-[0.22em] text-muted">
                           {MEAL_LABELS[mealType]}
                         </div>
-                        <div className="mt-2 font-semibold text-text">Empty slot</div>
-                        <div className="mt-1">Use Swap meal from another card to move a meal here.</div>
+                        {unsafeRecipe ? (
+                          <>
+                            <div className="mt-2 font-semibold text-amber-950">Allergen blocked: {unsafeRecipe.name}</div>
+                            <div className="mt-1">
+                              This saved meal contains excluded {unsafeAllergens.length === 1 ? "allergen" : "allergens"}
+                              {unsafeAllergens.length ? ` (${unsafeAllergens.join(", ")})` : ""}. It was preserved in place but removed from groceries and future generation.
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => regenerateMeal(dayIndex, mealType)}
+                              className="mt-3 rounded-full bg-amber-600 px-4 py-2 text-xs font-semibold text-white"
+                            >
+                              Replace with safe meal
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="mt-2 font-semibold text-text">Empty slot</div>
+                            <div className="mt-1">Use Swap meal from another card to move a meal here.</div>
+                          </>
+                        )}
                       </div>
                     );
                   }

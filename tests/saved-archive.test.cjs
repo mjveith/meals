@@ -54,6 +54,7 @@ const {
   getVisibleSavedWeeks,
   searchRecipeArchive
 } = require(path.join(projectRoot, 'src/lib/saved-archive.ts'));
+const { toggleFavoriteRecipeIds } = require(path.join(projectRoot, 'src/lib/favorites.ts'));
 
 function createRecipe(overrides = {}) {
   return {
@@ -135,4 +136,10 @@ test('searchRecipeArchive ranks exact recipe names first and supports ingredient
   const ingredientMatches = searchRecipeArchive(recipes, 'cucumber american').map((recipe) => recipe.id);
   assert.equal(ingredientMatches[0], 'salad');
   assert.ok(ingredientMatches.includes('salad'));
+});
+
+test('toggleFavoriteRecipeIds persists archive favorite changes without duplicates', () => {
+  assert.deepEqual(toggleFavoriteRecipeIds(['salad'], 'pork-chops'), ['salad', 'pork-chops']);
+  assert.deepEqual(toggleFavoriteRecipeIds(['salad', 'pork-chops'], 'pork-chops'), ['salad']);
+  assert.deepEqual(toggleFavoriteRecipeIds(['salad', 'salad'], 'pork-chops'), ['salad', 'pork-chops']);
 });

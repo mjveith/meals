@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
 import { RecipeDetail } from "@/components/RecipeDetail";
+import { recipeExcludedAllergens } from "@/lib/allergens";
 import { CATEGORY_LABELS, MEAL_LABELS, PROTEIN_OPTIONS } from "@/lib/constants";
 import { useAppState } from "@/lib/app-state";
 import { formatDay, formatSavedAt } from "@/lib/date";
@@ -27,12 +28,14 @@ function ArchivedMealCard({
   recipeName,
   description,
   metadata,
+  warning,
   children
 }: {
   mealType: MealType;
   recipeName: string;
   description: string;
   metadata?: string;
+  warning?: string;
   children?: React.ReactNode;
 }) {
   const [expanded, setExpanded] = useState(false);
@@ -45,46 +48,82 @@ function ArchivedMealCard({
         </div>
         <h3 className="mt-2 text-lg font-semibold text-text">{recipeName}</h3>
         <p className="mt-2 text-sm text-muted">{description}</p>
-        {metadata ? (
-          <div className="mt-3 inline-flex rounded-full bg-surfaceAlt px-3 py-1 text-xs text-muted">
-            {metadata}
-          </div>
-        ) : null}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {metadata ? (
+            <div className="inline-flex rounded-full bg-surfaceAlt px-3 py-1 text-xs text-muted">
+              {metadata}
+            </div>
+          ) : null}
+          {warning ? (
+            <div className="inline-flex rounded-full bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-700 dark:text-rose-200">
+              {warning}
+            </div>
+          ) : null}
+        </div>
       </button>
       {expanded ? children : null}
     </article>
   );
 }
 
-function RecipeArchiveCard({ recipe }: { recipe: Recipe }) {
+function RecipeArchiveCard({
+  recipe,
+  favorite,
+  onToggleFavorite,
+  excludedIngredients
+}: {
+  recipe: Recipe;
+  favorite: boolean;
+  onToggleFavorite: (recipeId: string) => void;
+  excludedIngredients: string[];
+}) {
   const [expanded, setExpanded] = useState(false);
   const primaryMealType = recipe.mealType[0] ?? "dinner";
+  const excludedAllergens = recipeExcludedAllergens(recipe, excludedIngredients);
 
   return (
     <article className="rounded-[28px] border border-border bg-surface p-4 shadow-panel">
-      <button type="button" onClick={() => setExpanded((current) => !current)} className="w-full text-left">
-        <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted">
-          {recipe.mealType.map((mealType) => (
-            <span key={`${recipe.id}-${mealType}`} className="rounded-full bg-surfaceAlt px-3 py-1">
-              {MEAL_LABELS[mealType]}
-            </span>
-          ))}
-        </div>
-        <h3 className="mt-3 text-lg font-semibold text-text">{recipe.name}</h3>
-        <p className="mt-2 text-sm text-muted">{recipe.description}</p>
-        <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
-          <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.cuisine}</span>
-          <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.prepTime + recipe.cookTime} min</span>
-          {recipe.proteins.map((protein) => (
-            <span key={`${recipe.id}-${protein}`} className="rounded-full bg-surfaceAlt px-3 py-1">
-              {proteinLabels.get(protein) ?? protein}
-            </span>
-          ))}
-          {"isCustom" in recipe && recipe.isCustom ? (
-            <span className="rounded-full bg-accentSoft px-3 py-1 font-semibold text-text">Custom</span>
-          ) : null}
-        </div>
-      </button>
+      <div className="flex items-start gap-3">
+        <button type="button" onClick={() => setExpanded((current) => !current)} className="flex-1 text-left">
+          <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted">
+            {recipe.mealType.map((mealType) => (
+              <span key={`${recipe.id}-${mealType}`} className="rounded-full bg-surfaceAlt px-3 py-1">
+                {MEAL_LABELS[mealType]}
+              </span>
+            ))}
+          </div>
+          <h3 className="mt-3 text-lg font-semibold text-text">{recipe.name}</h3>
+          <p className="mt-2 text-sm text-muted">{recipe.description}</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
+            <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.cuisine}</span>
+            <span className="rounded-full bg-surfaceAlt px-3 py-1">{recipe.prepTime + recipe.cookTime} min</span>
+            {recipe.proteins.map((protein) => (
+              <span key={`${recipe.id}-${protein}`} className="rounded-full bg-surfaceAlt px-3 py-1">
+                {proteinLabels.get(protein) ?? protein}
+              </span>
+            ))}
+            {"isCustom" in recipe && recipe.isCustom ? (
+              <span className="rounded-full bg-accentSoft px-3 py-1 font-semibold text-text">Custom</span>
+            ) : null}
+            {excludedAllergens.length > 0 ? (
+              <span className="rounded-full bg-rose-500/10 px-3 py-1 font-semibold text-rose-700 dark:text-rose-200">
+                Excluded: {excludedAllergens.join(", ")}
+              </span>
+            ) : null}
+          </div>
+        </button>
+        <button
+          type="button"
+          aria-pressed={favorite}
+          aria-label={`${favorite ? "Unfavorite" : "Favorite"} ${recipe.name}`}
+          onClick={() => onToggleFavorite(recipe.id)}
+          className={`shrink-0 rounded-full px-3 py-2 text-sm font-semibold transition ${
+            favorite ? "bg-accent text-white" : "bg-surfaceAlt text-muted hover:text-accent"
+          }`}
+        >
+          {favorite ? "★" : "☆"}
+        </button>
+      </div>
       {expanded ? <RecipeDetail recipe={recipe} mealType={primaryMealType} /> : null}
     </article>
   );
@@ -119,9 +158,17 @@ function ReadOnlyGrocerySection({ title, items }: { title: string; items: Grocer
 }
 
 function SavedPageContent() {
-  const { hydrated, customRecipes, savedWeeks, deleteSavedWeek, sectionOrder } = useAppState();
-  const recipeMap = useMemo(() => getRecipeMap(customRecipes), [customRecipes]);
-  const allRecipes = useMemo(() => getAllRecipes(customRecipes), [customRecipes]);
+  const {
+    hydrated,
+    customRecipes,
+    preferences,
+    savedWeeks,
+    deleteSavedWeek,
+    sectionOrder,
+    toggleFavoriteRecipe
+  } = useAppState();
+  const recipeMap = useMemo(() => getRecipeMap(customRecipes, preferences.mealProfileId), [customRecipes, preferences.mealProfileId]);
+  const allRecipes = useMemo(() => getAllRecipes(customRecipes, preferences.mealProfileId), [customRecipes, preferences.mealProfileId]);
   const [visibleSavedWeekCount, setVisibleSavedWeekCount] = useState(SAVED_WEEKS_PAGE_SIZE);
   const [archiveQuery, setArchiveQuery] = useState("");
   const visibleSavedWeeks = useMemo(
@@ -215,6 +262,7 @@ function SavedPageContent() {
                   {enabledMeals.map((mealType) => {
                     const recipeId = getArchivedMealSlot(day, mealType).recipeId;
                     const recipe = recipeId ? recipeMap.get(recipeId) : null;
+                    const excludedAllergens = recipe ? recipeExcludedAllergens(recipe, preferences.excludedIngredients) : [];
 
                     return (
                       <ArchivedMealCard
@@ -223,6 +271,7 @@ function SavedPageContent() {
                         recipeName={recipe?.name ?? "Recipe unavailable"}
                         description={recipe?.description ?? "This recipe is no longer available in the shared recipe set."}
                         metadata={recipe ? `${recipe.cuisine} · ${recipe.prepTime + recipe.cookTime} min` : undefined}
+                        warning={excludedAllergens.length > 0 ? `Excluded allergen: ${excludedAllergens.join(", ")}` : undefined}
                       >
                         {recipe ? <RecipeDetail recipe={recipe} mealType={mealType} /> : null}
                       </ArchivedMealCard>
@@ -318,7 +367,15 @@ function SavedPageContent() {
 
         <div className="mt-4 space-y-3">
           {filteredArchiveRecipes.length > 0 ? (
-            filteredArchiveRecipes.map((recipe) => <RecipeArchiveCard key={recipe.id} recipe={recipe} />)
+            filteredArchiveRecipes.map((recipe) => (
+              <RecipeArchiveCard
+                key={recipe.id}
+                recipe={recipe}
+                favorite={preferences.favoriteRecipeIds.includes(recipe.id)}
+                onToggleFavorite={toggleFavoriteRecipe}
+                excludedIngredients={preferences.excludedIngredients}
+              />
+            ))
           ) : (
             <div className="rounded-[28px] border border-dashed border-border bg-canvas px-4 py-5 text-sm text-muted">
               No recipes matched that search. Try a recipe name, cuisine, or ingredient.

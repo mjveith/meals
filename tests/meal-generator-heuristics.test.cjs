@@ -124,10 +124,21 @@ test('recipe library was expanded with additional breakfast and protein-forward 
     'lemon-dill-cod-packets',
     'chimichurri-steak-grain-bowls',
     'rosemary-pork-tenderloin-skillet',
-    'chicken-bacon-ranch-pasta'
+    'chicken-bacon-ranch-pasta',
+    'soy-braised-short-ribs'
   ].forEach((recipeId) => {
     assert.ok(recipeIds.has(recipeId), `expected expanded library to include ${recipeId}`);
   });
+});
+
+test('short rib recipe is available as a red-meat dinner option', () => {
+  const shortRibs = recipes.find((recipe) => recipe.id === 'soy-braised-short-ribs');
+
+  assert.ok(shortRibs, 'expected short rib recipe to exist');
+  assert.equal(shortRibs.name, 'Soy-Braised Short Ribs');
+  assert.ok(shortRibs.mealType.includes('dinner'));
+  assert.ok(shortRibs.proteins.includes('red-meat'));
+  assert.ok(shortRibs.ingredients.some((ingredient) => ingredient.name === 'bone-in beef short ribs'));
 });
 
 test('first lunch or dinner slot prefers a fresh fish recipe when fish is in rotation', () => {

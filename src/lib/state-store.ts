@@ -1,9 +1,11 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { DEFAULT_PREFERENCES, DEFAULT_SECTION_ORDER } from "@/lib/constants";
+import { normalizeExcludedIngredients } from "@/lib/allergens";
 import { countHouseholdMembers, normalizeHouseholdMembers } from "@/lib/household";
 import { dedupeCustomStaples, normalizeIngredientCategory } from "@/lib/custom-staples";
 import { normalizePlan } from "@/lib/meal-generator";
+import { normalizeMealProfileId } from "@/lib/meal-profiles";
 import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
 import {
   CustomRecipe,
@@ -34,7 +36,9 @@ export const defaultState: SharedAppState = {
     householdMembers: DEFAULT_PREFERENCES.householdMembers,
     customStaples: [],
     sectionOrder: DEFAULT_PREFERENCES.sectionOrder,
-    brunchMode: DEFAULT_PREFERENCES.brunchMode
+    brunchMode: DEFAULT_PREFERENCES.brunchMode,
+    excludedIngredients: DEFAULT_PREFERENCES.excludedIngredients,
+    mealProfileId: DEFAULT_PREFERENCES.mealProfileId
   },
   mealPlan: null,
   groceryOverrides: {},
@@ -229,9 +233,16 @@ export function sanitizeState(value: Partial<SharedAppState> | null | undefined)
       children: householdCounts.children,
       householdMembers,
       customStaples: dedupeCustomStaples(value?.preferences?.customStaples ?? []),
-      sectionOrder: normalizeSectionOrder(value?.preferences?.sectionOrder)
+      sectionOrder: normalizeSectionOrder(value?.preferences?.sectionOrder),
+      excludedIngredients: normalizeExcludedIngredients(value?.preferences?.excludedIngredients),
+      mealProfileId: normalizeMealProfileId(value?.preferences?.mealProfileId)
     },
-    mealPlan: normalizePlan(value?.mealPlan ?? null, { ...mergedPreferences, theme: "system" }),
+    mealPlan: normalizePlan(value?.mealPlan ?? null, {
+      ...mergedPreferences,
+      excludedIngredients: normalizeExcludedIngredients(value?.preferences?.excludedIngredients),
+      mealProfileId: normalizeMealProfileId(value?.preferences?.mealProfileId),
+      theme: "system"
+    }, normalizeCustomRecipes(value?.customRecipes)),
     groceryOverrides: normalizeGroceryOverrides(value?.groceryOverrides),
     customGroceryItems: (value?.customGroceryItems ?? []).map(normalizeCustomGroceryItem).filter((item): item is CustomGroceryItem => Boolean(item)),
     customRecipes: normalizeCustomRecipes(value?.customRecipes),
