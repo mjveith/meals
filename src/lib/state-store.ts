@@ -226,9 +226,17 @@ export function sanitizeState(value: Partial<SharedAppState> | null | undefined)
   const mergedPreferences = { ...defaultState.preferences, ...(value?.preferences ?? {}) } satisfies SharedPreferences;
   const householdMembers = normalizeHouseholdMembers(mergedPreferences.householdMembers, Number(mergedPreferences.adults), Number(mergedPreferences.children));
   const householdCounts = countHouseholdMembers(householdMembers);
+  // Every preference field must be re-normalized here: PUT bodies are untrusted,
+  // and any raw value that survives to disk is hydrated by every client.
+  const selectedProteins = normalizeProteinTypes(mergedPreferences.selectedProteins);
+  const favoriteProteins = normalizeProteinTypes(mergedPreferences.favoriteProteins);
   return {
     preferences: {
       ...mergedPreferences,
+      selectedProteins: selectedProteins.length > 0 ? selectedProteins : defaultState.preferences.selectedProteins,
+      favoriteProteins,
+      favoriteRecipeIds: normalizeStringList(mergedPreferences.favoriteRecipeIds),
+      brunchMode: Boolean(mergedPreferences.brunchMode),
       adults: householdCounts.adults,
       children: householdCounts.children,
       householdMembers,
