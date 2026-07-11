@@ -122,6 +122,23 @@ test('sanitizeState normalizes malformed persisted input', () => {
   assert.deepEqual(sanitized.customRecipes, []);
 });
 
+test('sanitizeState normalizes hostile scalar preference fields so clients cannot be crashed', () => {
+  const sanitized = sanitizeState({
+    preferences: {
+      ...defaultState.preferences,
+      selectedProteins: 5,
+      favoriteProteins: [{ evil: true }, 'chicken', 'chicken', 'not-a-protein'],
+      favoriteRecipeIds: 'nope',
+      brunchMode: 'truthy string'
+    }
+  });
+
+  assert.deepEqual(sanitized.preferences.selectedProteins, defaultState.preferences.selectedProteins);
+  assert.deepEqual(sanitized.preferences.favoriteProteins, ['chicken']);
+  assert.deepEqual(sanitized.preferences.favoriteRecipeIds, []);
+  assert.equal(sanitized.preferences.brunchMode, true);
+});
+
 test('mergeStatePatch keeps tombstone guards for custom staples and saved weeks', () => {
   const staple = { name: 'Milk', quantity: 1, unit: 'gallon', category: 'dairy' };
   const older = createSavedWeek('older', '2026-07-01T00:00:00.000Z');
