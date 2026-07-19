@@ -70,6 +70,15 @@ test('creates independent meal buckets with exact safe eligible recipe counts an
   }
 });
 
+test('uses one canonical lunch and dinner freshness context for every generated meal', () => {
+  const requestedCounts = { breakfast: 1, brunch: 1, lunch: 2, dinner: 3 };
+  assert.deepEqual(buckets.getLunchDinnerFreshnessContext(requestedCounts, 'breakfast', 0), undefined);
+  assert.deepEqual(buckets.getLunchDinnerFreshnessContext(requestedCounts, 'lunch', 0), { ordinal: 0, total: 5 });
+  assert.deepEqual(buckets.getLunchDinnerFreshnessContext(requestedCounts, 'lunch', 1), { ordinal: 1, total: 5 });
+  assert.deepEqual(buckets.getLunchDinnerFreshnessContext(requestedCounts, 'dinner', 0), { ordinal: 2, total: 5 });
+  assert.deepEqual(buckets.getLunchDinnerFreshnessContext(requestedCounts, 'dinner', 2), { ordinal: 4, total: 5 });
+});
+
 test('migrates enabled legacy slots in date order with deterministic IDs and tolerates malformed raw plans', () => {
   const legacy = { weekOf: '2026-04-06', days: [
     { date: '2026-04-07', meals: { breakfast: { enabled: true, recipeId: 'strawberry-ricotta-toast' }, brunch: { enabled: false, recipeId: 'x' }, lunch: { enabled: true, unsafeRecipeId: 'bad', unsafeExcludedIngredients: ['nuts'], consumed: true }, dinner: { enabled: true, recipeId: 'sheet-pan-garlic-salmon' } } },
@@ -83,7 +92,59 @@ test('migrates enabled legacy slots in date order with deterministic IDs and tol
   assert.equal(migrated.buckets.lunch[0].consumed, true);
   assert.equal(migrated.buckets.dinner[0].recipeId, 'sheet-pan-garlic-salmon');
   assert.deepEqual(buckets.normalizeBucketPlan(migrated, preferences()), migrated);
-  assert.doesNotThrow(() => buckets.normalizeBucketPlan({ schemaVersion: 2, buckets: { lunch: [null, { id: 3 }] } }, preferences()));
+  assert.equal(buckets.normalizeBucketPlan({ schemaVersion: 2, buckets: { lunch: [null, { id: 3 }] } }, preferences()), null);
+});
+
+test('normalizes persisted counts from bucket contents even after household availability changes', () => {
+  const persisted = {
+    schemaVersion: 2, id: 'persisted-plan', createdAt: '2026-04-06T00:00:00.000Z',
+    requestedCounts: { breakfast: 50, brunch: 50, lunch: 50, dinner: 50 },
+    buckets: {
+      breakfast: [{ id: 'breakfast-1', recipeId: 'strawberry-ricotta-toast' }], brunch: [],
+      lunch: [{ id: 'lunch-1', recipeId: 'mediterranean-chicken-pitas' }],
+      dinner: [{ id: 'dinner-1', recipeId: 'sheet-pan-garlic-salmon' }, { id: 'dinner-2', recipeId: 'one-pot-coconut-chicken-rice' }]
+    }
+  };
+  const normalized = buckets.normalizeBucketPlan(persisted, preferences({ householdMembers: createHouseholdMembers(0, 0) }));
+  assert.deepEqual(normalized.requestedCounts, { breakfast: 1, brunch: 0, lunch: 1, dinner: 2 });
+  assert.equal(countEntries(normalized), 4);
+});
+
+test('returns null for absent or structurally unrecognized bucket data', () => {
+  assert.equal(buckets.normalizeBucketPlan(null, preferences()), null);
+  assert.equal(buckets.normalizeBucketPlan('not-a-plan', preferences()), null);
+  assert.equal(buckets.normalizeBucketPlan({ hello: 'world' }, preferences()), null);
+  assert.equal(buckets.normalizeBucketPlan({ schemaVersion: 2, id: 'empty', createdAt: '2026-04-06T00:00:00.000Z', buckets: {} }, preferences()), null);
+  assert.equal(buckets.normalizeBucketPlan({ days: [] }, preferences()), null);
+});
+
+test('uses valid deterministic timestamps and unique IDs when normalizing hostile plans', () => {
+  const legacy = buckets.normalizeBucketPlan({ weekOf: 'not-a-date', days: [{ meals: { lunch: { enabled: true, recipeId: 'mediterranean-chicken-pitas' } } }] }, preferences());
+  assert.equal(legacy.createdAt, '1970-01-01T00:00:00.000Z');
+  assert.ok(Number.isFinite(Date.parse(legacy.createdAt)));
+
+  const normalized = buckets.normalizeBucketPlan({
+    schemaVersion: 2, id: 'hostile', createdAt: 'invalid',
+    buckets: {
+      breakfast: [{ id: 'duplicate', recipeId: 'strawberry-ricotta-toast' }, { id: 'duplicate', recipeId: 'strawberry-ricotta-toast' }],
+      brunch: [{ recipeId: 'strawberry-ricotta-toast' }],
+      lunch: [{ id: 'duplicate', recipeId: 'mediterranean-chicken-pitas' }], dinner: []
+    }
+  }, preferences());
+  const meals = Object.values(normalized.buckets).flat();
+  assert.equal(normalized.createdAt, '1970-01-01T00:00:00.000Z');
+  assert.equal(meals[0].id, 'duplicate');
+  assert.equal(new Set(meals.map((meal) => meal.id)).size, meals.length);
+  assert.deepEqual(normalized.requestedCounts, { breakfast: 2, brunch: 1, lunch: 1, dinner: 0 });
+
+  const preservesUniqueId = buckets.normalizeBucketPlan({
+    schemaVersion: 2, buckets: {
+      breakfast: [{ recipeId: 'strawberry-ricotta-toast' }],
+      brunch: [{ id: 'bucket-normalized-breakfast-1', recipeId: 'strawberry-ricotta-toast' }], lunch: [], dinner: []
+    }
+  }, preferences());
+  assert.equal(preservesUniqueId.buckets.brunch[0].id, 'bucket-normalized-breakfast-1');
+  assert.notEqual(preservesUniqueId.buckets.breakfast[0].id, 'bucket-normalized-breakfast-1');
 });
 
 test('bucket actions protect consumed entries, validate assignments, and report completion', () => {

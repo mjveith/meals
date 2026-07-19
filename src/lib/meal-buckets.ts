@@ -46,20 +46,20 @@ function makePlanId() {
   return `bucket-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function lunchDinnerContext(plan: BucketMealPlan, mealType: MealType, index: number) {
+export function getLunchDinnerFreshnessContext(requestedCounts: MealCounts, mealType: MealType, index: number) {
   if (mealType !== "lunch" && mealType !== "dinner") return undefined;
-  const total = plan.buckets.lunch.length + plan.buckets.dinner.length;
-  return { ordinal: mealType === "lunch" ? index : plan.buckets.lunch.length + index, total };
+  const lunchCount = requestedCounts.lunch;
+  return { ordinal: mealType === "lunch" ? index : lunchCount + index, total: lunchCount + requestedCounts.dinner };
 }
 
-function selectRecipe(plan: BucketMealPlan, mealType: MealType, index: number, preferences: UserPreferences, customRecipes: CustomRecipe[], usedIds: Set<string>, excludeIds: string[] = []) {
+function selectRecipe(requestedCounts: MealCounts, mealType: MealType, index: number, preferences: UserPreferences, customRecipes: CustomRecipe[], usedIds: Set<string>, excludeIds: string[] = []) {
   return pickMealRecipe(
     getSafeRecipes(customRecipes, preferences.excludedIngredients, preferences.mealProfileId),
     mealType,
     preferences,
     usedIds,
     excludeIds,
-    lunchDinnerContext(plan, mealType, index)
+    getLunchDinnerFreshnessContext(requestedCounts, mealType, index)
   );
 }
 
@@ -73,7 +73,7 @@ export function createBucketPlan(preferences: UserPreferences, rawCounts: Partia
   const usedIds = new Set<string>();
   MEAL_TYPES.forEach((mealType) => {
     plan.buckets[mealType] = Array.from({ length: requestedCounts[mealType] }, (_, index) => {
-      const recipe = selectRecipe(plan, mealType, index, preferences, customRecipes, usedIds);
+      const recipe = selectRecipe(requestedCounts, mealType, index, preferences, customRecipes, usedIds);
       usedIds.add(recipe.id);
       return { id: `${id}-${mealType}-${index + 1}`, mealType, recipeId: recipe.id };
     });
@@ -98,7 +98,20 @@ function normalizeMeal(raw: unknown, mealType: MealType, fallbackId: string): Pl
   };
 }
 
-function migrateLegacyPlan(raw: Record<string, unknown>, preferences: UserPreferences): BucketMealPlan {
+function countsFromBuckets(buckets: Record<MealType, PlannedMeal[]>): MealCounts {
+  return MEAL_TYPES.reduce((counts, mealType) => { counts[mealType] = buckets[mealType].length; return counts; }, emptyCounts());
+}
+
+function isValidDate(value: string | undefined) {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  return new Date(`${value}T00:00:00.000Z`).toISOString().startsWith(`${value}T`);
+}
+
+function isValidIsoTimestamp(value: string | undefined): value is string {
+  return Boolean(value && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value)));
+}
+
+function migrateLegacyPlan(raw: Record<string, unknown>): BucketMealPlan | null {
   const buckets = emptyBuckets();
   const days = Array.isArray(raw.days) ? raw.days : [];
   days
@@ -115,23 +128,49 @@ function migrateLegacyPlan(raw: Record<string, unknown>, preferences: UserPrefer
         if (entry) buckets[mealType].push(entry);
       });
     });
-  const requestedCounts = MEAL_TYPES.reduce((counts, mealType) => { counts[mealType] = buckets[mealType].length; return counts; }, emptyCounts());
-  const weekOf = asString(raw.weekOf) ?? "legacy";
-  return { schemaVersion: 2, id: `legacy-${weekOf}`, createdAt: `${weekOf}T00:00:00.000Z`, requestedCounts: normalizeMealCounts(requestedCounts, preferences), buckets };
+  if (MEAL_TYPES.every((mealType) => buckets[mealType].length === 0)) return null;
+  const weekOf = asString(raw.weekOf);
+  const idToken = weekOf?.replace(/[^a-zA-Z0-9_-]/g, "-") || "unknown";
+  return { schemaVersion: 2, id: `legacy-${idToken}`, createdAt: isValidDate(weekOf) ? `${weekOf}T00:00:00.000Z` : new Date(0).toISOString(), requestedCounts: countsFromBuckets(buckets), buckets };
 }
 
-export function normalizeBucketPlan(raw: unknown, preferences: UserPreferences): BucketMealPlan {
-  if (!raw || typeof raw !== "object") return { schemaVersion: 2, id: "bucket-normalized", createdAt: new Date(0).toISOString(), requestedCounts: emptyCounts(), buckets: emptyBuckets() };
+export function normalizeBucketPlan(raw: unknown, _preferences: UserPreferences): BucketMealPlan | null {
+  if (!raw || typeof raw !== "object") return null;
   const value = raw as Record<string, unknown>;
-  if (value.schemaVersion !== 2) return migrateLegacyPlan(value, preferences);
+  if (value.schemaVersion !== 2) return Array.isArray(value.days) ? migrateLegacyPlan(value) : null;
+  if (!value.buckets || typeof value.buckets !== "object") return null;
   const buckets = emptyBuckets();
-  const rawBuckets = value.buckets && typeof value.buckets === "object" ? value.buckets as Record<string, unknown> : {};
+  const rawBuckets = value.buckets as Record<string, unknown>;
+  const rawIdCounts = new Map<string, number>();
   MEAL_TYPES.forEach((mealType) => {
     const entries = Array.isArray(rawBuckets[mealType]) ? rawBuckets[mealType] : [];
-    buckets[mealType] = entries.slice(0, 50).map((entry, index) => normalizeMeal(entry, mealType, `bucket-normalized-${mealType}-${index + 1}`)).filter((entry): entry is PlannedMeal => Boolean(entry));
+    entries.slice(0, 50).forEach((entry) => {
+      const id = entry && typeof entry === "object" ? asString((entry as Record<string, unknown>).id) : undefined;
+      if (id) rawIdCounts.set(id, (rawIdCounts.get(id) ?? 0) + 1);
+    });
   });
-  const requestedCounts = normalizeMealCounts(value.requestedCounts, preferences);
-  return { schemaVersion: 2, id: asString(value.id) ?? "bucket-normalized", createdAt: asString(value.createdAt) ?? new Date(0).toISOString(), requestedCounts, buckets };
+  const reservedIds = new Set([...rawIdCounts].filter(([, occurrences]) => occurrences === 1).map(([id]) => id));
+  const usedIds = new Set<string>();
+  MEAL_TYPES.forEach((mealType) => {
+    const entries = Array.isArray(rawBuckets[mealType]) ? rawBuckets[mealType] : [];
+    buckets[mealType] = entries.slice(0, 50).map((entry, index) => {
+      const fallbackId = `bucket-normalized-${mealType}-${index + 1}`;
+      const hasExplicitId = Boolean(entry && typeof entry === "object" && asString((entry as Record<string, unknown>).id));
+      const meal = normalizeMeal(entry, mealType, fallbackId);
+      if (!meal) return null;
+      let id = meal.id;
+      if (usedIds.has(id) || (!hasExplicitId && reservedIds.has(id))) {
+        let suffix = 1;
+        id = fallbackId;
+        while (usedIds.has(id) || reservedIds.has(id)) id = `${fallbackId}-${++suffix}`;
+      }
+      usedIds.add(id);
+      return { ...meal, id };
+    }).filter((entry): entry is PlannedMeal => Boolean(entry));
+  });
+  if (MEAL_TYPES.every((mealType) => buckets[mealType].length === 0)) return null;
+  const createdAt = asString(value.createdAt);
+  return { schemaVersion: 2, id: asString(value.id) ?? "bucket-normalized", createdAt: isValidIsoTimestamp(createdAt) ? createdAt : new Date(0).toISOString(), requestedCounts: countsFromBuckets(buckets), buckets };
 }
 
 function locate(plan: BucketMealPlan, id: string) {
@@ -165,7 +204,7 @@ export function regenerateBucketMeal(plan: BucketMealPlan, id: string, preferenc
   if (!found || found.meal.consumed) return plan;
   const usedIds = new Set(Object.values(plan.buckets).flat().filter((meal) => meal.id !== id).map((meal) => meal.recipeId).filter((recipeId): recipeId is string => Boolean(recipeId)));
   try {
-    const recipe = selectRecipe(plan, found.mealType, found.index, preferences, customRecipes, usedIds, found.meal.recipeId ? [found.meal.recipeId] : []);
+    const recipe = selectRecipe(plan.requestedCounts, found.mealType, found.index, preferences, customRecipes, usedIds, found.meal.recipeId ? [found.meal.recipeId] : []);
     return replaceMeal(plan, found.mealType, found.index, { id: found.meal.id, mealType: found.mealType, recipeId: recipe.id });
   } catch { return plan; }
 }
