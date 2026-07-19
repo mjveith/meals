@@ -422,6 +422,26 @@ function filterRecipes(
   };
 }
 
+export interface MealRecipeSelectionContext {
+  ordinal: number;
+  total: number;
+}
+
+export function pickMealRecipe(
+  recipePool: Recipe[],
+  mealType: MealType,
+  preferences: UserPreferences,
+  usedIds: Set<string>,
+  excludeIds: string[] = [],
+  context?: MealRecipeSelectionContext
+): Recipe {
+  const slotContext = context && (mealType === "lunch" || mealType === "dinner")
+    ? { dayIndex: context.ordinal, mealType, lunchDinnerIndex: context.ordinal, lunchDinnerCount: context.total }
+    : undefined;
+
+  return pickRecipe(recipePool, mealType, preferences, usedIds, excludeIds, slotContext);
+}
+
 function pickRecipe(
   recipePool: Recipe[],
   mealType: MealType,
