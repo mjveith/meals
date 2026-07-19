@@ -1,3 +1,5 @@
+import type { BucketMealPlan } from "@/lib/meal-buckets";
+
 export type MealType = "breakfast" | "brunch" | "lunch" | "dinner";
 export type ProteinType = "chicken" | "pork" | "fish" | "red-meat";
 export type HouseholdMemberKind = "adult" | "child";
@@ -125,6 +127,19 @@ export interface SavedWeek {
   groceryList: GroceryItem[];
   customGroceryItems: CustomGroceryItem[];
 }
+
+export interface SavedBucketPlan {
+  kind: "bucket-plan";
+  schemaVersion: 1;
+  id: string;
+  savedAt: string;
+  label: string;
+  mealPlan: BucketMealPlan;
+  groceryList: GroceryItem[];
+  customGroceryItems: CustomGroceryItem[];
+}
+
+export type SavedArchiveRecord = SavedWeek | SavedBucketPlan;
 
 export interface SharedAppState {
   preferences: SharedPreferences;

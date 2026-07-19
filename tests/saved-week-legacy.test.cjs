@@ -46,7 +46,8 @@ const {
   getArchivedMealCount,
   getArchivedMealSlot,
   getEnabledArchivedMealTypes,
-  normalizeArchivedSavedWeek
+  normalizeArchivedSavedWeek,
+  normalizeSavedArchiveRecord
 } = require(path.join(projectRoot, 'src/lib/saved-week.ts'));
 
 test('legacy saved weeks without brunch renderable meal counts instead of throwing', () => {
@@ -108,4 +109,23 @@ test('legacy saved week normalization fills missing brunch slots while preservin
     recipeId: 'breakfast-1',
     consumed: true
   });
+});
+
+test('bucket archives normalize structurally and count every active and consumed bucket entry', () => {
+  const archive = {
+    kind: 'bucket-plan', schemaVersion: 1, id: 'bucket-archive', savedAt: '2026-05-01T00:00:00.000Z', label: 'May bucket plan', groceryList: [], customGroceryItems: [],
+    mealPlan: {
+      schemaVersion: 2, id: 'bucket-plan', createdAt: '2026-05-01T00:00:00.000Z', requestedCounts: { breakfast: 1, brunch: 0, lunch: 1, dinner: 1 },
+      buckets: {
+        breakfast: [{ id: 'breakfast-1', mealType: 'breakfast', recipeId: 'strawberry-ricotta-toast' }], brunch: [],
+        lunch: [{ id: 'lunch-1', mealType: 'lunch', recipeId: 'mediterranean-chicken-pitas', consumed: true, consumedAt: '2026-05-01T12:00:00.000Z' }],
+        dinner: [{ id: 'dinner-1', mealType: 'dinner', unsafeRecipeId: 'missing-later', unsafeExcludedIngredients: ['nuts'] }]
+      }
+    }
+  };
+  const normalized = normalizeSavedArchiveRecord(archive);
+  assert.equal(normalized.kind, 'bucket-plan');
+  assert.equal(getArchivedMealCount(normalized), 3);
+  assert.equal(normalized.mealPlan.buckets.lunch[0].consumed, true);
+  assert.equal(normalized.mealPlan.buckets.dinner[0].unsafeRecipeId, 'missing-later');
 });

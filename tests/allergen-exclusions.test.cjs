@@ -153,6 +153,28 @@ test('grocery list omits selected allergens and recipes containing them', () => 
   assert.deepEqual(groceries.map((item) => item.name), []);
 });
 
+test('bucket plans aggregate safe consumed meals with meal-type serving multipliers and omit unsafe entries', () => {
+  const safeLunch = customRecipe('safe-lunch', 'Safe Lunch', 'Rice');
+  safeLunch.mealType = ['lunch'];
+  const safeDinner = customRecipe('safe-dinner', 'Safe Dinner', 'Rice');
+  safeDinner.ingredients[0].quantity = 2;
+  const unsafeDinner = customRecipe('unsafe-dinner', 'Unsafe Dinner', 'Pistachios');
+  const plan = {
+    schemaVersion: 2, id: 'bucket-groceries', createdAt: '2026-05-18T00:00:00.000Z',
+    requestedCounts: { breakfast: 0, brunch: 0, lunch: 1, dinner: 2 },
+    buckets: {
+      breakfast: [], brunch: [],
+      lunch: [{ id: 'lunch-1', mealType: 'lunch', recipeId: 'safe-lunch', consumed: true }],
+      dinner: [{ id: 'dinner-1', mealType: 'dinner', recipeId: 'safe-dinner' }, { id: 'dinner-2', mealType: 'dinner', unsafeRecipeId: 'unsafe-dinner', unsafeExcludedIngredients: ['Pistachios'] }]
+    }
+  };
+
+  const groceries = buildGroceryList(plan, {}, [safeLunch, safeDinner, unsafeDinner], { lunch: 2, dinner: 3 }, [], DEFAULT_PREFERENCES.sectionOrder, excludedIngredients);
+  assert.deepEqual(groceries.map(({ name, quantity, unit, category }) => ({ name, quantity, unit, category })), [
+    { name: 'Rice', quantity: 8, unit: 'cup', category: 'pantry' }
+  ]);
+});
+
 test('BBQ pulled pork contributes cabbage slaw mix without plain cabbage', () => {
   const plan = {
     weekOf: '2026-06-29',

@@ -1,6 +1,7 @@
 import { filterSafeIngredients, isRecipeSafeForExcludedIngredients } from "@/lib/allergens";
 import { DEFAULT_SECTION_ORDER } from "@/lib/constants";
 import { getRecipeMap } from "@/lib/meal-generator";
+import type { BucketMealPlan } from "@/lib/meal-buckets";
 import {
   CustomRecipe,
   CustomStaple,
@@ -13,6 +14,19 @@ import {
 } from "@/types";
 
 type ServingMultiplier = number | Partial<Record<MealType, number>>;
+type GroceryPlanEntry = { mealType: MealType; recipeId?: string };
+
+function isBucketMealPlan(plan: MealPlan | BucketMealPlan): plan is BucketMealPlan {
+  return "schemaVersion" in plan && plan.schemaVersion === 2 && "buckets" in plan;
+}
+
+function getGroceryPlanEntries(plan: MealPlan | BucketMealPlan): GroceryPlanEntry[] {
+  if (isBucketMealPlan(plan)) return Object.values(plan.buckets).flat();
+  const legacyPlan = plan as MealPlan;
+  return legacyPlan.days.flatMap((day) => (Object.keys(day.meals) as MealType[])
+    .filter((mealType) => day.meals[mealType].enabled)
+    .map((mealType) => ({ mealType, recipeId: day.meals[mealType].recipeId })));
+}
 
 // Conversion factors to a canonical unit within each group.
 // Each entry maps a unit alias to [canonicalUnit, multiplier].
@@ -74,7 +88,7 @@ function sortItems(items: GroceryItem[], sectionOrder: IngredientCategory[]) {
 }
 
 export function buildGroceryList(
-  plan: MealPlan,
+  plan: MealPlan | BucketMealPlan,
   overrides: Record<string, GroceryOverride> = {},
   customRecipes: CustomRecipe[] = [],
   servingMultiplier: ServingMultiplier = 1,
@@ -109,36 +123,29 @@ export function buildGroceryList(
     }
   };
 
-  plan.days.forEach((day) => {
-    (Object.keys(day.meals) as MealType[]).forEach((mealType) => {
-      const slot = day.meals[mealType];
+  getGroceryPlanEntries(plan).forEach(({ mealType, recipeId }) => {
+    if (!recipeId) return;
+    const recipe = recipeMap.get(recipeId);
 
-      if (!slot.enabled || !slot.recipeId) {
-        return;
-      }
+    if (!recipe || !isRecipeSafeForExcludedIngredients(recipe, excludedIngredients)) {
+      return;
+    }
 
-      const recipe = recipeMap.get(slot.recipeId);
+    recipe.ingredients.forEach((ingredient) => {
+      const mealServingMultiplier = typeof servingMultiplier === "number"
+        ? servingMultiplier
+        : servingMultiplier[mealType] ?? 1;
 
-      if (!recipe || !isRecipeSafeForExcludedIngredients(recipe, excludedIngredients)) {
-        return;
-      }
-
-      recipe.ingredients.forEach((ingredient) => {
-        const mealServingMultiplier = typeof servingMultiplier === "number"
-          ? servingMultiplier
-          : servingMultiplier[mealType] ?? 1;
-
-        addOrMerge(
-          {
-            name: ingredient.name,
-            quantity: ingredient.quantity,
-            unit: ingredient.unit,
-            category: ingredient.category,
-            isStaple: false
-          },
-          Math.round(ingredient.quantity * mealServingMultiplier * 100) / 100
-        );
-      });
+      addOrMerge(
+        {
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+          category: ingredient.category,
+          isStaple: false
+        },
+        Math.round(ingredient.quantity * mealServingMultiplier * 100) / 100
+      );
     });
   });
 

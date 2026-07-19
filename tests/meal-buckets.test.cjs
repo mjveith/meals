@@ -164,3 +164,25 @@ test('bucket actions protect consumed entries, validate assignments, and report 
   assert.equal(buckets.getBucketMealCompletion(consumed).remaining, 2);
   assert.equal(buckets.toggleBucketMealConsumed(plan, 'missing'), plan);
 });
+
+test('reconciles bucket allergen safety through a safe-unsafe-safe round trip without losing consumption', () => {
+  const recipe = {
+    id: 'custom-pistachio-lunch', name: 'Pistachio Lunch', description: 'Test', mealType: ['lunch'], proteins: ['chicken'],
+    cuisine: 'Test', prepTime: 1, cookTime: 1, servings: 1, difficulty: 'easy',
+    ingredients: [{ name: 'Pistachios', quantity: 1, unit: 'cup', category: 'pantry' }], instructions: ['Serve'], isCustom: true
+  };
+  const plan = {
+    schemaVersion: 2, id: 'safety-plan', createdAt: '2026-05-01T00:00:00.000Z', requestedCounts: { breakfast: 0, brunch: 0, lunch: 1, dinner: 0 },
+    buckets: { breakfast: [], brunch: [], lunch: [{ id: 'meal-1', mealType: 'lunch', recipeId: recipe.id, consumed: true, consumedAt: '2026-05-01T12:00:00.000Z' }], dinner: [] }
+  };
+
+  const unsafe = buckets.reconcileBucketPlanSafety(plan, preferences({ excludedIngredients: ['pistachio'], householdMembers: createHouseholdMembers(0, 0) }), [recipe]);
+  assert.deepEqual(unsafe.buckets.lunch[0], {
+    id: 'meal-1', mealType: 'lunch', unsafeRecipeId: recipe.id, unsafeExcludedIngredients: ['Pistachios'], consumed: true, consumedAt: '2026-05-01T12:00:00.000Z'
+  });
+
+  const safeAgain = buckets.reconcileBucketPlanSafety(unsafe, preferences({ householdMembers: createHouseholdMembers(0, 0) }), [recipe]);
+  assert.deepEqual(safeAgain.buckets.lunch[0], {
+    id: 'meal-1', mealType: 'lunch', recipeId: recipe.id, consumed: true, consumedAt: '2026-05-01T12:00:00.000Z'
+  });
+});

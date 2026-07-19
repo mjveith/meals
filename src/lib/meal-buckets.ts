@@ -1,3 +1,4 @@
+import { recipeExcludedAllergens } from "@/lib/allergens";
 import { MEAL_TYPES } from "@/lib/constants";
 import { getMealParticipationAvailability } from "@/lib/household";
 import { getRecipeMap, getSafeRecipes, isRecipeEligibleForMealType, pickMealRecipe } from "@/lib/meal-generator";
@@ -171,6 +172,25 @@ export function normalizeBucketPlan(raw: unknown, _preferences: UserPreferences)
   if (MEAL_TYPES.every((mealType) => buckets[mealType].length === 0)) return null;
   const createdAt = asString(value.createdAt);
   return { schemaVersion: 2, id: asString(value.id) ?? "bucket-normalized", createdAt: isValidIsoTimestamp(createdAt) ? createdAt : new Date(0).toISOString(), requestedCounts: countsFromBuckets(buckets), buckets };
+}
+
+/** Reconciles stored bucket recipes against current allergens without changing bucket membership. */
+export function reconcileBucketPlanSafety(plan: BucketMealPlan, preferences: UserPreferences, customRecipes: CustomRecipe[] = []): BucketMealPlan {
+  const recipeMap = getRecipeMap(customRecipes, preferences.mealProfileId);
+  const buckets = emptyBuckets();
+  MEAL_TYPES.forEach((mealType) => {
+    buckets[mealType] = plan.buckets[mealType].map((meal) => {
+      const recipeId = meal.recipeId ?? meal.unsafeRecipeId;
+      const recipe = recipeId ? recipeMap.get(recipeId) : undefined;
+      if (!recipe) return meal;
+      const excluded = recipeExcludedAllergens(recipe, preferences.excludedIngredients);
+      const preserved = { id: meal.id, mealType: meal.mealType, ...(meal.consumed ? { consumed: true, ...(meal.consumedAt ? { consumedAt: meal.consumedAt } : {}) } : {}) };
+      return excluded.length
+        ? { ...preserved, unsafeRecipeId: recipe.id, unsafeExcludedIngredients: excluded }
+        : { ...preserved, recipeId: recipe.id };
+    });
+  });
+  return { ...plan, buckets };
 }
 
 function locate(plan: BucketMealPlan, id: string) {
