@@ -2,7 +2,7 @@ import { recipeExcludedAllergens } from "@/lib/allergens";
 import { MEAL_TYPES } from "@/lib/constants";
 import { getMealParticipationAvailability } from "@/lib/household";
 import { getRecipeMap, getSafeRecipes, isRecipeEligibleForMealType, pickMealRecipe } from "@/lib/meal-generator";
-import { BucketMealPlan, CustomRecipe, MealCounts, MealPlan, MealSlot, MealType, PlannedMeal, UserPreferences } from "@/types";
+import { BucketMealPlan, CustomRecipe, MealCounts, MealPlan, MealSlot, MealType, PlannedMeal, ProteinType, UserPreferences } from "@/types";
 
 export type { BucketMealPlan, MealCounts, PlannedMeal } from "@/types";
 
@@ -201,12 +201,13 @@ export function assignBucketMealRecipe(plan: BucketMealPlan, id: string, recipeI
   return replaceMeal(plan, found.mealType, found.index, { id: found.meal.id, mealType: found.mealType, recipeId });
 }
 
-export function regenerateBucketMeal(plan: BucketMealPlan, id: string, preferences: UserPreferences, customRecipes: CustomRecipe[] = []): BucketMealPlan {
+export function regenerateBucketMeal(plan: BucketMealPlan, id: string, preferences: UserPreferences, customRecipes: CustomRecipe[] = [], proteinOverride: ProteinType | "any" = "any") {
   const found = locate(plan, id);
   if (!found || found.meal.consumed) return plan;
   const usedIds = new Set(Object.values(plan.buckets).flat().filter((meal) => meal.id !== id).map((meal) => meal.recipeId).filter((recipeId): recipeId is string => Boolean(recipeId)));
   try {
-    const recipe = selectRecipe(plan.requestedCounts, found.mealType, found.index, preferences, customRecipes, usedIds, found.meal.recipeId ? [found.meal.recipeId] : []);
+    const effectivePreferences = proteinOverride === "any" ? preferences : { ...preferences, selectedProteins: [proteinOverride] };
+    const recipe = selectRecipe(plan.requestedCounts, found.mealType, found.index, effectivePreferences, customRecipes, usedIds, found.meal.recipeId ? [found.meal.recipeId] : []);
     return replaceMeal(plan, found.mealType, found.index, { id: found.meal.id, mealType: found.mealType, recipeId: recipe.id });
   } catch { return plan; }
 }
@@ -215,6 +216,23 @@ export function regenerateAllBucketMeals(plan: BucketMealPlan, preferences: User
   let next = plan;
   MEAL_TYPES.forEach((mealType) => plan.buckets[mealType].forEach((meal) => { if (!meal.consumed) next = regenerateBucketMeal(next, meal.id, preferences, customRecipes); }));
   return next;
+}
+
+/** Keeps bucket membership stable when a custom recipe is removed from the recipe catalog. */
+export function removeRecipeFromBucketPlan(plan: BucketMealPlan, recipeId: string): BucketMealPlan {
+  const buckets = emptyBuckets();
+  MEAL_TYPES.forEach((mealType) => {
+    buckets[mealType] = plan.buckets[mealType].map((meal) => {
+      if (meal.recipeId !== recipeId && meal.unsafeRecipeId !== recipeId) return meal;
+      return {
+        id: meal.id,
+        mealType: meal.mealType,
+        unsafeRecipeId: recipeId,
+        ...(meal.consumed ? { consumed: true, ...(meal.consumedAt ? { consumedAt: meal.consumedAt } : {}) } : {})
+      };
+    });
+  });
+  return { ...plan, buckets };
 }
 
 export function getBucketMealCompletion(plan: BucketMealPlan) {

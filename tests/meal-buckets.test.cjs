@@ -186,3 +186,29 @@ test('reconciles bucket allergen safety through a safe-unsafe-safe round trip wi
     id: 'meal-1', mealType: 'lunch', recipeId: recipe.id, consumed: true, consumedAt: '2026-05-01T12:00:00.000Z'
   });
 });
+
+test('removing a recipe preserves every bucket entry and its consumption metadata as unavailable', () => {
+  const plan = {
+    schemaVersion: 2, id: 'remove-plan', createdAt: '2026-05-01T00:00:00.000Z', requestedCounts: { breakfast: 0, brunch: 0, lunch: 2, dinner: 0 },
+    buckets: {
+      breakfast: [], brunch: [],
+      lunch: [
+        { id: 'removed-meal', mealType: 'lunch', recipeId: 'custom-removed', consumed: true, consumedAt: '2026-05-02T12:00:00.000Z' },
+        { id: 'kept-meal', mealType: 'lunch', recipeId: 'mediterranean-chicken-pitas' }
+      ],
+      dinner: []
+    }
+  };
+
+  assert.deepEqual(buckets.removeRecipeFromBucketPlan(plan, 'custom-removed').buckets.lunch, [
+    { id: 'removed-meal', mealType: 'lunch', unsafeRecipeId: 'custom-removed', consumed: true, consumedAt: '2026-05-02T12:00:00.000Z' },
+    { id: 'kept-meal', mealType: 'lunch', recipeId: 'mediterranean-chicken-pitas' }
+  ]);
+});
+
+test('regenerating remaining bucket meals preserves consumed entries', () => {
+  const plan = buckets.createBucketPlan(preferences(), { breakfast: 0, brunch: 0, lunch: 2, dinner: 0 });
+  const consumed = buckets.toggleBucketMealConsumed(plan, plan.buckets.lunch[0].id, true);
+  const regenerated = buckets.regenerateAllBucketMeals(consumed, preferences());
+  assert.deepEqual(regenerated.buckets.lunch[0], consumed.buckets.lunch[0]);
+});

@@ -55,15 +55,15 @@ export interface MealPlanContextValue extends SyncStatusValue {
   savedWeeks: SavedArchiveRecord[];
   planSavedSinceLastChange: boolean;
   toggleMealConsumed: (mealId: string) => void;
-  regenerateMeal: (mealId: string) => void;
+  regenerateMeal: (mealId: string, proteinOverride?: ProteinType | "any") => void;
   assignRecipeToMeal: (mealId: string, recipeId: string) => Promise<boolean>;
-  regenerateWeek: () => void;
+  regenerateRemaining: () => void;
   generatePlan: (counts: Partial<MealCounts>) => void;
   clearPlan: () => void;
   addCustomRecipe: (recipe: Omit<CustomRecipe, "id" | "isCustom">, options?: { favorite?: boolean; assignToMealId?: string }) => Promise<CustomRecipe>;
   removeCustomRecipe: (id: CustomRecipe["id"]) => void;
-  saveCurrentWeek: () => Promise<SavedArchiveRecord | null>;
-  deleteSavedWeek: (id: string) => void;
+  saveCurrentPlan: () => Promise<SavedArchiveRecord | null>;
+  deleteSavedPlan: (id: string) => void;
 }
 
 export interface GroceryContextValue extends SyncStatusValue {
