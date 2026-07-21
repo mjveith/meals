@@ -26,7 +26,6 @@ export default function SettingsPage() {
     toggleProtein,
     toggleFavoriteProtein,
     setTheme,
-    setBrunchMode,
     setMealProfile,
     toggleExcludedIngredient,
     addHouseholdMember,
@@ -99,7 +98,7 @@ export default function SettingsPage() {
       <section className="rounded-[32px] border border-border bg-surface p-4">
         <h2 className="text-lg font-semibold text-text">Meal profile</h2>
         <p className="mt-1 text-sm text-muted">
-          Choose the recipe repository and planning bias for generated weeks. Home keeps the current behavior; Bajan adds Barbados-friendly meals while retaining feasible Home overlap.
+          Choose the recipe repository and planning bias for generated plans. Home keeps the current behavior; Bajan adds Barbados-friendly meals while retaining feasible Home overlap.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {MEAL_PROFILES.map((profile) => {
@@ -248,28 +247,6 @@ export default function SettingsPage() {
       </section>
 
       <section className="rounded-[32px] border border-border bg-surface p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-text">Brunch Mode</h2>
-            <p className="mt-1 text-sm text-muted">
-              New weekly plans use Brunch and Dinner only. Brunch can use brunch, breakfast, and lunch recipes.
-            </p>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={preferences.brunchMode}
-            onClick={() => setBrunchMode(!preferences.brunchMode)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-              preferences.brunchMode ? "bg-accent text-white" : "bg-surfaceAlt text-muted"
-            }`}
-          >
-            {preferences.brunchMode ? "On" : "Off"}
-          </button>
-        </div>
-      </section>
-
-      <section className="rounded-[32px] border border-border bg-surface p-4">
         <h2 className="text-lg font-semibold text-text">Allergen exclusions</h2>
         <p className="mt-1 text-sm text-muted">
           Safety-critical: selected allergens are blocked from generated plans, recipe assignment, and grocery lists.
@@ -365,7 +342,7 @@ export default function SettingsPage() {
       <section className="rounded-[32px] border border-border bg-surface p-4">
         <h2 className="text-lg font-semibold text-text">Custom Staples</h2>
         <p className="mt-1 text-sm text-muted">
-          These items are added into their matching grocery sections every week and merge with recipe ingredients by name.
+          These items are added into their matching grocery sections for each plan and merge with recipe ingredients by name.
         </p>
         <div className="mt-4">
           <button
@@ -463,7 +440,7 @@ export default function SettingsPage() {
             ))
           ) : (
             <div className="rounded-3xl border border-dashed border-border px-4 py-5 text-sm text-muted">
-              Add staples you want included every week.
+              Add staples you want included in each plan.
             </div>
           )}
         </div>
@@ -533,7 +510,7 @@ export default function SettingsPage() {
             ))
           ) : (
             <div className="rounded-3xl border border-dashed border-border px-4 py-5 text-sm text-muted">
-              Star a meal from the weekly plan to keep it handy.
+              Star a meal from a plan to keep it handy.
             </div>
           )}
         </div>

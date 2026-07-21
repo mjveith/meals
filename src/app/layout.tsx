@@ -6,7 +6,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Meals",
-  description: "Weekly meal planner and grocery list",
+  description: "Meal planner and grocery list",
   applicationName: "Meals",
   manifest: "/manifest.json",
   icons: {

@@ -4,11 +4,12 @@ import { DEFAULT_PREFERENCES, DEFAULT_SECTION_ORDER } from "@/lib/constants";
 import { normalizeExcludedIngredients } from "@/lib/allergens";
 import { countHouseholdMembers, normalizeHouseholdMembers } from "@/lib/household";
 import { dedupeCustomStaples, normalizeIngredientCategory } from "@/lib/custom-staples";
-import { normalizePlan } from "@/lib/meal-generator";
+import { normalizeBucketPlan, reconcileBucketPlanSafety } from "@/lib/meal-buckets";
 import { normalizeMealProfileId } from "@/lib/meal-profiles";
-import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
+import { normalizeSavedArchiveRecord } from "@/lib/saved-week";
 import {
   CustomRecipe,
+  BucketMealPlan,
   CustomGroceryItem,
   GroceryOverride,
   GroceryItem,
@@ -18,7 +19,8 @@ import {
   ProteinType,
   SharedAppState,
   SharedPreferences,
-  SharedStatePatch
+  SharedStatePatch,
+  SavedWeek
 } from "@/types";
 
 export const maxHistorySnapshots = 200;
@@ -189,7 +191,15 @@ export function normalizeSharedStatePatch(value: unknown): SharedStatePatch {
   if (Object.hasOwn(value, "customRecipes")) normalized.customRecipes = normalizeCustomRecipes(value.customRecipes);
   if (Object.hasOwn(value, "groceryOverrides")) normalized.groceryOverrides = normalizeGroceryOverrides(value.groceryOverrides);
   if (Object.hasOwn(value, "mealPlan")) {
-    normalized.mealPlan = normalizePlan(patch.mealPlan ?? null, { ...defaultState.preferences, ...(patch.preferences ?? {}), theme: "system" });
+    if (value.mealPlan === null) {
+      normalized.mealPlan = null;
+    } else {
+      const preferences = normalizePreferences(patch.preferences);
+      const recipes = normalized.customRecipes ?? [];
+      const plan = normalizeBucketPlan(value.mealPlan, { ...preferences, theme: "system" });
+      normalized.mealPlan = plan ? reconcileBucketPlanSafety(plan, { ...preferences, theme: "system" }, recipes) : null;
+      if (isRecord(value.mealPlan) && value.mealPlan.schemaVersion !== 2 && plan) normalized.legacyMealPlanPatch = true;
+    }
   }
   return normalized;
 }
@@ -218,47 +228,78 @@ export async function parsePutStateRequest(request: Request): Promise<
   }
 }
 
-function normalizeSavedGroceryItem(item: GroceryItem): GroceryItem {
-  return { ...item, category: normalizeCategory(item.category) };
+function normalizeSavedGroceryItem(value: unknown): GroceryItem | null {
+  if (!isRecord(value)) return null;
+  const key = normalizeString(value.key);
+  const name = normalizeString(value.name);
+  const quantity = normalizeFiniteNumber(value.quantity, Number.NaN);
+  if (!key || !name || !Number.isFinite(quantity) || quantity < 0) return null;
+  return {
+    key,
+    name,
+    quantity,
+    unit: normalizeString(value.unit),
+    category: normalizeCategory(value.category),
+    isStaple: Boolean(value.isStaple),
+    collected: Boolean(value.collected),
+    ...(value.isCustom === true ? { isCustom: true } : {})
+  };
 }
 
-export function sanitizeState(value: Partial<SharedAppState> | null | undefined): SharedAppState {
-  const mergedPreferences = { ...defaultState.preferences, ...(value?.preferences ?? {}) } satisfies SharedPreferences;
+function normalizePreferences(value: unknown): SharedPreferences {
+  const raw = isRecord(value) ? value : {};
+  const mergedPreferences = { ...defaultState.preferences, ...raw } satisfies SharedPreferences;
   const householdMembers = normalizeHouseholdMembers(mergedPreferences.householdMembers, Number(mergedPreferences.adults), Number(mergedPreferences.children));
   const householdCounts = countHouseholdMembers(householdMembers);
-  // Every preference field must be re-normalized here: PUT bodies are untrusted,
-  // and any raw value that survives to disk is hydrated by every client.
   const selectedProteins = normalizeProteinTypes(mergedPreferences.selectedProteins);
   const favoriteProteins = normalizeProteinTypes(mergedPreferences.favoriteProteins);
   return {
-    preferences: {
-      ...mergedPreferences,
-      selectedProteins: selectedProteins.length > 0 ? selectedProteins : defaultState.preferences.selectedProteins,
-      favoriteProteins,
-      favoriteRecipeIds: normalizeStringList(mergedPreferences.favoriteRecipeIds),
-      brunchMode: Boolean(mergedPreferences.brunchMode),
-      adults: householdCounts.adults,
-      children: householdCounts.children,
-      householdMembers,
-      customStaples: dedupeCustomStaples(value?.preferences?.customStaples ?? []),
-      sectionOrder: normalizeSectionOrder(value?.preferences?.sectionOrder),
-      excludedIngredients: normalizeExcludedIngredients(value?.preferences?.excludedIngredients),
-      mealProfileId: normalizeMealProfileId(value?.preferences?.mealProfileId)
-    },
-    mealPlan: normalizePlan(value?.mealPlan ?? null, {
-      ...mergedPreferences,
-      excludedIngredients: normalizeExcludedIngredients(value?.preferences?.excludedIngredients),
-      mealProfileId: normalizeMealProfileId(value?.preferences?.mealProfileId),
-      theme: "system"
-    }, normalizeCustomRecipes(value?.customRecipes)),
-    groceryOverrides: normalizeGroceryOverrides(value?.groceryOverrides),
-    customGroceryItems: (value?.customGroceryItems ?? []).map(normalizeCustomGroceryItem).filter((item): item is CustomGroceryItem => Boolean(item)),
-    customRecipes: normalizeCustomRecipes(value?.customRecipes),
-    savedWeeks: (value?.savedWeeks ?? []).map((week) => normalizeArchivedSavedWeek({
-      ...week,
-      groceryList: (week.groceryList ?? []).map(normalizeSavedGroceryItem),
-      customGroceryItems: (week.customGroceryItems ?? []).map(normalizeCustomGroceryItem).filter((item): item is CustomGroceryItem => Boolean(item))
-    }))
+    ...mergedPreferences,
+    selectedProteins: selectedProteins.length > 0 ? selectedProteins : defaultState.preferences.selectedProteins,
+    favoriteProteins,
+    favoriteRecipeIds: normalizeStringList(mergedPreferences.favoriteRecipeIds),
+    brunchMode: Boolean(mergedPreferences.brunchMode),
+    adults: householdCounts.adults,
+    children: householdCounts.children,
+    householdMembers,
+    customStaples: dedupeCustomStaples(Array.isArray(raw.customStaples) ? raw.customStaples : []),
+    sectionOrder: normalizeSectionOrder(raw.sectionOrder),
+    excludedIngredients: normalizeExcludedIngredients(raw.excludedIngredients),
+    mealProfileId: normalizeMealProfileId(raw.mealProfileId)
+  };
+}
+
+function normalizeSavedArchive(value: unknown): SharedAppState["savedWeeks"][number] | null {
+  if (!isRecord(value)) return null;
+  const id = normalizeString(value.id);
+  const savedAt = normalizeString(value.savedAt);
+  const label = normalizeString(value.label);
+  if (!id || !savedAt || !label || !isRecord(value.mealPlan)) return null;
+  const groceryList = Array.isArray(value.groceryList) ? value.groceryList.map(normalizeSavedGroceryItem).filter((item): item is GroceryItem => Boolean(item)) : [];
+  const customGroceryItems = Array.isArray(value.customGroceryItems) ? value.customGroceryItems.map(normalizeCustomGroceryItem).filter((item): item is CustomGroceryItem => Boolean(item)) : [];
+  if (value.kind === "bucket-plan") {
+    const mealPlan = normalizeBucketPlan(value.mealPlan, { ...defaultState.preferences, theme: "system" });
+    if (!mealPlan) return null;
+    return normalizeSavedArchiveRecord({ kind: "bucket-plan", schemaVersion: 1, id, savedAt, label, mealPlan, groceryList, customGroceryItems });
+  }
+  const weekOf = normalizeString(value.weekOf);
+  if (!weekOf || !Array.isArray(value.mealPlan.days)) return null;
+  return normalizeSavedArchiveRecord({ id, savedAt, weekOf, label, mealPlan: value.mealPlan as unknown as SavedWeek["mealPlan"], groceryList, customGroceryItems });
+}
+
+export function sanitizeState(value: unknown): SharedAppState {
+  const raw = isRecord(value) ? value : {};
+  const preferences = normalizePreferences(raw.preferences);
+  const customRecipes = normalizeCustomRecipes(raw.customRecipes);
+  const normalizedPlan = normalizeBucketPlan(raw.mealPlan, { ...preferences, theme: "system" });
+  const mealPlan: BucketMealPlan | null = normalizedPlan ? reconcileBucketPlanSafety(normalizedPlan, { ...preferences, theme: "system" }, customRecipes) : null;
+  return {
+    preferences,
+    mealPlan,
+    groceryOverrides: normalizeGroceryOverrides(raw.groceryOverrides),
+    customGroceryItems: Array.isArray(raw.customGroceryItems) ? raw.customGroceryItems.map(normalizeCustomGroceryItem).filter((item): item is CustomGroceryItem => Boolean(item)) : [],
+    customRecipes,
+    savedWeeks: Array.isArray(raw.savedWeeks) ? raw.savedWeeks.map(normalizeSavedArchive).filter((week): week is SharedAppState["savedWeeks"][number] => Boolean(week)) : []
   };
 }
 
@@ -291,6 +332,12 @@ export function mergeStatePatch(current: SharedAppState, patch: SharedStatePatch
   const merged: Partial<SharedAppState> = { ...patch, preferences: mergedPreferences };
   delete (merged as SharedStatePatch).customStaplesReplace;
   delete (merged as SharedStatePatch).savedWeekDeletedIds;
+  delete (merged as SharedStatePatch).mealPlanReplace;
+  delete (merged as SharedStatePatch).legacyMealPlanPatch;
+  if (current.mealPlan?.schemaVersion === 2 && Object.hasOwn(patch, "mealPlan") && !patch.mealPlanReplace) {
+    const incoming = patch.mealPlan;
+    if (incoming === null || patch.legacyMealPlanPatch || incoming?.schemaVersion !== 2) merged.mealPlan = current.mealPlan;
+  }
   if (patch.savedWeeks && (patch.savedWeeks.length < current.savedWeeks.length || patch.savedWeekDeletedIds)) {
     merged.savedWeeks = mergeSavedWeeks(current.savedWeeks, patch.savedWeeks, patch.savedWeekDeletedIds);
   }
