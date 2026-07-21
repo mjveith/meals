@@ -49,7 +49,7 @@ export function MealCard({ mealType, recipe, favorite, favoriteRecipeIds, consum
         </div>
       </button>
       <div className="flex flex-col gap-2">
-        <button type="button" onClick={onToggleFavorite} className={`rounded-full px-3 py-2 text-lg ${favorite ? "bg-accent text-white" : "bg-surfaceAlt text-muted"}`} aria-label="Toggle favorite meal">★</button>
+        <button type="button" onClick={onToggleFavorite} className={`rounded-full px-3 py-2 text-lg ${favorite ? "bg-accent text-white" : "bg-surfaceAlt text-muted"}`} aria-label={`Toggle favorite ${recipe.name}`} aria-pressed={favorite}>★</button>
         <button type="button" disabled={consumed} onClick={() => setPickerOpen(true)} className="rounded-full bg-surfaceAlt px-3 py-2 text-xs font-semibold text-text disabled:cursor-not-allowed disabled:text-muted">Change meal</button>
         <button type="button" onClick={onToggleConsumed} className={`rounded-full px-3 py-2 text-xs font-semibold ${consumed ? "bg-slate-700 text-white" : "bg-surfaceAlt text-text"}`}>{consumed ? "Undo" : "Mark consumed"}</button>
       </div>

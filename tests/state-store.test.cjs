@@ -229,6 +229,51 @@ test('sanitizeState preserves v2 IDs and counts while reconciling normalized all
   assert.deepEqual(sanitizeState(sanitized).mealPlan, sanitized.mealPlan);
 });
 
+test('a legacy plan migration survives an unrelated preference write', async () => {
+  const dir = tempDir();
+  const store = createStateStore(dir);
+  const legacyState = {
+    ...defaultState,
+    mealPlan: {
+      weekOf: '2026-04-06',
+      days: [{
+        date: '2026-04-07',
+        meals: {
+          breakfast: { enabled: true, recipeId: 'strawberry-ricotta-toast' },
+          lunch: { enabled: true, unsafeRecipeId: 'removed-recipe', unsafeExcludedIngredients: ['cashew'], consumed: true },
+          dinner: { enabled: true, recipeId: 'sheet-pan-garlic-salmon' }
+        }
+      }]
+    },
+    savedWeeks: [createSavedWeek('legacy-archive', '2026-04-08T00:00:00.000Z')]
+  };
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'meals-state.json'), `${JSON.stringify(legacyState, null, 2)}\n`);
+
+  const migrated = await store.readStateRecord();
+  assert.equal(migrated.state.mealPlan.schemaVersion, 2);
+  assert.deepEqual(migrated.state.mealPlan.buckets.breakfast.map((meal) => meal.id), ['legacy-2026-04-06-0-breakfast']);
+  assert.equal(migrated.state.mealPlan.buckets.lunch[0].id, 'legacy-2026-04-06-0-lunch');
+  assert.equal(migrated.state.mealPlan.buckets.lunch[0].unsafeRecipeId, 'removed-recipe');
+  assert.deepEqual(migrated.state.mealPlan.buckets.lunch[0].unsafeExcludedIngredients, ['cashew']);
+  assert.equal(migrated.state.mealPlan.buckets.lunch[0].consumed, true);
+
+  const patch = mergeStatePatch(migrated.state, { preferences: { ...migrated.state.preferences, brunchMode: true } });
+  await store.writeStateRecord(sanitizeState({ ...migrated.state, ...patch }), migrated.version);
+
+  const persisted = JSON.parse(fs.readFileSync(path.join(dir, 'meals-state.json'), 'utf8'));
+  const reread = await store.readStateRecord();
+  assert.equal(persisted.mealPlan.schemaVersion, 2);
+  assert.equal(reread.state.mealPlan.schemaVersion, 2);
+  assert.deepEqual(reread.state.mealPlan.buckets.breakfast.map((meal) => meal.id), ['legacy-2026-04-06-0-breakfast']);
+  assert.equal(reread.state.mealPlan.buckets.lunch[0].id, 'legacy-2026-04-06-0-lunch');
+  assert.equal(reread.state.mealPlan.buckets.lunch[0].unsafeRecipeId, 'removed-recipe');
+  assert.equal(reread.state.mealPlan.buckets.lunch[0].consumed, true);
+  assert.equal(reread.state.savedWeeks.length, 1);
+  assert.equal(reread.state.savedWeeks[0].id, 'legacy-archive');
+  assert.equal(reread.state.preferences.brunchMode, true);
+});
+
 test('sanitizeState safely normalizes mixed archives without rewriting historical legacy days', () => {
   const state = sanitizeState({ savedWeeks: [
     { id: 'legacy', savedAt: '2026-04-10T00:00:00.000Z', weekOf: '2026-04-06', label: 'Legacy', mealPlan: { weekOf: '2026-04-06', days: [{ date: '2026-04-06', meals: { lunch: { enabled: true, unsafeRecipeId: 'gone', consumed: true } } }] }, groceryList: [{ name: 'Milk', category: 'dairy' }], customGroceryItems: [{ id: 'item', name: ' Apples ', quantity: 2, unit: ' lb ', category: 'produce', collected: false }] },

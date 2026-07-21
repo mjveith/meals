@@ -31,6 +31,7 @@ for (const extension of ['.ts', '.tsx']) {
 
 const { createHouseholdMembers } = require(path.join(projectRoot, 'src/lib/household.ts'));
 const buckets = require(path.join(projectRoot, 'src/lib/meal-buckets.ts'));
+const { finalizePlanSave } = require(path.join(projectRoot, 'src/lib/plan-save.ts'));
 
 function preferences(overrides = {}) {
   return {
@@ -43,6 +44,15 @@ function preferences(overrides = {}) {
 
 const allCounts = { breakfast: 2, brunch: 1, lunch: 3, dinner: 4 };
 const countEntries = (plan) => Object.values(plan.buckets).reduce((total, entries) => total + entries.length, 0);
+
+test('finalizePlanSave only reports success after a successful mutation', async () => {
+  const archive = { id: 'archive' };
+  let marked = false;
+  assert.equal(await finalizePlanSave(Promise.resolve(false), archive, (value) => { marked = value; }), null);
+  assert.equal(marked, false);
+  assert.equal(await finalizePlanSave(Promise.resolve(true), archive, (value) => { marked = value; }), archive);
+  assert.equal(marked, true);
+});
 
 test('normalizes bucket counts independently, clamps them, and rejects an empty creation request', () => {
   const unavailable = preferences({ householdMembers: createHouseholdMembers(0, 0) });
@@ -225,6 +235,14 @@ test('bucket plan UI uses all meal types with count defaults and contains no leg
   assert.match(page, /MEAL_TYPES/);
   assert.match(page, /Math\.min\(50, Math\.max\(0/);
   assert.match(page, /Start next plan/);
+  assert.match(page, /Plan complete —/);
+  assert.match(page, /Save this plan/);
+  assert.match(page, /Save then continue/);
+  assert.match(page, /role="dialog" aria-modal="true" aria-labelledby="save-changes-title"/);
+  assert.match(page, /Decrease \$\{MEAL_LABELS\[type\]\} count/);
+  assert.match(page, /excluded from groceries and generation/);
+  assert.match(page, /consumed recipeOptions=\{\[\]\}/);
+  assert.match(card, /aria-pressed=\{favorite\}/);
   assert.doesNotMatch(page, /@ts-nocheck|Plan your week|Weekly plan|DAY_LABELS|dayConfigs|mealPlan\.days|Swap/);
   assert.doesNotMatch(card, /swapTargets|onSwapRecipe|Swap meal|dayLabel/);
   assert.doesNotMatch(saved, /@ts-nocheck/);

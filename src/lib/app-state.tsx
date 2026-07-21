@@ -9,6 +9,7 @@ import { storage } from "@/lib/storage";
 import { mergePreferences, type SharedStateMutator, useSharedStateSync } from "@/lib/use-shared-state-sync";
 import { toggleFavoriteRecipeIds } from "@/lib/favorites";
 import { normalizeMealProfileId } from "@/lib/meal-profiles";
+import { finalizePlanSave } from "@/lib/plan-save";
 import type { AppStateInternals, AppStateValue, GroceryContextValue, MealPlanContextValue, PreferencesContextValue, SyncStatusValue } from "@/lib/app-state-types";
 import type { CustomRecipe, MealType, SavedArchiveRecord, SavedBucketPlan, ThemePreference, UserPreferences } from "@/types";
 
@@ -85,14 +86,14 @@ function useMealPlanValue(syncState: ReturnType<typeof useSharedStateSync>["stat
     removeCustomRecipe: (id) => { void mutate((current) => ({ customRecipes: current.customRecipes.filter((recipe) => recipe.id !== id), preferences: { ...current.preferences, favoriteRecipeIds: current.preferences.favoriteRecipeIds.filter((recipeId) => recipeId !== id) }, ...(current.mealPlan ? { mealPlan: removeRecipeFromBucketPlan(current.mealPlan, id) } : {}) })); setPlanSavedSinceLastChange(false); },
     saveCurrentPlan: async () => {
       let saved: SavedArchiveRecord | null = null;
-      await mutate((current, currentPreferences) => {
+      const changed = await mutate((current, currentPreferences) => {
         if (!current.mealPlan) return null;
         const savedAt = new Date().toISOString();
         const groceryList = buildGroceryList(current.mealPlan, current.groceryOverrides, current.customRecipes, getMealServingMultipliers(currentPreferences.householdMembers), currentPreferences.customStaples, currentPreferences.sectionOrder, currentPreferences.excludedIngredients, currentPreferences.mealProfileId);
         saved = { kind: "bucket-plan", schemaVersion: 1, id: `plan-${current.mealPlan.id}-${Date.now().toString(36)}`, savedAt, label: `Plan saved ${savedAt.slice(0, 10)}`, mealPlan: current.mealPlan, groceryList: groceryList.filter((item) => !item.collected), customGroceryItems: current.customGroceryItems.filter((item) => !item.collected && !ingredientMatchesExcluded(item.name, currentPreferences.excludedIngredients)) } satisfies SavedBucketPlan;
         return { savedWeeks: [saved, ...current.savedWeeks].sort((a, b) => b.savedAt.localeCompare(a.savedAt)) };
       });
-      setPlanSavedSinceLastChange(true); return saved;
+      return finalizePlanSave(Promise.resolve(changed), saved, setPlanSavedSinceLastChange);
     },
     deleteSavedPlan: (id) => { void mutate((current) => ({ savedWeeks: current.savedWeeks.filter((plan) => plan.id !== id), savedWeekDeletedIds: [id] })); }
   }), [mutate, planSavedSinceLastChange, preferences, setPlanSavedSinceLastChange, status, syncState.customRecipes, syncState.mealPlan, syncState.savedWeeks]);
