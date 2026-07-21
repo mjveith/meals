@@ -212,3 +212,20 @@ test('regenerating remaining bucket meals preserves consumed entries', () => {
   const regenerated = buckets.regenerateAllBucketMeals(consumed, preferences());
   assert.deepEqual(regenerated.buckets.lunch[0], consumed.buckets.lunch[0]);
 });
+
+test('bucket plan UI uses all meal types with count defaults and contains no legacy weekly active UI', () => {
+  const page = fs.readFileSync(path.join(projectRoot, 'src/app/page.tsx'), 'utf8');
+  const saved = fs.readFileSync(path.join(projectRoot, 'src/app/saved/page.tsx'), 'utf8');
+  const card = fs.readFileSync(path.join(projectRoot, 'src/components/MealCard.tsx'), 'utf8');
+
+  assert.match(page, /breakfast:\s*7/);
+  assert.match(page, /brunch:\s*0/);
+  assert.match(page, /lunch:\s*7/);
+  assert.match(page, /dinner:\s*7/);
+  assert.match(page, /MEAL_TYPES/);
+  assert.match(page, /Math\.min\(50, Math\.max\(0/);
+  assert.match(page, /Start next plan/);
+  assert.doesNotMatch(page, /@ts-nocheck|Plan your week|Weekly plan|DAY_LABELS|dayConfigs|mealPlan\.days|Swap/);
+  assert.doesNotMatch(card, /swapTargets|onSwapRecipe|Swap meal|dayLabel/);
+  assert.doesNotMatch(saved, /@ts-nocheck/);
+});

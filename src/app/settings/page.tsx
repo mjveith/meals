@@ -26,7 +26,6 @@ export default function SettingsPage() {
     toggleProtein,
     toggleFavoriteProtein,
     setTheme,
-    setBrunchMode,
     setMealProfile,
     toggleExcludedIngredient,
     addHouseholdMember,
@@ -244,28 +243,6 @@ export default function SettingsPage() {
               {participants.map((member) => member.name).join(", ") || "No one selected"} · {formatParticipationCount(weight)} serving{weight === 1 ? "" : "s"}
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className="rounded-[32px] border border-border bg-surface p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-text">Brunch Mode</h2>
-            <p className="mt-1 text-sm text-muted">
-              New weekly plans use Brunch and Dinner only. Brunch can use brunch, breakfast, and lunch recipes.
-            </p>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={preferences.brunchMode}
-            onClick={() => setBrunchMode(!preferences.brunchMode)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-              preferences.brunchMode ? "bg-accent text-white" : "bg-surfaceAlt text-muted"
-            }`}
-          >
-            {preferences.brunchMode ? "On" : "Off"}
-          </button>
         </div>
       </section>
 
