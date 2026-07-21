@@ -144,3 +144,28 @@ test('PUT returns 400 for malformed JSON before touching state', async () => {
   assert.equal(response.status, 400);
   assert.deepEqual(await response.json(), { error: 'invalid JSON' });
 });
+
+test('parsed legacy plans retain a migration marker and cannot replace a current v2 plan', async () => {
+  const { mergeStatePatch, sanitizeState } = require(path.join(projectRoot, 'src/lib/state-store.ts'));
+  const current = sanitizeState({ mealPlan: { schemaVersion: 2, id: 'current', createdAt: '2026-04-06T00:00:00.000Z', buckets: { breakfast: [{ id: 'current-breakfast', recipeId: 'strawberry-ricotta-toast' }], brunch: [], lunch: [], dinner: [] } } });
+  const parsed = await parsePutStateRequest(new Request('http://local/api/state', { method: 'PUT', body: JSON.stringify({ mealPlan: { weekOf: '2020-01-06', days: [{ meals: { lunch: { enabled: true, recipeId: 'mediterranean-chicken-pitas' } } }] } }) }));
+  assert.equal(parsed.ok, true);
+  assert.equal(parsed.patch.legacyMealPlanPatch, true);
+  const merged = mergeStatePatch(current, parsed.patch);
+  assert.deepEqual(merged.mealPlan, current.mealPlan);
+  assert.equal(Object.hasOwn(merged, 'legacyMealPlanPatch'), false);
+});
+
+test('parsed null plans need an explicit replacement marker to clear v2 state', async () => {
+  const { mergeStatePatch, sanitizeState } = require(path.join(projectRoot, 'src/lib/state-store.ts'));
+  const current = sanitizeState({ mealPlan: { schemaVersion: 2, id: 'current', createdAt: '2026-04-06T00:00:00.000Z', buckets: { breakfast: [{ id: 'current-breakfast', recipeId: 'strawberry-ricotta-toast' }], brunch: [], lunch: [], dinner: [] } } });
+  const parsed = await parsePutStateRequest(new Request('http://local/api/state', { method: 'PUT', body: JSON.stringify({ mealPlan: null }) }));
+  assert.equal(parsed.ok, true);
+  assert.deepEqual(mergeStatePatch(current, parsed.patch).mealPlan, current.mealPlan);
+  const replace = await parsePutStateRequest(new Request('http://local/api/state', { method: 'PUT', body: JSON.stringify({ mealPlan: null, mealPlanReplace: true }) }));
+  assert.equal(replace.ok, true);
+  const merged = mergeStatePatch(current, replace.patch);
+  assert.equal(merged.mealPlan, null);
+  assert.equal(Object.hasOwn(merged, 'mealPlanReplace'), false);
+  assert.equal(Object.hasOwn(merged, 'legacyMealPlanPatch'), false);
+});

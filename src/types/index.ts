@@ -175,6 +175,8 @@ export type SharedStatePatch = Partial<SharedAppState> & {
   savedWeekDeletedIds?: string[];
   /** Required to intentionally clear an active v2 plan; stripped before storage. */
   mealPlanReplace?: true;
+  /** Server-only signal that a normalized v2 plan originated from a legacy weekly payload. */
+  legacyMealPlanPatch?: true;
 };
 
 export interface SharedStateResponse extends SharedAppState {

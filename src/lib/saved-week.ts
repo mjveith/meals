@@ -15,6 +15,8 @@ function normalizeArchivedMealSlot(slot: MealSlot | undefined): MealSlot {
   return {
     enabled: true,
     ...(slot.recipeId ? { recipeId: slot.recipeId } : {}),
+    ...(!slot.recipeId && slot.unsafeRecipeId ? { unsafeRecipeId: slot.unsafeRecipeId } : {}),
+    ...(!slot.recipeId && slot.unsafeExcludedIngredients?.length ? { unsafeExcludedIngredients: slot.unsafeExcludedIngredients } : {}),
     ...(slot.consumed ? { consumed: true } : {})
   };
 }
