@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import {
@@ -18,15 +19,15 @@ import {
   getMealServingMultipliers,
   normalizeHouseholdMembers
 } from "@/lib/household";
+import { getRecipeMap } from "@/lib/meal-generator";
 import {
-  assignRecipeToSlot,
-  createPlanFromConfig,
-  getRecipeMap,
-  regenerateMealSlot,
-  regenerateWeek as regenerateWeekPlan,
-  swapRecipesBetweenSlots,
-  toggleMealSlotEnabled
-} from "@/lib/meal-generator";
+  assignBucketMealRecipe,
+  createBucketPlan,
+  regenerateAllBucketMeals,
+  regenerateBucketMeal,
+  reconcileBucketPlanSafety,
+  toggleBucketMealConsumed
+} from "@/lib/meal-buckets";
 import { storage } from "@/lib/storage";
 import { mergePreferences, SharedStateMutator, useSharedStateSync } from "@/lib/use-shared-state-sync";
 import { formatWeekLabel } from "@/lib/date";

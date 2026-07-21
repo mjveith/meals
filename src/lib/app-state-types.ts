@@ -1,4 +1,4 @@
-import { DayConfig } from "@/lib/meal-generator";
+
 import { SharedStateMutator } from "@/lib/use-shared-state-sync";
 import {
   CustomGroceryItem,
@@ -7,11 +7,12 @@ import {
   GroceryItem,
   HouseholdMember,
   IngredientCategory,
-  MealPlan,
+  BucketMealPlan,
+  MealCounts,
   MealProfileId,
   MealType,
   ProteinType,
-  SavedWeek,
+  SavedArchiveRecord,
   ThemePreference,
   UserPreferences
 } from "@/types";
@@ -49,21 +50,19 @@ export interface PreferencesContextValue extends SyncStatusValue {
 }
 
 export interface MealPlanContextValue extends SyncStatusValue {
-  mealPlan: MealPlan | null;
+  mealPlan: BucketMealPlan | null;
   customRecipes: CustomRecipe[];
-  savedWeeks: SavedWeek[];
+  savedWeeks: SavedArchiveRecord[];
   planSavedSinceLastChange: boolean;
-  toggleMealEnabled: (dayIndex: number, mealType: MealType) => void;
-  toggleMealConsumed: (dayIndex: number, mealType: MealType) => void;
-  regenerateMeal: (dayIndex: number, mealType: MealType, proteinOverride?: ProteinType | "any") => void;
-  swapMeals: (source: { dayIndex: number; mealType: MealType }, target: { dayIndex: number; mealType: MealType }) => Promise<boolean>;
-  assignRecipeToMeal: (dayIndex: number, mealType: MealType, recipeId: string) => Promise<boolean>;
+  toggleMealConsumed: (mealId: string) => void;
+  regenerateMeal: (mealId: string) => void;
+  assignRecipeToMeal: (mealId: string, recipeId: string) => Promise<boolean>;
   regenerateWeek: () => void;
-  generatePlan: (dayConfigs: DayConfig[]) => void;
+  generatePlan: (counts: Partial<MealCounts>) => void;
   clearPlan: () => void;
-  addCustomRecipe: (recipe: Omit<CustomRecipe, "id" | "isCustom">, options?: { favorite?: boolean; assignTo?: { dayIndex: number; mealType: MealType } }) => Promise<CustomRecipe>;
+  addCustomRecipe: (recipe: Omit<CustomRecipe, "id" | "isCustom">, options?: { favorite?: boolean; assignToMealId?: string }) => Promise<CustomRecipe>;
   removeCustomRecipe: (id: CustomRecipe["id"]) => void;
-  saveCurrentWeek: () => Promise<SavedWeek | null>;
+  saveCurrentWeek: () => Promise<SavedArchiveRecord | null>;
   deleteSavedWeek: (id: string) => void;
 }
 

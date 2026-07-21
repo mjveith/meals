@@ -1,5 +1,3 @@
-import type { BucketMealPlan } from "@/lib/meal-buckets";
-
 export type MealType = "breakfast" | "brunch" | "lunch" | "dinner";
 export type ProteinType = "chicken" | "pork" | "fish" | "red-meat";
 export type HouseholdMemberKind = "adult" | "child";
@@ -60,6 +58,27 @@ export interface DayPlan {
 export interface MealPlan {
   weekOf: string;
   days: DayPlan[];
+}
+
+/** Date-free non-expiring active-plan data; behavior lives in meal-buckets. */
+export type MealCounts = Record<MealType, number>;
+
+export interface PlannedMeal {
+  id: string;
+  mealType: MealType;
+  recipeId?: string;
+  unsafeRecipeId?: string;
+  unsafeExcludedIngredients?: string[];
+  consumed?: boolean;
+  consumedAt?: string;
+}
+
+export interface BucketMealPlan {
+  schemaVersion: 2;
+  id: string;
+  createdAt: string;
+  requestedCounts: MealCounts;
+  buckets: Record<MealType, PlannedMeal[]>;
 }
 
 export interface CustomStaple {
@@ -143,16 +162,19 @@ export type SavedArchiveRecord = SavedWeek | SavedBucketPlan;
 
 export interface SharedAppState {
   preferences: SharedPreferences;
-  mealPlan: MealPlan | null;
+  mealPlan: BucketMealPlan | null;
   groceryOverrides: Record<string, GroceryOverride>;
   customGroceryItems: CustomGroceryItem[];
   customRecipes: CustomRecipe[];
-  savedWeeks: SavedWeek[];
+  /** Kept as savedWeeks for backward-compatible persistence. */
+  savedWeeks: SavedArchiveRecord[];
 }
 
 export type SharedStatePatch = Partial<SharedAppState> & {
   customStaplesReplace?: true;
   savedWeekDeletedIds?: string[];
+  /** Required to intentionally clear an active v2 plan; stripped before storage. */
+  mealPlanReplace?: true;
 };
 
 export interface SharedStateResponse extends SharedAppState {

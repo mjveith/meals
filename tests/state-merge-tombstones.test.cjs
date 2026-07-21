@@ -126,3 +126,22 @@ test('savedWeekDeletedIds deletes archives and prevents resurrection from stale 
   });
   assert.deepEqual(stalePatch.savedWeeks.map((week) => week.id), ['newer', 'older']);
 });
+
+test('v2 plans survive stale legacy and null patches unless an explicit replacement is requested', () => {
+  const v2Plan = {
+    schemaVersion: 2,
+    id: 'bucket-current',
+    createdAt: '2026-07-01T00:00:00.000Z',
+    requestedCounts: { breakfast: 1, brunch: 0, lunch: 0, dinner: 0 },
+    buckets: { breakfast: [{ id: 'b-1', mealType: 'breakfast', recipeId: 'eggs' }], brunch: [], lunch: [], dinner: [] }
+  };
+  const current = createState({ mealPlan: v2Plan });
+  const legacyPlan = { weekOf: '2020-01-06', days: [] };
+
+  assert.deepEqual(mergeStatePatch(current, { mealPlan: legacyPlan }).mealPlan, v2Plan);
+  assert.deepEqual(mergeStatePatch(current, { mealPlan: null }).mealPlan, v2Plan);
+
+  const replacement = mergeStatePatch(current, { mealPlan: null, mealPlanReplace: true });
+  assert.equal(replacement.mealPlan, null);
+  assert.equal(Object.hasOwn(replacement, 'mealPlanReplace'), false);
+});

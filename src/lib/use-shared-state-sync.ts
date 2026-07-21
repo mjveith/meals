@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { DEFAULT_PREFERENCES } from "@/lib/constants";
 import { normalizeExcludedIngredients } from "@/lib/allergens";
 import { migrateLegacyCustomStaplesToSharedState } from "@/lib/custom-staples";
-import { normalizePlan } from "@/lib/meal-generator";
+import { normalizeBucketPlan, reconcileBucketPlanSafety } from "@/lib/meal-buckets";
 import { normalizeMealProfileId } from "@/lib/meal-profiles";
 import { storage } from "@/lib/storage";
 import { SharedStateSyncError, fetchSharedState, pushSharedState } from "@/lib/sync";
 import { countHouseholdMembers, normalizeHouseholdMembers } from "@/lib/household";
-import { normalizeArchivedSavedWeek } from "@/lib/saved-week";
+import { normalizeSavedArchiveRecord } from "@/lib/saved-week";
 import {
   SharedAppState,
   SharedPreferences,
@@ -89,12 +89,15 @@ function normalizeSharedState(state: SharedAppState, theme: ThemePreference): Sh
       excludedIngredients: preferences.excludedIngredients,
       mealProfileId: preferences.mealProfileId
     },
-    mealPlan: normalizePlan(state.mealPlan, preferences, state.customRecipes ?? []),
+    mealPlan: (() => {
+      const plan = normalizeBucketPlan(state.mealPlan, preferences);
+      return plan ? reconcileBucketPlanSafety(plan, preferences, state.customRecipes ?? []) : null;
+    })(),
     groceryOverrides: state.groceryOverrides ?? {},
     customGroceryItems: state.customGroceryItems ?? [],
     customRecipes: state.customRecipes ?? [],
     savedWeeks: [...(state.savedWeeks ?? [])]
-      .map(normalizeArchivedSavedWeek)
+      .map(normalizeSavedArchiveRecord)
       .sort((a, b) => b.savedAt.localeCompare(a.savedAt))
   };
 }

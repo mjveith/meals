@@ -2,27 +2,9 @@ import { recipeExcludedAllergens } from "@/lib/allergens";
 import { MEAL_TYPES } from "@/lib/constants";
 import { getMealParticipationAvailability } from "@/lib/household";
 import { getRecipeMap, getSafeRecipes, isRecipeEligibleForMealType, pickMealRecipe } from "@/lib/meal-generator";
-import { CustomRecipe, MealPlan, MealSlot, MealType, UserPreferences } from "@/types";
+import { BucketMealPlan, CustomRecipe, MealCounts, MealPlan, MealSlot, MealType, PlannedMeal, UserPreferences } from "@/types";
 
-export type MealCounts = Record<MealType, number>;
-
-export interface PlannedMeal {
-  id: string;
-  mealType: MealType;
-  recipeId?: string;
-  unsafeRecipeId?: string;
-  unsafeExcludedIngredients?: string[];
-  consumed?: boolean;
-  consumedAt?: string;
-}
-
-export interface BucketMealPlan {
-  schemaVersion: 2;
-  id: string;
-  createdAt: string;
-  requestedCounts: MealCounts;
-  buckets: Record<MealType, PlannedMeal[]>;
-}
+export type { BucketMealPlan, MealCounts, PlannedMeal } from "@/types";
 
 const emptyBuckets = (): Record<MealType, PlannedMeal[]> => ({ breakfast: [], brunch: [], lunch: [], dinner: [] });
 const emptyCounts = (): MealCounts => ({ breakfast: 0, brunch: 0, lunch: 0, dinner: 0 });
