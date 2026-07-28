@@ -261,6 +261,7 @@ test('bucket plan UI uses all meal types with count defaults and contains no leg
   assert.match(page, /excluded from groceries and generation/);
   assert.match(page, /consumed recipeOptions=\{\[\]\}/);
   assert.match(card, /aria-pressed=\{favorite\}/);
+  assert.equal((saved.match(/text-slate-900 shadow-panel dark:from-slate-800 dark:via-teal-900 dark:to-cyan-900 dark:text-white/g) ?? []).length, 2);
   assert.doesNotMatch(page, /@ts-nocheck|Plan your week|Weekly plan|DAY_LABELS|dayConfigs|mealPlan\.days|Swap/);
   assert.doesNotMatch(card, /swapTargets|onSwapRecipe|Swap meal|dayLabel/);
   assert.doesNotMatch(saved, /@ts-nocheck/);
