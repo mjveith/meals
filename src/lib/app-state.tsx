@@ -70,7 +70,11 @@ function useMealPlanValue(syncState: ReturnType<typeof useSharedStateSync>["stat
     regenerateMeal: (mealId, proteinOverride = "any") => { void mutate((current, currentPreferences) => current.mealPlan ? { mealPlan: regenerateBucketMeal(current.mealPlan, mealId, currentPreferences, current.customRecipes, proteinOverride) } : null); setPlanSavedSinceLastChange(false); },
     assignRecipeToMeal: async (mealId, recipeId) => { const changed = await mutate((current, currentPreferences) => { if (!current.mealPlan) return null; const mealPlan = assignBucketMealRecipe(current.mealPlan, mealId, recipeId, currentPreferences, current.customRecipes); return mealPlan === current.mealPlan ? null : { mealPlan }; }); if (changed) setPlanSavedSinceLastChange(false); return changed; },
     regenerateRemaining: () => { void mutate((current, currentPreferences) => current.mealPlan ? { mealPlan: regenerateAllBucketMeals(current.mealPlan, currentPreferences, current.customRecipes) } : null); setPlanSavedSinceLastChange(false); },
-    generatePlan: (counts) => { void mutate((current, currentPreferences) => ({ mealPlan: createBucketPlan(currentPreferences, counts, current.customRecipes), groceryOverrides: {} })); setPlanSavedSinceLastChange(false); },
+    generatePlan: async (counts) => {
+      const changed = await mutate((current, currentPreferences) => ({ mealPlan: createBucketPlan(currentPreferences, counts, current.customRecipes), groceryOverrides: {} }));
+      if (changed) setPlanSavedSinceLastChange(false);
+      return changed;
+    },
     clearPlan: () => { void mutate(() => ({ mealPlan: null, mealPlanReplace: true, groceryOverrides: {} })); setPlanSavedSinceLastChange(true); },
     addCustomRecipe: async (recipe, options) => {
       if (recipe.ingredients.some((item) => ingredientMatchesExcluded(item.name, preferences.excludedIngredients))) throw new Error("Custom recipe contains an excluded allergen and was not saved.");
