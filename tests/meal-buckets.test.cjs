@@ -32,6 +32,7 @@ for (const extension of ['.ts', '.tsx']) {
 const { createHouseholdMembers } = require(path.join(projectRoot, 'src/lib/household.ts'));
 const buckets = require(path.join(projectRoot, 'src/lib/meal-buckets.ts'));
 const { finalizePlanSave } = require(path.join(projectRoot, 'src/lib/plan-save.ts'));
+const { finishPlanGeneration } = require(path.join(projectRoot, 'src/lib/plan-generation.ts'));
 
 function preferences(overrides = {}) {
   return {
@@ -52,6 +53,23 @@ test('finalizePlanSave only reports success after a successful mutation', async 
   assert.equal(marked, false);
   assert.equal(await finalizePlanSave(Promise.resolve(true), archive, (value) => { marked = value; }), archive);
   assert.equal(marked, true);
+});
+
+test('plan setup remains visible until generation is persisted', async () => {
+  let resolveMutation;
+  const mutation = new Promise((resolve) => { resolveMutation = resolve; });
+  let setupClosed = false;
+  const completion = finishPlanGeneration(mutation, () => { setupClosed = true; });
+
+  await Promise.resolve();
+  assert.equal(setupClosed, false);
+  resolveMutation(true);
+  assert.equal(await completion, true);
+  assert.equal(setupClosed, true);
+
+  setupClosed = false;
+  assert.equal(await finishPlanGeneration(Promise.resolve(false), () => { setupClosed = true; }), false);
+  assert.equal(setupClosed, false);
 });
 
 test('normalizes bucket counts independently, clamps them, and rejects an empty creation request', () => {

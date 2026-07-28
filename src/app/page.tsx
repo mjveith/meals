@@ -7,16 +7,19 @@ import { useAppState } from "@/lib/app-state";
 import { MEAL_LABELS, MEAL_TYPES } from "@/lib/constants";
 import { getMealParticipationAvailability } from "@/lib/household";
 import { getBucketMealCompletion } from "@/lib/meal-buckets";
+import { finishPlanGeneration } from "@/lib/plan-generation";
 import { getRecipeMap, getSafeRecipes } from "@/lib/meal-generator";
 import type { MealCounts, MealType } from "@/types";
 
 const defaults: MealCounts = { breakfast: 7, brunch: 0, lunch: 7, dinner: 7 };
 const clamp = (value: number) => Math.min(50, Math.max(0, Math.trunc(value)));
 
-function CountSetup({ onGenerate }: { onGenerate: (counts: MealCounts) => void }) {
+function CountSetup({ onGenerate, onGenerated }: { onGenerate: (counts: MealCounts) => Promise<boolean>; onGenerated: () => void }) {
   const { preferences, toggleProtein, toggleFavoriteProtein } = useAppState();
   const availability = useMemo(() => getMealParticipationAvailability(preferences.householdMembers), [preferences.householdMembers]);
   const [counts, setCounts] = useState<MealCounts>(() => ({ ...defaults }));
+  const [generating, setGenerating] = useState(false);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   useEffect(() => setCounts((current) => MEAL_TYPES.reduce((next, type) => ({ ...next, [type]: availability[type] ? current[type] : 0 }), {} as MealCounts)), [availability]);
   const total = MEAL_TYPES.reduce((sum, type) => sum + counts[type], 0);
   const change = (type: MealType, value: number) => setCounts((current) => ({ ...current, [type]: availability[type] ? clamp(value) : 0 }));
@@ -24,7 +27,8 @@ function CountSetup({ onGenerate }: { onGenerate: (counts: MealCounts) => void }
     <section className="rounded-[32px] bg-gradient-to-br from-teal-200 via-cyan-100 to-sky-100 p-6 text-slate-900 shadow-panel dark:from-slate-800 dark:via-teal-900 dark:to-cyan-900 dark:text-white"><div className="text-xs font-semibold uppercase tracking-[0.24em]">Meals</div><h1 className="mt-3 text-3xl font-bold">Build a meal plan</h1><p className="mt-3 text-sm">Choose how many meals you want in each bucket. Plans never expire.</p></section>
     <section className="rounded-[32px] border border-border bg-surface p-4"><h2 className="text-lg font-semibold text-text">Meal counts</h2><div className="mt-4 space-y-3">{MEAL_TYPES.map((type) => <div key={type} className="flex items-center justify-between rounded-3xl bg-canvas p-3"><div><b className="text-text">{MEAL_LABELS[type]}</b>{!availability[type] ? <p className="text-xs text-muted">Unavailable for this household</p> : null}</div><div className="flex items-center gap-2"><button type="button" aria-label={`Decrease ${MEAL_LABELS[type]} count`} disabled={!availability[type] || counts[type] === 0} onClick={() => change(type, counts[type] - 1)} className="rounded-full bg-surfaceAlt px-3 py-2 disabled:opacity-40">−</button><input aria-label={`${MEAL_LABELS[type]} count`} type="number" min="0" max="50" disabled={!availability[type]} value={counts[type]} onChange={(event) => change(type, Number(event.target.value))} className="w-14 rounded-xl border border-border bg-surface px-2 py-2 text-center" /><button type="button" aria-label={`Increase ${MEAL_LABELS[type]} count`} disabled={!availability[type] || counts[type] === 50} onClick={() => change(type, counts[type] + 1)} className="rounded-full bg-surfaceAlt px-3 py-2 disabled:opacity-40">+</button></div></div>)}</div></section>
     <section className="rounded-[32px] border border-border bg-surface p-4"><h2 className="text-lg font-semibold text-text">Proteins</h2><div className="mt-4"><ProteinSelector selected={preferences.selectedProteins} pinned={preferences.favoriteProteins} onToggle={toggleProtein} onPin={toggleFavoriteProtein} /></div></section>
-    <button type="button" disabled={total === 0} onClick={() => onGenerate(counts)} className="w-full rounded-full bg-accent px-5 py-4 text-base font-bold text-white disabled:opacity-40">Generate {total} meal{total === 1 ? "" : "s"}</button>
+    {generationError ? <section role="alert" className="rounded-3xl border border-rose-400 bg-rose-50 p-4 text-sm text-rose-800">{generationError}</section> : null}
+    <button type="button" disabled={total === 0 || generating} onClick={async () => { if (generating) return; setGenerating(true); setGenerationError(null); const generated = await finishPlanGeneration(onGenerate(counts), onGenerated); setGenerating(false); if (!generated) setGenerationError("Couldn’t generate this plan. Please try again."); }} className="w-full rounded-full bg-accent px-5 py-4 text-base font-bold text-white disabled:opacity-40">{generating ? "Generating…" : `Generate ${total} meal${total === 1 ? "" : "s"}`}</button>
   </main>;
 }
 
@@ -37,7 +41,7 @@ export default function PlanPage() {
   useEffect(() => { if (!pending) return; continueRef.current?.focus(); const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape" && !saving) setPending(null); }; window.addEventListener("keydown", onKeyDown); return () => window.removeEventListener("keydown", onKeyDown); }, [pending, saving]);
   if (!hydrated) return <main className="p-6 text-sm text-muted">Loading your plan...</main>;
   if (!hasLoadedSharedState && syncError) return <main className="p-6 text-sm text-muted">Couldn&apos;t load your saved plan. {syncError}</main>;
-  if (!mealPlan || setup) return <CountSetup onGenerate={(counts) => { generatePlan(counts); setSetup(false); }} />;
+  if (!mealPlan || setup) return <CountSetup onGenerate={generatePlan} onGenerated={() => setSetup(false)} />;
   const completion = getBucketMealCompletion(mealPlan);
   const replace = (action: "regenerate" | "new") => { if (action === "regenerate") regenerateRemaining(); else { clearPlan(); setSetup(true); } };
   const act = (action: "regenerate" | "new") => { if (!planSavedSinceLastChange) return setPending(action); replace(action); };

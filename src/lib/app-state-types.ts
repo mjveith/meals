@@ -58,7 +58,7 @@ export interface MealPlanContextValue extends SyncStatusValue {
   regenerateMeal: (mealId: string, proteinOverride?: ProteinType | "any") => void;
   assignRecipeToMeal: (mealId: string, recipeId: string) => Promise<boolean>;
   regenerateRemaining: () => void;
-  generatePlan: (counts: Partial<MealCounts>) => void;
+  generatePlan: (counts: Partial<MealCounts>) => Promise<boolean>;
   clearPlan: () => void;
   addCustomRecipe: (recipe: Omit<CustomRecipe, "id" | "isCustom">, options?: { favorite?: boolean; assignToMealId?: string }) => Promise<CustomRecipe>;
   removeCustomRecipe: (id: CustomRecipe["id"]) => void;
