@@ -26,7 +26,7 @@ import {
 export const maxHistorySnapshots = 200;
 export const maxPutBodyBytes = 1024 * 1024;
 const mealTypes = ["breakfast", "brunch", "lunch", "dinner"] as const;
-const proteinTypes = ["chicken", "pork", "fish", "red-meat"] as const;
+const proteinTypes = ["chicken", "pork", "fish", "red-meat", "duck"] as const;
 
 export const defaultState: SharedAppState = {
   preferences: {

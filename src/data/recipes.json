@@ -4756,5 +4756,536 @@
       "Slice cucumbers and toast bagels for 2-3 minutes, until lightly crisp.",
       "Arrange salmon, cream cheese, eggs, and vegetables on a platter."
     ]
+  },
+  {
+    "id": "crispy-duck-breast-cherry-sauce",
+    "name": "Crispy Duck Breast with Cherry Sauce",
+    "description": "Pan-seared duck breast with crisp skin and a bright cherry-thyme pan sauce.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "duck"
+    ],
+    "cuisine": "French",
+    "prepTime": 15,
+    "cookTime": 30,
+    "servings": 4,
+    "difficulty": "medium",
+    "ingredients": [
+      {
+        "name": "duck breast",
+        "quantity": 4,
+        "unit": "count",
+        "category": "protein"
+      },
+      {
+        "name": "cherries",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "shallot",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "chicken broth",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "balsamic vinegar",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "thyme",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "salt",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "black pepper",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Pat the duck breasts dry. Score the skin in a shallow crosshatch without cutting into the meat, then season both sides with salt and pepper.",
+      "Place the duck skin-side down in a cold heavy skillet. Turn the heat to medium-low and cook for 10 to 14 minutes, pouring off excess fat as it renders, until the skin is deep golden and crisp.",
+      "Turn the breasts and cook for 5 to 8 minutes more, until the thickest part reaches 165\u00b0F (74\u00b0C). Transfer to a board and rest for 8 minutes.",
+      "Pour off all but 1 tablespoon of fat. Cook the minced shallot for 1 minute, then add the cherries, broth, balsamic vinegar, and thyme. Simmer for 5 to 7 minutes until glossy and lightly thickened.",
+      "Slice the duck across the grain and spoon the warm cherry sauce over the top."
+    ]
+  },
+  {
+    "id": "five-spice-duck-rice-bowls",
+    "name": "Five-Spice Duck Rice Bowls",
+    "description": "Sliced five-spice duck with rice, bok choy, carrots, and a ginger-soy glaze.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "duck"
+    ],
+    "cuisine": "Asian",
+    "prepTime": 20,
+    "cookTime": 30,
+    "servings": 4,
+    "difficulty": "medium",
+    "ingredients": [
+      {
+        "name": "duck breast",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "rice",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "bok choy",
+        "quantity": 2,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "honey",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "ginger",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "Chinese five-spice",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Cook the rice according to package directions, then keep it covered off the heat while the duck and vegetables cook.",
+      "Pat the duck dry, score the skin, and rub both sides with Chinese five-spice. Place skin-side down in a cold skillet and cook over medium-low heat for 10 to 14 minutes until the fat renders and the skin is crisp.",
+      "Turn the duck and cook for 5 to 8 minutes more, until it reaches 165\u00b0F (74\u00b0C). Rest on a board for 8 minutes before slicing.",
+      "Pour off all but 1 tablespoon of duck fat. Stir-fry the sliced bok choy and carrots over medium-high heat for 4 to 5 minutes until crisp-tender.",
+      "Add soy sauce, honey, and grated ginger and bubble for 1 minute. Build bowls with rice, vegetables, sliced duck, and the pan glaze."
+    ]
+  },
+  {
+    "id": "slow-roasted-duck-legs-root-vegetables",
+    "name": "Slow-Roasted Duck Legs with Root Vegetables",
+    "description": "Tender roasted duck legs with baby potatoes, carrots, parsnips, garlic, and rosemary.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "duck"
+    ],
+    "cuisine": "European",
+    "prepTime": 20,
+    "cookTime": 105,
+    "servings": 4,
+    "difficulty": "easy",
+    "ingredients": [
+      {
+        "name": "duck leg",
+        "quantity": 4,
+        "unit": "count",
+        "category": "protein"
+      },
+      {
+        "name": "baby potatoes",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 4,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "parsnip",
+        "quantity": 3,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 4,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "rosemary",
+        "quantity": 2,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "salt",
+        "quantity": 1.5,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "black pepper",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 325\u00b0F (165\u00b0C). Pat the duck legs dry, prick the skin in several places without piercing the meat, and season with salt, pepper, and half the rosemary.",
+      "Arrange the legs skin-side up in a large roasting pan. Roast for 45 minutes so the fat begins to render.",
+      "Halve the baby potatoes and cut the carrots, parsnips, and onion into 1-inch pieces. Carefully spoon off excess fat, then arrange the vegetables and garlic around the duck and season with the remaining rosemary.",
+      "Roast for 50 to 60 minutes more, stirring the vegetables once, until the duck reaches at least 165\u00b0F (74\u00b0C), the joints move easily, and the vegetables are tender.",
+      "For crisper skin, broil for 2 to 3 minutes while watching closely. Rest the duck for 8 minutes before serving with the vegetables."
+    ]
+  },
+  {
+    "id": "shredded-duck-tacos-citrus-slaw",
+    "name": "Shredded Duck Tacos with Citrus Slaw",
+    "description": "Spiced shredded duck tucked into corn tortillas with crisp orange-lime slaw.",
+    "mealType": [
+      "lunch",
+      "dinner"
+    ],
+    "proteins": [
+      "duck"
+    ],
+    "cuisine": "Mexican",
+    "prepTime": 20,
+    "cookTime": 100,
+    "servings": 4,
+    "difficulty": "medium",
+    "ingredients": [
+      {
+        "name": "duck leg",
+        "quantity": 4,
+        "unit": "count",
+        "category": "protein"
+      },
+      {
+        "name": "corn tortilla",
+        "quantity": 12,
+        "unit": "count",
+        "category": "bakery"
+      },
+      {
+        "name": "cabbage",
+        "quantity": 0.5,
+        "unit": "head",
+        "category": "produce"
+      },
+      {
+        "name": "orange",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "lime",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "avocado",
+        "quantity": 2,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "cumin",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "smoked paprika",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "salt",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "black pepper",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Preheat the oven to 325\u00b0F (165\u00b0C). Pat the duck legs dry and season with cumin, smoked paprika, salt, and pepper.",
+      "Place the legs skin-side up in a covered baking dish and roast for 80 to 90 minutes, until they reach at least 165\u00b0F (74\u00b0C) and the meat pulls easily from the bone.",
+      "Meanwhile, finely shred the cabbage and toss it with the juice of one orange, the juice of one lime, and a pinch of salt. Let it stand for 15 minutes, then drain any excess liquid.",
+      "Remove the duck meat from the bones and shred it, discarding excess skin and fat. Spread it on a sheet pan and broil for 2 to 3 minutes until the edges are crisp.",
+      "Warm the tortillas in a dry skillet. Fill with duck, citrus slaw, sliced avocado, and wedges from the remaining orange and lime."
+    ]
+  },
+  {
+    "id": "duck-mushroom-ragu-pappardelle",
+    "name": "Duck and Mushroom Ragu with Pappardelle",
+    "description": "Slow-simmered shredded duck and mushroom tomato ragu tossed with wide pasta.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "duck"
+    ],
+    "cuisine": "Italian",
+    "prepTime": 20,
+    "cookTime": 110,
+    "servings": 4,
+    "difficulty": "medium",
+    "ingredients": [
+      {
+        "name": "duck leg",
+        "quantity": 4,
+        "unit": "count",
+        "category": "protein"
+      },
+      {
+        "name": "pappardelle",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "cremini mushrooms",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "produce"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 28,
+        "unit": "oz",
+        "category": "pantry"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "beef broth",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "tomato paste",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "thyme",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "salt",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "black pepper",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Pat the duck legs dry and season with salt and pepper. Brown them skin-side down in a Dutch oven over medium heat for 8 to 10 minutes, then turn and brown for 3 minutes. Transfer to a plate and pour off all but 1 tablespoon of fat.",
+      "Cook the diced onion and sliced mushrooms over medium heat for 7 to 9 minutes until softened and browned. Stir in the garlic, tomato paste, and thyme for 1 minute.",
+      "Add the crushed tomatoes and beef broth, return the duck legs to the pot, and bring to a gentle simmer. Cover and cook over low heat for 75 to 90 minutes, until the duck reaches at least 165\u00b0F (74\u00b0C) and pulls easily from the bone.",
+      "Remove the duck, discard the bones and excess skin, and shred the meat. Return it to the sauce and simmer uncovered for 10 minutes until the ragu coats a spoon.",
+      "Cook the pappardelle until al dente, reserve 1/2 cup pasta water, and drain. Toss with the ragu, adding a splash of pasta water if needed."
+    ]
+  },
+  {
+    "id": "classic-beef-stew",
+    "name": "Classic Beef Stew",
+    "description": "Fork-tender beef chuck with baby potatoes, carrots, celery, and herbs in a rich bone-broth gravy.",
+    "mealType": [
+      "dinner"
+    ],
+    "proteins": [
+      "red-meat"
+    ],
+    "cuisine": "American",
+    "prepTime": 25,
+    "cookTime": 165,
+    "servings": 6,
+    "difficulty": "medium",
+    "ingredients": [
+      {
+        "name": "beef chuck",
+        "quantity": 2.5,
+        "unit": "lb",
+        "category": "protein"
+      },
+      {
+        "name": "tomato paste",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "baby potatoes",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 4,
+        "unit": "count",
+        "category": "produce"
+      },
+      {
+        "name": "celery",
+        "quantity": 4,
+        "unit": "stalk",
+        "category": "produce"
+      },
+      {
+        "name": "apple cider vinegar",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "beef bone broth",
+        "quantity": 4,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "garlic",
+        "quantity": 4,
+        "unit": "clove",
+        "category": "produce"
+      },
+      {
+        "name": "flour",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "salt",
+        "quantity": 2,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "black pepper",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "thyme",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "rosemary",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      },
+      {
+        "name": "bay leaf",
+        "quantity": 2,
+        "unit": "count",
+        "category": "spice"
+      },
+      {
+        "name": "smoked paprika",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spice"
+      }
+    ],
+    "instructions": [
+      "Cut the beef chuck into 1 1/2-inch pieces and pat dry. Toss with the flour, salt, black pepper, and smoked paprika until evenly coated.",
+      "Heat 1 tablespoon olive oil in a Dutch oven over medium-high heat. Brown the beef in two or three uncrowded batches for 3 to 4 minutes per side, adding the remaining oil as needed. Transfer each batch to a plate.",
+      "Reduce the heat to medium. Add the diced onion and celery and cook for 5 minutes until softened. Stir in the minced garlic and tomato paste and cook for 1 to 2 minutes, until the paste darkens slightly.",
+      "Pour in the apple cider vinegar and scrape up every browned bit from the bottom. Add the beef bone broth, thyme, rosemary, bay leaves, and browned beef with any juices. Bring to a gentle simmer.",
+      "Cover and cook over low heat for 1 1/2 hours, stirring occasionally. Add the halved baby potatoes and carrots, cover again, and simmer for 40 to 50 minutes more, until the beef is fork-tender and the vegetables are cooked through.",
+      "Remove the bay leaves. If the gravy is thin, simmer uncovered for 5 to 10 minutes; if it is too thick, add a splash of broth. Taste and adjust salt, pepper, vinegar, or paprika before serving."
+    ]
   }
 ]

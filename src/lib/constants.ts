@@ -7,7 +7,8 @@ export const PROTEIN_OPTIONS: { id: ProteinType; label: string }[] = [
   { id: "chicken", label: "Chicken" },
   { id: "pork", label: "Pork" },
   { id: "fish", label: "Salmon / Fish" },
-  { id: "red-meat", label: "Red Meat" }
+  { id: "red-meat", label: "Red Meat" },
+  { id: "duck", label: "Duck" }
 ];
 
 export const DEFAULT_SECTION_ORDER: IngredientCategory[] = [
@@ -24,7 +25,7 @@ export const DEFAULT_SECTION_ORDER: IngredientCategory[] = [
 ];
 
 export const DEFAULT_PREFERENCES: UserPreferences = {
-  selectedProteins: ["chicken", "pork", "fish", "red-meat"],
+  selectedProteins: ["chicken", "pork", "fish", "red-meat", "duck"],
   favoriteProteins: [],
   theme: "system",
   favoriteRecipeIds: [],
