@@ -1,5 +1,5 @@
 export type MealType = "breakfast" | "brunch" | "lunch" | "dinner";
-export type ProteinType = "chicken" | "pork" | "fish" | "red-meat";
+export type ProteinType = "chicken" | "pork" | "fish" | "red-meat" | "duck";
 export type HouseholdMemberKind = "adult" | "child";
 export type IngredientCategory =
   | "produce"
